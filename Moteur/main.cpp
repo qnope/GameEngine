@@ -206,13 +206,11 @@ void run() {
 		auto frameTime = newTime - currentTime;
 		currentTime = newTime;
 		accumulator += std::chrono::duration_cast<time_ms>(frameTime);
-		std::cout << accumulator.count() << std::endl;
 		while (accumulator > deltaTimeStep) {
 
 			computePhysicalStep(timeSimulated, deltaTimeStep);
 			accumulator -= deltaTimeStep;
 			timeSimulated += deltaTimeStep;
-			std::cout << timeSimulated.count() << std::endl;
 		}
 		render(window, device, sceneGraph, camera, interface, rendererFacades, rotate);
 	}
