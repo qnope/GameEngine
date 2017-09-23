@@ -19,6 +19,8 @@
 
 #define NAME "Engine"
 
+typedef std::chrono::milliseconds time_ms;
+
 class SuperWindow {
 public:
 	SuperWindow(int w, int h, std::string name) :
@@ -118,7 +120,47 @@ private:
 	const std::chrono::milliseconds mFrameDurationInMilisecond;
 };
 
+void render(SuperWindow& window, Device& device, SceneGraph& sceneGraph, Camera& camera, Interface& interface, std::vector<RendererFacade>& rendererFacades/*, FPSManager& fpsManager*/, float& rotate) {
+	if (window.isResized()) {
+		rendererFacades.clear();
+		for (auto i(0u); i < window.getNumberImages(); ++i)
+			rendererFacades.emplace_back(device, sceneGraph, window.getBufferFactory(), window.getImageFactory(), window.getImGUIInstance(), window.getSwapchain(), window.getExtent());
+	}
+
+	/*	firstCube.identity();
+	firstCube.translate(0, 500, 0);
+	firstCube.rotate(glm::vec3(0, 1, 0), rotate);
+	firstCube.scale(glm::vec3(200));*/
+
+	//rotate += 360.0f / (2* 300);
+	if (rotate > 360.0f)
+		rotate -= 360.0f;
+
+	auto nextImage{ window.getNextImage() };
+
+	sceneGraph.setCamera(camera);
+	rendererFacades[nextImage].newFrame();
+
+	interface.setVoxelizationProfiling(rendererFacades[nextImage].getVoxelizationPassProfiling());
+	interface.execute();
+	interface.checkError();
+
+	rendererFacades[nextImage].setParameters(interface.getParameters());
+
+	auto semaphoreWaitRenderingFinished = rendererFacades[nextImage].execute(window.getImageAvailableSemaphore());
+
+	//fpsManager.wait();
+	window.present(semaphoreWaitRenderingFinished);
+}
+
+void computePhysicalStep(time_ms timeSimulated, time_ms period) {
+
+}
+
 void run() {
+
+
+
 	SuperWindow window(800, 600, NAME);
 	decltype(auto) device = window.getDevice();
 
@@ -131,7 +173,7 @@ void run() {
 	auto sponzaManager = rootNode->addModel("../Models/Sponza/sponza.obj");
 
 	auto sponza = sponzaManager.createEntity();
-	sponza.scale(glm::vec3(1.0 / 10.0));
+	sponza.scale(glm::vec3(1.f / 10.f));
 	//auto firstCube = cubeManager.createEntity();
 
 	auto aabb = sceneGraph.getAABB();
@@ -153,38 +195,26 @@ void run() {
 	camera.position = glm::vec3(-40, 25, 0.0);
 	camera.direction = glm::vec3(-1.0f, -0.0f, 0.0f);
 
+
+	time_ms timeSimulated(0);
+	const time_ms deltaTimeStep(10);
+	time_ms accumulator(0);
+	auto currentTime = std::chrono::high_resolution_clock::now();
+
 	while (window.isRunning()) {
-		if (window.isResized()) {
-			rendererFacades.clear();
-			for (auto i(0u); i < window.getNumberImages(); ++i)
-				rendererFacades.emplace_back(device, sceneGraph, window.getBufferFactory(), window.getImageFactory(), window.getImGUIInstance(), window.getSwapchain(), window.getExtent());
+		auto newTime = std::chrono::high_resolution_clock::now();
+		auto frameTime = newTime - currentTime;
+		currentTime = newTime;
+		accumulator += std::chrono::duration_cast<time_ms>(frameTime);
+		std::cout << accumulator.count() << std::endl;
+		while (accumulator > deltaTimeStep) {
+
+			computePhysicalStep(timeSimulated, deltaTimeStep);
+			accumulator -= deltaTimeStep;
+			timeSimulated += deltaTimeStep;
+			std::cout << timeSimulated.count() << std::endl;
 		}
-
-	/*	firstCube.identity();
-		firstCube.translate(0, 500, 0);
-		firstCube.rotate(glm::vec3(0, 1, 0), rotate);
-		firstCube.scale(glm::vec3(200));*/
-
-		//rotate += 360.0f / (2* 300);
-		if (rotate > 360.0f)
-			rotate -= 360.0f;
-
-		auto nextImage{ window.getNextImage() };
-
-		sceneGraph.setCamera(camera);
-		rendererFacades[nextImage].newFrame();
-
-		interface.setVoxelizationProfiling(rendererFacades[nextImage].getVoxelizationPassProfiling());
-		interface.execute();
-		interface.checkError();
-		
-		rendererFacades[nextImage].setParameters(interface.getParameters());
-		
-		auto semaphoreWaitRenderingFinished = rendererFacades[nextImage].execute(window.getImageAvailableSemaphore());
-
-		fpsManager.wait();
-
-		window.present(semaphoreWaitRenderingFinished);
+		render(window, device, sceneGraph, camera, interface, rendererFacades, rotate);
 	}
 	device->waitIdle();
 }
