@@ -1,6 +1,6 @@
 #include <vector>
 #include "../Tools/glm.h"
-#include "../Tools/Vec3.h"
+#include "../Tools/Maths/Vec3.h"
 
 
 void test() {
