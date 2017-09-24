@@ -6,7 +6,7 @@
 struct State {
 	glm::quat mRot;
 	glm::vec3 mPos;
-	AABB mAABB;
+	glm::vec3 mScale;
 };
 
 class Entity {
@@ -14,7 +14,6 @@ public:
 	Entity(bool *validity, glm::mat4 *matrix, AABB *aabb, const AABB &originalAABB);
 
 	void identity();
-	AABB getOriginalAABB() { return mOriginalAABB; }
 
 	void scale(glm::vec3 scaling);
 	void scale(float x, float y, float z);

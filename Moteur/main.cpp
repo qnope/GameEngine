@@ -172,8 +172,7 @@ void updateCamera(Camera &camera) {
 }
 
 void computePhysicalStep(const float& timeSimulated, const float& period, DynaObject& object) {
-	object.saveState();
-	object.rotate(glm::vec3(0, 1, 0), glm::radians(45.f) * period);
+	object.update(timeSimulated, period);
 }
 
 void computeRenderState(const float& timeLeft, const float& period, DynaObject& object) {
@@ -200,10 +199,10 @@ void run() {
 
 	DynaObject d(&firstCube);
 
-
+	d.scale(glm::vec3(10.f));
 	float rotate = 0.0f;
 
-	FPSManager fpsManager(30);
+	//FPSManager fpsManager(30);
 
 	bool show_test_window = true;
 	bool show_another_window = false;
@@ -215,7 +214,7 @@ void run() {
 	Camera camera;
 
 
-	camera.position = glm::vec3(50, 25, 0.0);
+	camera.position = glm::vec3(50.f, 0.f, 0.f);
 	camera.direction = glm::vec3(-1.0f, -0.0f, 0.0f);
 
 	time_s timeSimulated(0.f);
@@ -237,7 +236,7 @@ void run() {
 			timeSimulated += deltaTimeStep;
 		}
 		computeRenderState(accumulator.count(), deltaTimeStep.count(), d);
-		fpsManager.wait();
+		//fpsManager.wait();
 		window.present(semaphoreWaitRenderingFinished);
 	}
 	device->waitIdle();
@@ -245,16 +244,6 @@ void run() {
 
 int main() {
 	run();
-	/*int _CrtDbgReport(
-		int reportType,
-		const char *filename,
-		int linenumber,
-		const char *moduleName,
-		const char *format[,
-		argument] ...
-	);*/
-	//_CrtSetReportFile(_CRT_ASSERT, _CRTDBG_FILE_STDOUT);
-	//CASSERT(false);
 
 	getchar();
 

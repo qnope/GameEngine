@@ -9,6 +9,7 @@ class DynaObject {
 
 public:
 	DynaObject(Entity* e);
+	void update(const float& timeSimulated, const float& period);
 	void saveState();
 	void computeRenderState(const float alpha);
 	void rotate(const glm::vec3& axis, const float& angle);
