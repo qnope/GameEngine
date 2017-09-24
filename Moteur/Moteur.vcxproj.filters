@@ -302,9 +302,6 @@
     <ClInclude Include="SceneGraph\materialmanager.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="SceneGraph\materialkind.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="Vulkan\descriptorsetlayout.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>

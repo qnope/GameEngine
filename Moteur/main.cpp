@@ -142,7 +142,6 @@ void run() {
 
 	bool show_test_window = true;
 	bool show_another_window = false;
-	ImVec4 clear_color = ImColor(114, 144, 154);
 
 	std::vector<RendererFacade> rendererFacades{};
 
@@ -150,7 +149,7 @@ void run() {
 
 	Camera camera;
 
-	camera.position = glm::vec3(-40, 25, 0.0);
+	camera.position = glm::vec3(-40, 20.0, 0.0);
 	camera.direction = glm::vec3(-1.0f, -0.0f, 0.0f);
 
 	while (window.isRunning()) {
@@ -170,6 +169,18 @@ void run() {
 			rotate -= 360.0f;
 
 		auto nextImage{ window.getNextImage() };
+
+		if (Input::instance().keyPressed[GLFW_KEY_UP])
+			camera.position += glm::vec3(-1, 0.0, 0.0);
+
+		if (Input::instance().keyPressed[GLFW_KEY_DOWN])
+			camera.position -= glm::vec3(-1, 0., 0.);
+
+		if (Input::instance().keyPressed[GLFW_KEY_RIGHT])
+			camera.position += glm::vec3(0.0, 0.0, -1.0);
+
+		if (Input::instance().keyPressed[GLFW_KEY_LEFT])
+			camera.position += glm::vec3(0.0, 0.0, 1.0);
 
 		sceneGraph.setCamera(camera);
 		rendererFacades[nextImage].newFrame();

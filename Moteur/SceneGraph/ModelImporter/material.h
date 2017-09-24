@@ -8,6 +8,13 @@ struct Material {
 	Material(aiMaterial *mtl, std::string const &globalPath);
 
 	std::string albedoTexturePath;
+	std::string normalTexturePath;
+	std::string roughnessTexturePath;
+	std::string metallicTexturePath;
+
 	glm::vec3 albedoColor;
-	bool useAlbedoTexture;
+	bool useAlbedoTexture = false;
+	bool useNormalTexture = false;
+	bool useRoughnessTexture = false;
+	bool useMetallicTexture = false;
 };

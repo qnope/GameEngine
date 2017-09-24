@@ -35,4 +35,8 @@ public:
 	static DescriptorPoolWrapper voxelDownsampler(vk::Device device) {
 		return build(device, 1, DescriptorPoolSize::uniformBuffer(), DescriptorPoolSize::combinedImage(), DescriptorPoolSize::storageImage());
 	}
+
+	static DescriptorPoolWrapper PBRTexture(vk::Device device, uint32_t numberSetByPool) {
+		return build(device, numberSetByPool, DescriptorPoolSize::combinedImage(4)); // albedo, normal, roughness, metallic
+	}
 };

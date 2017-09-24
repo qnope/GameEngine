@@ -4,7 +4,6 @@
 #include "../Descriptor/descriptorsetlayoutbuilder.h"
 #include "../Transfer/imagefactory.h"
 #include "../Transfer/bufferfactory.h"
-#include "materialkind.h"
 #include "ModelImporter/material.h"
 #include "drawer.h"
 
@@ -17,6 +16,9 @@ static_assert(sizeof(AlbedoColor) % 256 == 0, "Albedo color must be 256 bytes al
 
 struct MaterialDescriptor {
 	std::shared_ptr<CombinedImage> albedoTexture;
+	std::shared_ptr<CombinedImage> normalTexture;
+	std::shared_ptr<CombinedImage> roughnessTexture;
+	std::shared_ptr<CombinedImage> metallicTexture;
 	glm::vec3 albedoColor;
 	uint32_t offset;
 };
@@ -39,6 +41,7 @@ public:
 
 	vk::DescriptorSetLayout getAlbedoColorDescriptorSetLayout() const;
 	vk::DescriptorSetLayout getAlbedoTextureDescriptorSetLayout() const;
+	vk::DescriptorSetLayout getPBRTextureDescriptorSetLayout() const;
 
 private:
 	vk::Device mDevice;
@@ -48,7 +51,7 @@ private:
 	std::vector<DescriptorSetLayout> mDescriptorSetLayouts;
 	Buffer mAlbedoColorBuffer;
 	Buffer mAlbedoColorStagingBuffer;
-	std::vector<MaterialKind> mMaterialKinds;
+
 	std::vector<std::vector<vk::DescriptorSet>> mDescriptorSets;
 	std::vector<std::vector<MaterialDescriptor>> mMaterialDescriptors;
 	std::vector<vk::Pipeline> mPipelines;

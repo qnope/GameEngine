@@ -35,8 +35,7 @@ bool insideTheCube(const in vec3 worldPosition, const in uint currentClipMap) {
 }
 
 vec3 getPosSampling(in const vec3 worldPosition, in const uint level) {
-	const float diagonal = cubeCenterDiagonal[level].w;
-	return (worldPosition - cubeCenterDiagonal[level].xyz +	diagonal / 2.0) / diagonal;
+	return fract(worldPosition / cubeCenterDiagonal[level].w);
 }
 
 void main() 
@@ -46,7 +45,7 @@ void main()
 	if(!insideTheCube(fs_in.worldPosition, indexClipMap))
 		return;
 		
-	const ivec3 voxel = ivec3(getPosSampling(fs_in.worldPosition, indexClipMap) * voxelGridResolution) & ivec3(voxelGridResolution - 1);
+	const ivec3 voxel = ivec3(getPosSampling(fs_in.worldPosition, indexClipMap) * voxelGridResolution) % ivec3(voxelGridResolution);
 	
 	for(int i = 0; i < 3; ++i)
 		storeOpacity(i, indexClipMap, voxel, 1.0);

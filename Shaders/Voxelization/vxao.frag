@@ -50,7 +50,7 @@ vec2 Hammersley(uint i)
 
 vec3 getPosSampling(in const vec3 worldPosition, in const uint level) {
 	const float diagonal = cubeCenterDiagonal[level].w;
-	return (worldPosition - cubeCenterDiagonal[level].xyz + diagonal / 2.0) / diagonal;
+	return fract(worldPosition / diagonal);
 }
 
 float sampleAnisotropic(in const vec3 worldPosition, in const uint level, in const vec3 weight) {
@@ -115,7 +115,7 @@ float coneTracing(in vec3 start, in const vec3 direction, in const float tanHalf
 				
 		const float diameter = max(dist * coneApertureCoeff, voxelSizeL0);
 				
-		const float level = min(max(log2(diameter / voxelSizeL0), currentLevel), clipMapNumber - 1);
+		const float level = min(max(max(log2(diameter / voxelSizeL0), currentLevel), startLevel), clipMapNumber - 1);
 		voxelSize = voxelSizeL0 * exp2(level);
 		const float voxel = sampleAnisotropicLinearly(start, direction, level);
 		
