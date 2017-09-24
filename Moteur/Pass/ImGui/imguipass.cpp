@@ -56,6 +56,11 @@ void ImGUIPass::newFrame()
 	ImGui::NewFrame();
 }
 
+vk::RenderPass ImGUIPass::getRenderPass() const
+{
+	return mRenderPass;
+}
+
 vk::CommandBuffer ImGUIPass::execute(const Framebuffer &framebuffer)
 {
 	ImGui::Render();

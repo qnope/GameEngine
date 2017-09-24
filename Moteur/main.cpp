@@ -90,7 +90,7 @@ public:
 
 private:
 	Window mWindow;
-	Instance mInstance{ "", "", mWindow, false };
+	Instance mInstance{ "", "", mWindow, true };
 	Device mDevice{ mInstance };
 	std::unique_ptr<Swapchain> mSwapchain;
 	std::vector<vk::UniqueSemaphore> mImageAvailableSemaphores;
@@ -123,25 +123,25 @@ private:
 	const std::chrono::milliseconds mFrameDurationInMilisecond;
 };
 
-vk::Semaphore render(SuperWindow& window, Device& device, SceneGraph& sceneGraph, Camera& camera, Interface& interface, std::vector<RendererFacade>& rendererFacades) {
+vk::Semaphore render(SuperWindow& window, Device& device, SceneGraph& sceneGraph, Camera& camera, Interface& interface, std::unique_ptr<RendererFacade> &rendererFacade) {
 	if (window.isResized()) {
-		rendererFacades.clear();
+		rendererFacade = std::make_unique<RendererFacade>(device, sceneGraph, window.getBufferFactory(), window.getImageFactory(), window.getImGUIInstance(), window.getExtent());
 		for (auto i(0u); i < window.getNumberImages(); ++i)
-			rendererFacades.emplace_back(device, sceneGraph, window.getBufferFactory(), window.getImageFactory(), window.getImGUIInstance(), window.getSwapchain(), window.getExtent());
+			window.getSwapchain().createFramebuffer(rendererFacade->getPresentationRenderPass());
 	}
 
 	auto nextImage{ window.getNextImage() };
 
 	sceneGraph.setCamera(camera);
-	rendererFacades[nextImage].newFrame();
+	rendererFacade->newFrame();
 
-	interface.setVoxelizationProfiling(rendererFacades[nextImage].getVoxelizationPassProfiling());
+	interface.setVoxelizationProfiling(rendererFacade->getVoxelizationPassProfiling());
 	interface.execute();
 	interface.checkError();
 
-	rendererFacades[nextImage].setParameters(interface.getParameters());
+	rendererFacade->setParameters(interface.getParameters());
 
-	return rendererFacades[nextImage].execute(window.getImageAvailableSemaphore());
+	return rendererFacade->execute(window.getImageAvailableSemaphore(), window.getSwapchain().getFramebuffers()[window.getNextImage()]);
 }
 
 void updateCamera(Camera &camera) {
@@ -195,7 +195,7 @@ void run() {
 	bool show_test_window = true;
 	bool show_another_window = false;
 
-	std::vector<RendererFacade> rendererFacades{};
+	std::unique_ptr<RendererFacade> rendererFacade;
 
 	Interface interface(NAME);
 
@@ -210,7 +210,7 @@ void run() {
 	auto currentTime = std::chrono::high_resolution_clock::now();
 
 	while (window.isRunning()) {
-		auto semaphoreWaitRenderingFinished = render(window, device, sceneGraph, camera, interface, rendererFacades);
+		auto semaphoreWaitRenderingFinished = render(window, device, sceneGraph, camera, interface, rendererFacade);
 		updateCamera(camera);
 		auto newTime = std::chrono::high_resolution_clock::now();
 		auto frameTime = newTime - currentTime;
@@ -223,7 +223,7 @@ void run() {
 			timeSimulated += deltaTimeStep;
 		}
 		computeRenderState(accumulator.count(), deltaTimeStep.count(), d);
-		fpsManager.wait();
+		//fpsManager.wait();
 		window.present(semaphoreWaitRenderingFinished);
 	}
 	device->waitIdle();

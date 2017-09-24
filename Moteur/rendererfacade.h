@@ -38,16 +38,18 @@ struct EngineParameter {
 
 class RendererFacade {
 public:
-	RendererFacade(Device &device, SceneGraph &sceneGraph, BufferFactory &bufferFactory, ImageFactory &imageFactory, ImGUIInstance &imguiInstance, Swapchain &swapchain, vk::Extent2D extent);
+	RendererFacade(Device &device, SceneGraph &sceneGraph, BufferFactory &bufferFactory, ImageFactory &imageFactory, ImGUIInstance &imguiInstance, vk::Extent2D extent);
 
 	void setParameters(EngineParameter parameter);
 
 	void newFrame();
 
 	// return presentationRenderPass
-	vk::Semaphore execute(vk::Semaphore waitRenderPresentableImageSemaphore);
+	vk::Semaphore execute(vk::Semaphore waitRenderPresentableImageSemaphore, const Framebuffer &framebuffer);
 
 	const std::vector<Profiling> *getVoxelizationPassProfiling() const;
+
+	vk::RenderPass getPresentationRenderPass() const;
 
 private:
 	Device &mDevice;
@@ -57,13 +59,13 @@ private:
 	ImGUIInstance &mImGUIInstance;
 
 	CommandBufferSubmitter mSubmitter{};
-	CommandPool mCommandPool{ mDevice, 0, false, false };
+	CommandPool mNonTransientCommandPool{ mDevice, 0, false, false };
+	CommandPool mTransientCommandPool{ mDevice, 0, true, true };
 	vk::UniqueSemaphore mImagePresentable{ mDevice->createSemaphoreUnique(vk::SemaphoreCreateInfo()) };
 
 	Fence mFencePresentableImage{ mDevice, true };
 
 	vk::Extent2D mExtent;
-	const Framebuffer *mSwapchainFramebuffer;
 
 	Framebuffer mAmbientOcclusionFramebuffer;
 
@@ -80,19 +82,17 @@ private:
 	std::unique_ptr<VXAOPass> mVxaoPass;
 
 	vk::UniqueCommandBuffer mRenderDeferredPassesCommandBuffer;
-	vk::UniqueCommandBuffer mFinalRenderingPassCommandBuffer;
+	vk::UniqueCommandBuffer mFinalRenderingPassCommandBuffer{ std::move(mTransientCommandPool.allocate(vk::CommandBufferLevel::ePrimary, 1)[0]) };
 	
 	vk::UniqueCommandBuffer mVoxelizationPassCommandBuffer;
 	vk::UniqueCommandBuffer mVxaoPassCommandBuffer;
 
-	// These passes are for debugguing
 	std::unique_ptr<RenderFullScreenPass> mVisualizePass;
-	vk::UniqueCommandBuffer mVisualizePassCommandBuffer;
 	int mCurrentType{ -1 };
 
 	void createSceneGraphBuffers();
 	void createDeferredPasses();
-	void createFinalRenderingPass(Swapchain &swapchain);
+	void createFinalRenderingPass();
 
 	void createVoxelizationPass();
 	void createVXAOPass();
@@ -106,7 +106,5 @@ private:
 	void createVisualizeNormalPass();
 	void createVisualizeAmbientOcclusionPass();
 
-	void createVisualizeVoxelGridPass();
-
-	vk::CommandBuffer choseTheGoodPresentationPass();
+	vk::CommandBuffer choseTheGoodPresentationPass(vk::Framebuffer framebuffer);
 };

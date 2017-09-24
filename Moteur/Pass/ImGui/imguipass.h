@@ -10,6 +10,7 @@ public:
 	ImGUIPass(ImGUIInstance &imGUIInstance, Device &device, vk::Format format, vk::Extent2D extent, BufferFactory &bufferFactory);
 
 	void newFrame();
+	vk::RenderPass getRenderPass() const;
 
 	vk::CommandBuffer execute(const Framebuffer &framebuffer);
 

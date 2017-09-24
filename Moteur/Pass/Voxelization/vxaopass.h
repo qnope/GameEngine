@@ -4,9 +4,9 @@
 #include "voxelizationpass.h"
 
 struct VXAOParameter {
-	float offsetCone{ 3.0f };
+	float offsetCone{ 2.5f };
 	int numberCones{ 16 };
-	float oversampling{ 1.0f };
+	float oversampling{ 0.1f };
 	float distanceAttenuation{ 1.f };
 	float force{ 1.0f };
 	float maximumDistance{ 0.1f };

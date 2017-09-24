@@ -1,6 +1,6 @@
 #include "rendererfacade.h"
 
-RendererFacade::RendererFacade(Device & device, SceneGraph & sceneGraph, BufferFactory & bufferFactory, ImageFactory & imageFactory, ImGUIInstance & imguiInstance, Swapchain &swapchain, vk::Extent2D extent) :
+RendererFacade::RendererFacade(Device & device, SceneGraph & sceneGraph, BufferFactory & bufferFactory, ImageFactory & imageFactory, ImGUIInstance & imguiInstance, vk::Extent2D extent) :
 	mDevice(device),
 	mSceneGraph(sceneGraph),
 	mBufferFactory(bufferFactory),
@@ -10,13 +10,13 @@ RendererFacade::RendererFacade(Device & device, SceneGraph & sceneGraph, BufferF
 {
 	createSceneGraphBuffers();
 	createDeferredPasses();
-	createFinalRenderingPass(swapchain);
 
 	createVoxelizationPass();
 
 	createVXAOPass();
 
 	createImGUIPass();
+
 	mVoxelGridHasChanged = false;
 }
 
@@ -34,7 +34,7 @@ void RendererFacade::newFrame()
 	mImguiPass->newFrame();
 }
 
-vk::Semaphore RendererFacade::execute(vk::Semaphore waitImageAvailableSemaphore)
+vk::Semaphore RendererFacade::execute(vk::Semaphore waitImageAvailableSemaphore, const Framebuffer &framebuffer)
 {
 	if (mEngineParameters.voxelizationPassParameter.enable) {
 		mFencePresentableImage.wait();
@@ -62,7 +62,7 @@ vk::Semaphore RendererFacade::execute(vk::Semaphore waitImageAvailableSemaphore)
 		mSubmitter.addCommandBuffer(sceneGraphBuffersComputing);
 	}
 
-	auto imguiCommandBuffer = mImguiPass->execute(*mSwapchainFramebuffer);
+	auto imguiCommandBuffer = mImguiPass->execute(framebuffer);
 
 	mSubmitter.addCommandBuffer(mRenderDeferredPassesCommandBuffer);
 
@@ -71,7 +71,7 @@ vk::Semaphore RendererFacade::execute(vk::Semaphore waitImageAvailableSemaphore)
 		mSubmitter.addCommandBuffer(mVxaoPassCommandBuffer);
 	}
 
-	mSubmitter.addCommandBuffer(choseTheGoodPresentationPass());
+	mSubmitter.addCommandBuffer(choseTheGoodPresentationPass(framebuffer));
 
 	mSubmitter.addCommandBuffer(imguiCommandBuffer);
 
@@ -91,6 +91,11 @@ const std::vector<Profiling>* RendererFacade::getVoxelizationPassProfiling() con
 	return (mVoxelizationPassProfiling.empty()) ? nullptr : &mVoxelizationPassProfiling;
 }
 
+vk::RenderPass RendererFacade::getPresentationRenderPass() const
+{
+	return mImguiPass->getRenderPass();
+}
+
 void RendererFacade::createSceneGraphBuffers()
 {
 	mSceneGraphBuffers = std::make_unique<SceneGraphBuffer>(mDevice, mSceneGraph, mBufferFactory);
@@ -100,27 +105,19 @@ void RendererFacade::createDeferredPasses()
 {
 	mRenderDeferredPasses = std::make_unique<RenderDeferredPasses>(mDevice, mExtent, mImageFactory, mSceneGraph, mSceneGraphBuffers->getPerspectiveViewMatrixBuffer(), mSceneGraphBuffers->getModelMatricesBuffer(), mSceneGraphBuffers->getIndirectBuffer());
 
-	mRenderDeferredPassesCommandBuffer = std::move(mCommandPool.allocate(vk::CommandBufferLevel::ePrimary, 1)[0]);
+	mRenderDeferredPassesCommandBuffer = std::move(mNonTransientCommandPool.allocate(vk::CommandBufferLevel::ePrimary, 1)[0]);
 
 	mRenderDeferredPassesCommandBuffer->begin(StructHelper::beginCommand());
 	mRenderDeferredPasses->execute(mRenderDeferredPassesCommandBuffer);
 	mRenderDeferredPassesCommandBuffer->end();
 }
 
-void RendererFacade::createFinalRenderingPass(Swapchain & swapchain)
+void RendererFacade::createFinalRenderingPass()
 {
 	mFinalRenderingPass = std::make_unique<RenderFullScreenPass>(mDevice, vk::Format::eB8G8R8A8Unorm, vk::ImageLayout::eUndefined, vk::ImageLayout::eShaderReadOnlyOptimal);
 	mFinalRenderingPass->setFragmentStage("../Shaders/RenderFullScreen/finalrendering.spv");
 	mFinalRenderingPass->addSampler(vk::DescriptorImageInfo(mRenderDeferredPasses->getAlbedoMap(), mRenderDeferredPasses->getAlbedoMap(), vk::ImageLayout::eShaderReadOnlyOptimal), 0);
 	mFinalRenderingPass->create(mExtent);
-
-	mSwapchainFramebuffer = &swapchain.createFramebuffer(mFinalRenderingPass->getRenderPass());
-
-	mFinalRenderingPassCommandBuffer = std::move(mCommandPool.allocate(vk::CommandBufferLevel::ePrimary, 1)[0]);
-
-	mFinalRenderingPassCommandBuffer->begin(StructHelper::beginCommand());
-	mFinalRenderingPass->execute(mFinalRenderingPassCommandBuffer, *mSwapchainFramebuffer);
-	mFinalRenderingPassCommandBuffer->end();
 }
 
 void RendererFacade::createVoxelizationPass()
@@ -141,7 +138,7 @@ void RendererFacade::createVoxelizationPass()
 		mCurrentType = -1;
 
 		mVoxelizationPass = std::make_unique<VoxelizationPass>(mDevice, resolution, mEngineParameters.voxelizationPassParameter.clipMapNumber, mSceneGraph, mSceneGraphBuffers->getModelMatricesBuffer(), mSceneGraphBuffers->getIndirectBuffer(), mImageFactory, mBufferFactory);
-		mVoxelizationPassCommandBuffer = std::move(mCommandPool.allocate(vk::CommandBufferLevel::ePrimary, 1)[0]);
+		mVoxelizationPassCommandBuffer = std::move(mNonTransientCommandPool.allocate(vk::CommandBufferLevel::ePrimary, 1)[0]);
 		mVoxelizationPassCommandBuffer->begin(StructHelper::beginCommand());
 		mVoxelizationPass->execute(mVoxelizationPassCommandBuffer);
 		mVoxelizationPassCommandBuffer->end();
@@ -168,7 +165,7 @@ void RendererFacade::createVXAOPass()
 
 	mAmbientOcclusionFramebuffer = FramebufferBuilder::fullscreen(mDevice, mImageFactory, vk::Format::eR8Unorm, extent, mVxaoPass->getRenderPass());
 	
-	mVxaoPassCommandBuffer = std::move(mCommandPool.allocate(vk::CommandBufferLevel::ePrimary, 1)[0]);
+	mVxaoPassCommandBuffer = std::move(mNonTransientCommandPool.allocate(vk::CommandBufferLevel::ePrimary, 1)[0]);
 	mVxaoPassCommandBuffer->begin(StructHelper::beginCommand());
 	mVxaoPass->execute(mVxaoPassCommandBuffer, mAmbientOcclusionFramebuffer);
 	mVxaoPassCommandBuffer->end();
@@ -182,17 +179,11 @@ void RendererFacade::createImGUIPass()
 void RendererFacade::createVisualizePass(const CombinedImage & combinedImage, bool isMonochromatic, bool needGammaCorrection)
 {
 	std::vector<unsigned> rangesData = { isMonochromatic, needGammaCorrection };
-	mVisualizePass = std::make_unique<RenderFullScreenPass>(mDevice, vk::Format::eB8G8R8A8Unorm, vk::ImageLayout::eUndefined, vk::ImageLayout::eShaderReadOnlyOptimal);
-	mVisualizePass->setFragmentStage("../Shaders/RenderFullScreen/visualizationbuffer.spv");
-	mVisualizePass->addSampler(vk::DescriptorImageInfo(combinedImage, combinedImage, vk::ImageLayout::eShaderReadOnlyOptimal), 0);
-	mVisualizePass->addPushConstant(rangesData.data(), (uint32_t)rangesData.size() * sizeof(unsigned));
-	mVisualizePass->create(mExtent);
-	
-	mVisualizePassCommandBuffer = std::move(mCommandPool.allocate(vk::CommandBufferLevel::ePrimary, 1)[0]);
-
-	mVisualizePassCommandBuffer->begin(StructHelper::beginCommand());
-	mVisualizePass->execute(mVisualizePassCommandBuffer, *mSwapchainFramebuffer);
-	mVisualizePassCommandBuffer->end();
+	mFinalRenderingPass = std::make_unique<RenderFullScreenPass>(mDevice, vk::Format::eB8G8R8A8Unorm, vk::ImageLayout::eUndefined, vk::ImageLayout::eShaderReadOnlyOptimal);
+	mFinalRenderingPass->setFragmentStage("../Shaders/RenderFullScreen/visualizationbuffer.spv");
+	mFinalRenderingPass->addSampler(vk::DescriptorImageInfo(combinedImage, combinedImage, vk::ImageLayout::eShaderReadOnlyOptimal), 0);
+	mFinalRenderingPass->addPushConstant(rangesData.data(), (uint32_t)rangesData.size() * sizeof(unsigned));
+	mFinalRenderingPass->create(mExtent);
 }
 
 void RendererFacade::createVisualizeAlbedoPass()
@@ -215,53 +206,32 @@ void RendererFacade::createVisualizeAmbientOcclusionPass()
 	createVisualizePass(mAmbientOcclusionFramebuffer.getCombinedImage(0), true, true);
 }
 
-void RendererFacade::createVisualizeVoxelGridPass()
-{
-	mVisualizePass = std::make_unique<RenderFullScreenPass>(mDevice, vk::Format::eB8G8R8A8Unorm, vk::ImageLayout::eUndefined, vk::ImageLayout::eShaderReadOnlyOptimal);
-	mVisualizePass->setFragmentStage("../Shaders/Voxelization/visualization.spv");
-	mVisualizePass->addUniformBuffer(vk::DescriptorBufferInfo(mSceneGraphBuffers->getPerspectiveViewMatrixBuffer(), 0, VK_WHOLE_SIZE), 0);
-	mVisualizePass->addUniformBuffer(vk::DescriptorBufferInfo(mVoxelizationPass->getCubeVoxelizationInfoBuffer(), 0, VK_WHOLE_SIZE), 1);
-	mVisualizePass->addStorageImage(vk::DescriptorImageInfo(mVoxelizationPass->getVoxelGrid(), mVoxelizationPass->getVoxelGrid(), vk::ImageLayout::eGeneral), 2);
-	mVisualizePass->create(mExtent);
-
-	mVisualizePassCommandBuffer = std::move(mCommandPool.allocate(vk::CommandBufferLevel::ePrimary, 1)[0]);
-	mVisualizePassCommandBuffer->begin(StructHelper::beginCommand());
-	auto transitionVoxelGrid = MemoryBarrier::image(mVoxelizationPass->getVoxelGrid(), vk::ImageLayout::eTransferSrcOptimal, vk::ImageLayout::eGeneral, ImageSubresource::rangeColor(), vk::AccessFlagBits::eTransferRead, vk::AccessFlagBits::eShaderRead);
-	MemoryBarrier::barrier(transitionVoxelGrid, mVisualizePassCommandBuffer, vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eFragmentShader);
-	mVisualizePass->execute(mVisualizePassCommandBuffer, *mSwapchainFramebuffer);
-	mVisualizePassCommandBuffer->end();
-}
-
-vk::CommandBuffer RendererFacade::choseTheGoodPresentationPass()
+vk::CommandBuffer RendererFacade::choseTheGoodPresentationPass(vk::Framebuffer framebuffer)
 {
 	auto type = mEngineParameters.presentationPassParameter.type;
-	if (type == FINAL_RENDERING) {
+
+	if (mCurrentType != type) {
+		if (type == FINAL_RENDERING)
+			createFinalRenderingPass();
+
+		else if (type == ALBEDO)
+			createVisualizeAlbedoPass();
+
+		else if (type == TANGENT)
+			createVisualizeTangentPass();
+
+		else if (type == NORMAL)
+			createVisualizeNormalPass();
+
+		else if (type == AMBIENT_OCCLUSION)
+			createVisualizeAmbientOcclusionPass();
+		
 		mCurrentType = type;
-		mVisualizePass = nullptr;
-		mVisualizePassCommandBuffer.reset(vk::CommandBuffer());
-		return mFinalRenderingPassCommandBuffer;
 	}
 
-	else {
-		if (mCurrentType != type) {
-			if (type == ALBEDO)
-				createVisualizeAlbedoPass();
+	mFinalRenderingPassCommandBuffer->begin(StructHelper::beginCommand());
+	mFinalRenderingPass->execute(mFinalRenderingPassCommandBuffer, framebuffer);
+	mFinalRenderingPassCommandBuffer->end();
 
-			else if (type == TANGENT)
-				createVisualizeTangentPass();
-
-			else if (type == NORMAL)
-				createVisualizeNormalPass();
-
-			else if (type == AMBIENT_OCCLUSION)
-				createVisualizeAmbientOcclusionPass();
-
-			else if (type == VOXEL_GRID)
-				createVisualizeVoxelGridPass();
-			
-			mCurrentType = type;
-		}
-
-		return (*mVisualizePassCommandBuffer != vk::CommandBuffer()) ? mVisualizePassCommandBuffer : mFinalRenderingPassCommandBuffer;
-	}
+	return mFinalRenderingPassCommandBuffer;
 }
