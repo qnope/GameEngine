@@ -2,24 +2,30 @@
 
 
 DynaObject::DynaObject(Entity* e) {
-	mRef = glm::mat4{ 1.f };
+	mState.mPos = glm::vec3(0.f, 0.f, 0.f);
+	mState.mRot = glm::quat(1, 0, 0.f, 0.f);
+	mState.mScale = glm::vec3(0.f, 0.f, 0.f);
+	mPrevState = mState;
 	mVisualEntity = e;
 }
 
-void DynaObject::computeRenderState(float alpha) {
-	*mVisualEntity->mMatrix = glm::mix(mPrevState.mRef.mat, mRef.mat, alpha);
-	mVisualEntity->mAABB->min = glm::mix(mPrevState.mAABB.min, mAABB.min, alpha);
-	mVisualEntity->mAABB->max = glm::mix(mPrevState.mAABB.max, mAABB.max, alpha);
+void DynaObject::update(const float& timeSimulated, const float& period) {
+	saveState();
+	rotate(glm::vec3(0, 1, 0), glm::radians(45.f) * period);
+}
+
+void DynaObject::computeRenderState(const float alpha) {
+	mVisualEntity->computeState(mPrevState, mState, alpha);
 }
 
 void DynaObject::saveState() {
-	mPrevState.mAABB = mAABB;
-	mPrevState.mRef = mRef;
+	mPrevState = mState;
 }
 
 void DynaObject::rotate(const glm::vec3& axis, const float& angle) {
-	glm::mat4 rot = glm::mat4{ 1.f };
-	rot = glm::rotate(rot, angle, axis);
-	mRef = glm::rotate(mRef.mat, angle, axis);
-	mAABB = mAABB * rot;
+	mState.mRot = glm::rotate(mState.mRot, angle, axis);
+}
+
+void DynaObject::scale(glm::vec3 scaling) {
+	mState.mScale = scaling;
 }

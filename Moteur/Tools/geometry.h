@@ -9,6 +9,7 @@ struct AABB {
 
 AABB &operator<<(AABB &aabb, const AABB &a);
 AABB operator*(const AABB &aabb, const glm::mat4 &matrix);
+AABB operator*(const AABB &aabb, const glm::quat &quat);
 
 struct Cube {
 	Cube(const AABB &aabb) {

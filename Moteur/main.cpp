@@ -19,6 +19,19 @@
 
 #include "Physics/dynaobject.h"
 
+#include <crtdbg.h>
+
+
+#define CASSERT(expr) \
+   do { \
+	_CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_WNDW);\
+	_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_WNDW);\
+	_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_WNDW);\
+      if (!(expr) && (1 == _CrtDbgReport( \
+         _CRT_ASSERT, __FILE__, __LINE__, #expr, NULL))) \
+         _CrtDbgBreak(); \
+   } while (0)
+
 #define NAME "Engine"
 #define TIMESTEP 0.01f
 typedef std::chrono::duration<float> time_s;
@@ -159,8 +172,7 @@ void updateCamera(Camera &camera) {
 }
 
 void computePhysicalStep(const float& timeSimulated, const float& period, DynaObject& object) {
-	object.saveState();
-	object.rotate(glm::vec3(0, 1, 0), glm::radians(45.f) * period);
+	object.update(timeSimulated, period);
 }
 
 void computeRenderState(const float& timeLeft, const float& period, DynaObject& object) {
@@ -183,14 +195,14 @@ void run() {
 	auto sponza = sponzaManager.createEntity();
 	sponza.scale(glm::vec3(1.f / 10.f));
 	auto firstCube = cubeManager.createEntity();
+	auto aabb = sceneGraph.getAABB();
 
 	DynaObject d(&firstCube);
 
-	auto aabb = sceneGraph.getAABB();
-
+	d.scale(glm::vec3(10.f));
 	float rotate = 0.0f;
 
-	FPSManager fpsManager(30);
+	//FPSManager fpsManager(30);
 
 	bool show_test_window = true;
 	bool show_another_window = false;
@@ -201,7 +213,8 @@ void run() {
 
 	Camera camera;
 
-	camera.position = glm::vec3(50, 25, 0.0);
+
+	camera.position = glm::vec3(50.f, 0.f, 0.f);
 	camera.direction = glm::vec3(-1.0f, -0.0f, 0.0f);
 
 	time_s timeSimulated(0.f);

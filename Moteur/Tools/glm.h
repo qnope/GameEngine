@@ -6,6 +6,7 @@
 #include <iostream>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 template<typename T, glm::precision P>
 inline std::ostream &operator<<(std::ostream &o, const glm::tvec2<T, P> &v) {
