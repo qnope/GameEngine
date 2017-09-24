@@ -58,3 +58,9 @@ bool Entity::isValid() const
 {
 	return mValidity;
 }
+
+void Entity::computeState(const State& prevState, const State& state, const float& alpha) {
+	*mMatrix = glm::mix(prevState.mRef.mat, state.mRef.mat, alpha);
+	mAABB->min = glm::mix(prevState.mAABB.min, state.mAABB.min, alpha);
+	mAABB->max = glm::mix(prevState.mAABB.max, state.mAABB.max, alpha);
+}
