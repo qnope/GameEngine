@@ -1,22 +1,33 @@
+#pragma once
 #include <vector>
-#include "../Tools/glm.h"
-#include "../Tools/Maths/Vec3.h"
+#include "../Tools/geometry.h"
+#include "../SceneGraph/entity.h"
 
+struct Ref {
+	Ref() : mat(glm::mat4{ 1.f }){}
+	Ref(glm::mat4 m) : mat(m) {}
 
-void test() {
-	//glm::cross()
-}
+	glm::mat3 rot() { return glm::mat3(mat); }
+	glm::vec3 pos() { return glm::vec3(mat[3]); }
+	glm::mat4 mat;
+};
 
-
+struct PrevState {
+	Ref mRef;
+	AABB mAABB;
+};
 
 class DynaObject {
-	DynaObject();
 
+public:
+	DynaObject(Entity* e);
+	~DynaObject();
+	void saveState();
+	void computeRenderState(const float alpha);
+	void rotate(const glm::vec3& axis, const float& angle);
 private:
-	std::vector<glm::vec3> mForces;
-	std::vector<glm::vec3> mTorques;
-
-	Vec3 mPos;
-
-	glm::vec3 mGravityCenter; // relative to mPos
+	Ref mRef;
+	AABB mAABB;
+	PrevState mPrevState;
+	Entity *mVisualEntity;
 };

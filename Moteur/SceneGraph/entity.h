@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../Tools/glm.h"
-#include "ModelImporter/mesh.h"
+#include "../Tools/geometry.h"
 
 class Entity {
 public:
@@ -22,7 +22,7 @@ public:
 
 	bool isValid() const;
 
-private:
+//private:
 	bool *mValidity;
 	glm::mat4 *mMatrix;
 	AABB *mAABB;

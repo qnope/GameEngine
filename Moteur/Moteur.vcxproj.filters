@@ -192,13 +192,10 @@
     <ClCompile Include="Vulkan\querypool.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Physics\DynaObject.cpp">
+    <ClCompile Include="Tools\geometry.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Tools\Maths\Mat3.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Tools\Maths\Vec3.cpp">
+    <ClCompile Include="Physics\dynaobject.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -422,13 +419,10 @@
     <ClInclude Include="SceneGraph\camera.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Physics\DynaObject.h">
+    <ClInclude Include="Tools\geometry.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Tools\Maths\Vec3.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Tools\Maths\Mat3.h">
+    <ClInclude Include="Physics\dynaobject.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

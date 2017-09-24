@@ -1,11 +1,11 @@
-#include "Window\window.h"
-#include "Tools\glm.h"
+#include "Window/window.h"
+#include "Tools/glm.h"
 #include <thread>
 #include <chrono>
 #include <iostream>
 #include "Vulkan/instance.h"
 #include "Vulkan/device.h"
-#include "Vulkan\swapchain.h"
+#include "Vulkan/swapchain.h"
 #include "Transfer/bufferfactory.h"
 #include "Transfer/imagefactory.h"
 #include "SceneGraph/scenegraph.h"
@@ -17,9 +17,12 @@
 #include "rendererfacade.h"
 #include "interface.h"
 
-#define NAME "Engine"
+#include "Physics/dynaobject.h"
 
-typedef std::chrono::milliseconds time_ms;
+#define NAME "Engine"
+#define TIMESTEP 0.01f
+typedef std::chrono::duration<float> time_s;
+
 
 class SuperWindow {
 public:
@@ -120,7 +123,7 @@ private:
 	const std::chrono::milliseconds mFrameDurationInMilisecond;
 };
 
-void render(SuperWindow& window, Device& device, SceneGraph& sceneGraph, Camera& camera, Interface& interface, std::vector<RendererFacade>& rendererFacades/*, FPSManager& fpsManager*/, float& rotate) {
+void render(SuperWindow& window, Device& device, SceneGraph& sceneGraph, Camera& camera, Interface& interface, std::vector<RendererFacade>& rendererFacades) {
 	if (window.isResized()) {
 		rendererFacades.clear();
 		for (auto i(0u); i < window.getNumberImages(); ++i)
@@ -133,8 +136,8 @@ void render(SuperWindow& window, Device& device, SceneGraph& sceneGraph, Camera&
 	firstCube.scale(glm::vec3(200));*/
 
 	//rotate += 360.0f / (2* 300);
-	if (rotate > 360.0f)
-		rotate -= 360.0f;
+	//if (rotate > 360.0f)
+		//rotate -= 360.0f;
 
 	auto nextImage{ window.getNextImage() };
 
@@ -153,8 +156,14 @@ void render(SuperWindow& window, Device& device, SceneGraph& sceneGraph, Camera&
 	window.present(semaphoreWaitRenderingFinished);
 }
 
-void computePhysicalStep(time_ms timeSimulated, time_ms period) {
+void computePhysicalStep(const float& timeSimulated, const float& period, DynaObject& object) {
+	object.saveState();
+	object.rotate(glm::vec3(0, 1, 0), glm::radians(45.f) * period);
+}
 
+void computeRenderState(const float& timeLeft, const float& period, DynaObject& object) {
+	float alpha = timeLeft / period;
+	object.computeRenderState(alpha);
 }
 
 void run() {
@@ -169,12 +178,14 @@ void run() {
 
 	auto rootNode = sceneGraph.getRootNode();
 
-	//auto cubeManager = rootNode->addModel("../Models/cube.obj");
+	auto cubeManager = rootNode->addModel("../Models/cube.obj");
 	auto sponzaManager = rootNode->addModel("../Models/Sponza/sponza.obj");
 
 	auto sponza = sponzaManager.createEntity();
 	sponza.scale(glm::vec3(1.f / 10.f));
-	//auto firstCube = cubeManager.createEntity();
+	auto firstCube = cubeManager.createEntity();
+
+	DynaObject d(&firstCube);
 
 	auto aabb = sceneGraph.getAABB();
 
@@ -192,27 +203,28 @@ void run() {
 
 	Camera camera;
 
-	camera.position = glm::vec3(-40, 25, 0.0);
-	camera.direction = glm::vec3(-1.0f, -0.0f, 0.0f);
+	camera.position = glm::vec3(-0, 2.f, -3.0);
+	camera.direction = glm::vec3(-0.0f, -0.2f, 1.0f);
 
 
-	time_ms timeSimulated(0);
-	const time_ms deltaTimeStep(10);
-	time_ms accumulator(0);
+	time_s timeSimulated(0.f);
+	const time_s deltaTimeStep(TIMESTEP);
+	time_s accumulator(0.f);
 	auto currentTime = std::chrono::high_resolution_clock::now();
 
 	while (window.isRunning()) {
 		auto newTime = std::chrono::high_resolution_clock::now();
 		auto frameTime = newTime - currentTime;
 		currentTime = newTime;
-		accumulator += std::chrono::duration_cast<time_ms>(frameTime);
+		accumulator += std::chrono::duration_cast<time_s>(frameTime);
 		while (accumulator > deltaTimeStep) {
 
-			computePhysicalStep(timeSimulated, deltaTimeStep);
+			computePhysicalStep(timeSimulated.count(), deltaTimeStep.count(), d);
 			accumulator -= deltaTimeStep;
 			timeSimulated += deltaTimeStep;
 		}
-		render(window, device, sceneGraph, camera, interface, rendererFacades, rotate);
+		computeRenderState(accumulator.count(), deltaTimeStep.count(), d);
+		render(window, device, sceneGraph, camera, interface, rendererFacades);
 	}
 	device->waitIdle();
 }
