@@ -244,7 +244,6 @@
     <ClInclude Include="SceneGraph\drawer.h" />
     <ClInclude Include="SceneGraph\entity.h" />
     <ClInclude Include="SceneGraph\entitymanager.h" />
-    <ClInclude Include="SceneGraph\materialkind.h" />
     <ClInclude Include="SceneGraph\materialmanager.h" />
     <ClInclude Include="SceneGraph\meshmanager.h" />
     <ClInclude Include="SceneGraph\ModelImporter\material.h" />

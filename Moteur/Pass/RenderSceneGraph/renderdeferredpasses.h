@@ -14,6 +14,7 @@ public:
 	const CombinedImage &getAlbedoMap() const;
 	const CombinedImage &getTangentMap() const;
 	const CombinedImage &getNormalMap() const;
+	const CombinedImage &getRoughnessMetallicMap() const;
 	const CombinedImage &getDepthMap() const;
 
 private:

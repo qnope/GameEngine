@@ -3,6 +3,7 @@
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 #include <array>
+
 class Input {
 public:
 	double mouseXPos{ 0.0 };
@@ -12,6 +13,7 @@ public:
 	double scrollYOffset{ 0.0 };
 
 	std::array<bool, GLFW_MOUSE_BUTTON_LAST> mouseButtonPressed;
+	std::array<bool, GLFW_KEY_LAST> keyPressed;
 
 public:
 	static Input &instance(GLFWwindow *window = nullptr);

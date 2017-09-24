@@ -67,7 +67,7 @@ Pipeline PipelineBuilder::buildFillGBufferPipeline(vk::Device device, vk::Render
 
 	pipeline.setDepthState(true);
 
-	for (int i = 0; i < 3; ++i)
+	for (int i = 0; i < 4; ++i)
 		pipeline.addColorBlendAttachment(PipelineHelper::colorBlendAttachmentSimple());
 
 	pipeline.createGraphics(renderpass, layout, 0);

@@ -136,21 +136,12 @@ private:
 	const std::chrono::milliseconds mFrameDurationInMilisecond;
 };
 
-void render(SuperWindow& window, Device& device, SceneGraph& sceneGraph, Camera& camera, Interface& interface, std::vector<RendererFacade>& rendererFacades) {
+vk::Semaphore render(SuperWindow& window, Device& device, SceneGraph& sceneGraph, Camera& camera, Interface& interface, std::vector<RendererFacade>& rendererFacades) {
 	if (window.isResized()) {
 		rendererFacades.clear();
 		for (auto i(0u); i < window.getNumberImages(); ++i)
 			rendererFacades.emplace_back(device, sceneGraph, window.getBufferFactory(), window.getImageFactory(), window.getImGUIInstance(), window.getSwapchain(), window.getExtent());
 	}
-
-	/*	firstCube.identity();
-	firstCube.translate(0, 500, 0);
-	firstCube.rotate(glm::vec3(0, 1, 0), rotate);
-	firstCube.scale(glm::vec3(200));*/
-
-	//rotate += 360.0f / (2* 300);
-	//if (rotate > 360.0f)
-		//rotate -= 360.0f;
 
 	auto nextImage{ window.getNextImage() };
 
@@ -163,10 +154,21 @@ void render(SuperWindow& window, Device& device, SceneGraph& sceneGraph, Camera&
 
 	rendererFacades[nextImage].setParameters(interface.getParameters());
 
-	auto semaphoreWaitRenderingFinished = rendererFacades[nextImage].execute(window.getImageAvailableSemaphore());
+	return rendererFacades[nextImage].execute(window.getImageAvailableSemaphore());
+}
 
-	//fpsManager.wait();
-	window.present(semaphoreWaitRenderingFinished);
+void updateCamera(Camera &camera) {
+	if (Input::instance().keyPressed[GLFW_KEY_LEFT])
+		camera.position += glm::vec3(0.0, 0.0, 1.0);
+
+	if (Input::instance().keyPressed[GLFW_KEY_RIGHT])
+		camera.position += glm::vec3(0.0, 0.0, -1.0);
+	
+	if (Input::instance().keyPressed[GLFW_KEY_UP])
+		camera.position += glm::vec3(-1.0, 0.0, 0.0);
+	
+	if (Input::instance().keyPressed[GLFW_KEY_DOWN])
+		camera.position += glm::vec3(1.0, 0.0, 0.0);
 }
 
 void computePhysicalStep(const float& timeSimulated, const float& period, DynaObject& object) {
@@ -180,9 +182,6 @@ void computeRenderState(const float& timeLeft, const float& period, DynaObject& 
 }
 
 void run() {
-
-
-
 	SuperWindow window(800, 600, NAME);
 	decltype(auto) device = window.getDevice();
 
@@ -208,7 +207,6 @@ void run() {
 
 	bool show_test_window = true;
 	bool show_another_window = false;
-	ImVec4 clear_color = ImColor(114, 144, 154);
 
 	std::vector<RendererFacade> rendererFacades{};
 
@@ -216,10 +214,9 @@ void run() {
 
 	Camera camera;
 
-	camera.position = glm::vec3(-0, 2.f, -3.0);
-	camera.direction = glm::vec3(-0.0f, -0.2f, 1.0f);
 
-	d.scale(glm::vec3(5.f));
+	camera.position = glm::vec3(50, 25, 0.0);
+	camera.direction = glm::vec3(-1.0f, -0.0f, 0.0f);
 
 	time_s timeSimulated(0.f);
 	const time_s deltaTimeStep(TIMESTEP);
@@ -227,6 +224,8 @@ void run() {
 	auto currentTime = std::chrono::high_resolution_clock::now();
 
 	while (window.isRunning()) {
+		auto semaphoreWaitRenderingFinished = render(window, device, sceneGraph, camera, interface, rendererFacades);
+		updateCamera(camera);
 		auto newTime = std::chrono::high_resolution_clock::now();
 		auto frameTime = newTime - currentTime;
 		currentTime = newTime;
@@ -238,7 +237,8 @@ void run() {
 			timeSimulated += deltaTimeStep;
 		}
 		computeRenderState(accumulator.count(), deltaTimeStep.count(), d);
-		render(window, device, sceneGraph, camera, interface, rendererFacades);
+		fpsManager.wait();
+		window.present(semaphoreWaitRenderingFinished);
 	}
 	device->waitIdle();
 }

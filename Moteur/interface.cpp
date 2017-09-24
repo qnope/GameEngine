@@ -111,7 +111,7 @@ void Interface::createAOSettingsWindow()
 				ImGui::SliderInt("Number of cones", &p.numberCones, 1, 128);
 				ImGui::SliderFloat("Offset Cone in dt", &p.offsetCone, 0.5f, 4.0f);
 				ImGui::SliderFloat("Over sampling", &p.oversampling, 0.1f, 4.0f);
-				ImGui::SliderFloat("Distance Attenuation", &p.distanceAttenuation, 0.0f, 2.0f);
+				ImGui::SliderFloat("Distance Attenuation", &p.distanceAttenuation, 0.0f, 10.0f);
 				ImGui::SliderFloat("Force", &p.force, 0.0f, 1.0f);
 				ImGui::SliderFloat("Maximum Distance", &p.maximumDistance, 0.0f, 1.0f);
 			}

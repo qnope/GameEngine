@@ -4,10 +4,12 @@ Framebuffer FramebufferBuilder::gBuffer(vk::Device device, ImageFactory & imageF
 {
 	auto imageColor = Image::simple2DGPU(extent.width, extent.height, false, vk::Format::eR8G8B8A8Unorm, vk::ImageUsageFlagBits::eColorAttachment | vk::ImageUsageFlagBits::eInputAttachment | vk::ImageUsageFlagBits::eSampled);
 	auto imageNormal = Image::simple2DGPU(extent.width, extent.height, false, vk::Format::eR32G32B32A32Sfloat, vk::ImageUsageFlagBits::eColorAttachment | vk::ImageUsageFlagBits::eInputAttachment | vk::ImageUsageFlagBits::eSampled);
+	auto imageRoughnessMetallic = Image::simple2DGPU(extent.width, extent.height, false, vk::Format::eR8G8Unorm, vk::ImageUsageFlagBits::eColorAttachment | vk::ImageUsageFlagBits::eInputAttachment | vk::ImageUsageFlagBits::eSampled);
 	auto imageDepth = Image::simple2DGPU(extent.width, extent.height, false, vk::Format::eD32Sfloat, vk::ImageUsageFlagBits::eDepthStencilAttachment | vk::ImageUsageFlagBits::eInputAttachment | vk::ImageUsageFlagBits::eSampled);
 
 	auto imageViewColor = ImageView::color2D(vk::Image(), vk::Format::eR8G8B8A8Unorm);
 	auto imageViewNormal = ImageView::color2D(vk::Image(), vk::Format::eR32G32B32A32Sfloat);
+	auto imageViewRoughnessMetallic = ImageView::color2D(vk::Image(), vk::Format::eR8G8Unorm);
 	auto imageViewDepth = ImageView::depth2D(vk::Image(), vk::Format::eD32Sfloat);
 
 	std::vector<CombinedImage> combinedImages;
@@ -15,6 +17,7 @@ Framebuffer FramebufferBuilder::gBuffer(vk::Device device, ImageFactory & imageF
 	combinedImages.emplace_back(imageFactory.createEmptyImage(imageColor, imageViewColor)); // Diffuse map
 	combinedImages.emplace_back(imageFactory.createEmptyImage(imageNormal, imageViewNormal)); // Tangeant map
 	combinedImages.emplace_back(imageFactory.createEmptyImage(imageNormal, imageViewNormal)); // Normal map
+	combinedImages.emplace_back(imageFactory.createEmptyImage(imageRoughnessMetallic, imageViewRoughnessMetallic));
 	combinedImages.emplace_back(imageFactory.createEmptyImage(imageDepth, imageViewDepth)); // Depth map
 
 	return Framebuffer{ device, renderPass, std::move(combinedImages)};

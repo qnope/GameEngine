@@ -5,6 +5,7 @@ glslangValidator.exe -V RenderFullScreen\finalrendering.frag -o RenderFullScreen
 glslangValidator.exe -V RenderSceneGraphRelated\renderscenegraph.vert -o RenderSceneGraphRelated\renderscenegraph_vert.spv
 glslangValidator.exe -V RenderSceneGraphRelated\fillgbufferalbedocolor.frag -o RenderSceneGraphRelated\fillgbufferalbedocolor_frag.spv
 glslangValidator.exe -V RenderSceneGraphRelated\fillgbufferalbedotexture.frag -o RenderSceneGraphRelated\fillgbufferalbedotexture_frag.spv
+glslangValidator.exe -V RenderSceneGraphRelated\fillgbufferpbrtexture.frag -o RenderSceneGraphRelated\fillgbufferpbrtexture_frag.spv
 
 glslangValidator.exe -V ImGUI\imgui.vert -o ImGUI\imgui_vert.spv
 glslangValidator.exe -V ImGUI\imgui.frag -o ImGUI\imgui_frag.spv

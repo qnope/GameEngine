@@ -13,7 +13,7 @@ VoxelizationPass::VoxelizationPass(Device & device, uint32_t resolution, uint32_
 	mFramebuffer = FramebufferBuilder::emptyFrameBuffer(device, vk::Extent2D{ resolution, resolution }, mRenderPass);
 
 	auto ubo = vk::DescriptorBufferInfo{ mCubeVoxelizationInfoBuffer, 0, VK_WHOLE_SIZE };
-	auto sampler = vk::DescriptorImageInfo{ *mVoxelGrid, *mVoxelGrid, vk::ImageLayout::eGeneral };
+	auto sampler = vk::DescriptorImageInfo{ mDownsamplerSampler, *mVoxelGrid, vk::ImageLayout::eGeneral };
 	auto img = vk::DescriptorImageInfo{ vk::Sampler(), *mVoxelGrid, vk::ImageLayout::eGeneral };
 
 	auto writeUbo = StructHelper::writeDescriptorSet(mDownsamplerDescriptorSet, 0, &ubo, vk::DescriptorType::eUniformBuffer);
@@ -31,7 +31,7 @@ void VoxelizationPass::prepare() {
 	info.clipMapNumber = mClipMapNumber;
 	info.voxelGridResolution = mResolution;
 
-	float diagonal = cube.diagonal;
+	float diagonal = cube.diagonal * 2;
 
 	for (int i = mClipMapNumber - 1; i > -1; --i) {
 		glm::vec3 center = camera.position;
@@ -75,7 +75,7 @@ void VoxelizationPass::execute(vk::CommandBuffer cmd)
 
 		for (int i = 1; i < mClipMapNumber; ++i) {
 
-			auto dispatch = mResolution / 8;
+			auto dispatch = mResolution / 8 / 2;
 
 			cmd.pushConstants(mDownsamplerPipelineLayout, vk::ShaderStageFlagBits::eCompute, 0, sizeof(int), &i);
 			cmd.dispatch(dispatch, dispatch, dispatch);

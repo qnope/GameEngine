@@ -33,4 +33,8 @@ public:
 	static DescriptorSetLayout voxelDownsampler(vk::Device device) {
 		return build(device, LayoutBinding::uniformBuffer(0, 1, vk::ShaderStageFlagBits::eCompute), LayoutBinding::combinedImage(1, 1, vk::ShaderStageFlagBits::eCompute), LayoutBinding::storageImage(2, 1, vk::ShaderStageFlagBits::eCompute));
 	}
+
+	static DescriptorSetLayout PBRTexture(vk::Device device, vk::ShaderStageFlags flags) {
+		return build(device, LayoutBinding::combinedImage(0, 1, flags), LayoutBinding::combinedImage(1, 1, flags), LayoutBinding::combinedImage(2, 1, flags), LayoutBinding::combinedImage(3, 1, flags));
+	}
 };

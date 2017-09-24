@@ -59,4 +59,5 @@ private:
 	vk::DescriptorSet mDownsamplerDescriptorSet{ mDownsamplerDescriptorPool.allocate(mDownsamplerDescriptorSetLayout) };
 	PipelineLayout mDownsamplerPipelineLayout{ PipelineLayoutBuilder::build(mDevice, { mDownsamplerDescriptorSetLayout }, {vk::PushConstantRange(vk::ShaderStageFlagBits::eCompute, 0, 4)}) };
 	Pipeline mDownsamplerPipeline{ PipelineBuilder::buildVoxelDownsamplerOnlyGeometryPipeline(mDevice, mDownsamplerPipelineLayout) };
+	Sampler mDownsamplerSampler{ mDevice, Sampler::simple(vk::Filter::eNearest, vk::SamplerMipmapMode::eNearest, vk::SamplerAddressMode::eClampToEdge, false, 0.0f, false, vk::CompareOp::eLess, 0.0f, 0.0f) };
 };

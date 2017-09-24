@@ -1,23 +1,25 @@
 #include "material.h"
 #include <iostream>
 
+static std::string normalizePathTexture(std::string _path) {
+	std::string path = std::move(_path);
+	if (path[0] == '.')
+		path.erase(0, 1);
+
+	if (path[0] == '/' || path[0] == '\\')
+		path.erase(0, 1);
+
+	for (auto &v : path)
+		if (v == '\\')
+			v = '/';
+	return path;
+}
+
 Material::Material(aiMaterial *mtl, std::string const &globalPath) {
 	aiString texPath;
 
 	if (mtl->GetTexture(aiTextureType_DIFFUSE, 0, &texPath) == AI_SUCCESS) {
-		std::string path = texPath.C_Str();
-
-		if (path[0] == '.')
-			path.erase(0, 1);
-
-		if (path[0] == '/' || path[0] == '\\')
-			path.erase(0, 1);
-
-		for (auto &v : path)
-			if (v == '\\')
-				v = '/';
-
-		albedoTexturePath = globalPath + path;
+		albedoTexturePath = globalPath + normalizePathTexture(texPath.C_Str());
 		useAlbedoTexture = true;
 	}
 
@@ -30,5 +32,23 @@ Material::Material(aiMaterial *mtl, std::string const &globalPath) {
 		else
 			this->albedoColor = glm::vec3(1.0, 1.0, 1.0);
 		useAlbedoTexture = false;
+	}
+	
+	// metallic
+	if (mtl->GetTexture(aiTextureType_AMBIENT, 0, &texPath) == AI_SUCCESS) {
+		metallicTexturePath = globalPath + normalizePathTexture(texPath.C_Str());
+		useMetallicTexture = true;
+	}
+
+	// Normals
+	if (mtl->GetTexture(aiTextureType_HEIGHT, 0, &texPath) == AI_SUCCESS) {
+		normalTexturePath = globalPath + normalizePathTexture(texPath.C_Str());
+		useNormalTexture = true;
+	}
+
+	// Roughness
+	if(mtl->GetTexture(aiTextureType_SHININESS, 0, &texPath) == AI_SUCCESS) {
+		roughnessTexturePath = globalPath + normalizePathTexture(texPath.C_Str());
+		useRoughnessTexture = true;
 	}
 }

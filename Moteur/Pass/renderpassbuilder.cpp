@@ -6,6 +6,7 @@ std::tuple<RenderPass, std::shared_ptr<FillGBufferSubpass>> RenderPassBuilder::r
 	renderPass.addAttachment(StructHelper::attachmentDescriptionSimpleWithoutStencil(vk::Format::eR8G8B8A8Unorm, vk::ImageLayout::eUndefined, vk::ImageLayout::eShaderReadOnlyOptimal), Clear::black()); // albedo
 	renderPass.addAttachment(StructHelper::attachmentDescriptionSimpleWithoutStencil(vk::Format::eR32G32B32A32Sfloat, vk::ImageLayout::eUndefined, vk::ImageLayout::eShaderReadOnlyOptimal), Clear::black()); // tangent
 	renderPass.addAttachment(StructHelper::attachmentDescriptionSimpleWithoutStencil(vk::Format::eR32G32B32A32Sfloat, vk::ImageLayout::eUndefined, vk::ImageLayout::eShaderReadOnlyOptimal), Clear::black()); // normal
+	renderPass.addAttachment(StructHelper::attachmentDescriptionSimpleWithoutStencil(vk::Format::eR8G8Unorm, vk::ImageLayout::eUndefined, vk::ImageLayout::eShaderReadOnlyOptimal), Clear::black());
 	renderPass.addAttachment(StructHelper::attachmentDescriptionSimpleWithoutStencil(vk::Format::eD32Sfloat, vk::ImageLayout::eUndefined, vk::ImageLayout::eDepthStencilReadOnlyOptimal), Clear::horizon());; // depth
 
 	auto fillGBufferSubpass{ std::make_shared<FillGBufferSubpass>(device, sceneGraph, matrixDescriptorSetLayout, matrixDescriptorSet, modelMatricesBuffer, indirectBuffer) };

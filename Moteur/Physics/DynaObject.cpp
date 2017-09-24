@@ -9,10 +9,6 @@ DynaObject::DynaObject(Entity* e) {
 	mVisualEntity = e;
 }
 
-DynaObject::~DynaObject() {
-	delete mVisualEntity;
-}
-
 void DynaObject::computeRenderState(const float alpha) {
 	mVisualEntity->computeState(mPrevState, mState, alpha);
 }

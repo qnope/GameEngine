@@ -17,9 +17,11 @@ layout(location = 0) in struct FS_IN {
 layout(location = 0) out vec4 outAlbedo;
 layout(location = 1) out vec4 outTangent;
 layout(location = 2) out vec4 outNormal;
+layout(location = 3) out vec2 outRoughnessMetalness;
 
 void main() {
     outAlbedo = pow(albedoColor, vec4(2.2));
 	outTangent = vec4(normalize(fs_in.tangent), 0.0);
 	outNormal = vec4(normalize(fs_in.normal), 0.0);
+	outRoughnessMetalness = vec2(1.0, 0.0);
 }

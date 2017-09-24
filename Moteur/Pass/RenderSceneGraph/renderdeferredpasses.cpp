@@ -37,9 +37,14 @@ const CombinedImage & RenderDeferredPasses::getNormalMap() const
 	return mFramebuffer.getCombinedImage(2);
 }
 
-const CombinedImage & RenderDeferredPasses::getDepthMap() const
+const CombinedImage & RenderDeferredPasses::getRoughnessMetallicMap() const
 {
 	return mFramebuffer.getCombinedImage(3);
+}
+
+const CombinedImage & RenderDeferredPasses::getDepthMap() const
+{
+	return mFramebuffer.getCombinedImage(4);
 }
 
 
