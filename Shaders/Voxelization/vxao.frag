@@ -66,7 +66,7 @@ float sampleAnisotropic(in const vec3 worldPosition, in const uint level, in con
 	result.x += texture(voxelGrid, pos).x;
 	result.y += texture(voxelGrid, pos + vec3(factorDirection, 0, 0)).x;
 	result.z += texture(voxelGrid, pos + vec3(2.0 * factorDirection, 0, 0)).x;
-	return dot(result, weight);
+	return clamp(dot(result, weight), 0, 1);
 }
 
 float sampleAnisotropicLinearly(in const vec3 worldPosition, in const vec3 dir, in const float level) {
@@ -78,11 +78,11 @@ float sampleAnisotropicLinearly(in const vec3 worldPosition, in const vec3 dir, 
 	const float lowSample = sampleAnisotropic(worldPosition, low, weight);
 	
 	if(low == high)
-		return clamp(lowSample, 0.0, 1.0);
+		return lowSample;
 	
 	const float highSample = sampleAnisotropic(worldPosition, high, weight);
 	
-	return clamp(mix(lowSample, highSample, fract(level)), 0.0, 1.0);
+	return mix(lowSample, highSample, fract(level));
 }
 
 vec3 alignVToNormal(in const vec3 v, in const vec3 tangeant, in const vec3 normal) {
@@ -115,7 +115,8 @@ float coneTracing(in vec3 start, in const vec3 direction, in const float tanHalf
 				
 		const float diameter = max(dist * coneApertureCoeff, voxelSizeL0);
 				
-		const float level = min(max(max(log2(diameter / voxelSizeL0), currentLevel), startLevel), clipMapNumber - 1);
+		//const float level = min(max(max(log2(diameter / voxelSizeL0), currentLevel), startLevel), clipMapNumber - 1);
+		const float level = min(max(log2(diameter / voxelSizeL0), currentLevel), clipMapNumber - 1);
 		voxelSize = voxelSizeL0 * exp2(level);
 		const float voxel = sampleAnisotropicLinearly(start, direction, level);
 		

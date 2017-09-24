@@ -170,6 +170,7 @@
     <ClCompile Include="Pass\Voxelization\voxelizationgeometrysubpass.cpp" />
     <ClCompile Include="Pass\Voxelization\voxelizationpass.cpp" />
     <ClCompile Include="Pass\Voxelization\vxaopass.cpp" />
+    <ClCompile Include="Physics\dynaobject.cpp" />
     <ClCompile Include="rendererfacade.cpp" />
     <ClCompile Include="SceneGraph\entity.cpp" />
     <ClCompile Include="SceneGraph\entitymanager.cpp" />
@@ -181,6 +182,7 @@
     <ClCompile Include="SceneGraph\node.cpp" />
     <ClCompile Include="SceneGraph\scenegraph.cpp" />
     <ClCompile Include="SceneGraph\scenegraphbuffer.cpp" />
+    <ClCompile Include="Tools\geometry.cpp" />
     <ClCompile Include="Transfer\bufferfactory.cpp" />
     <ClCompile Include="Transfer\imagefactory.cpp" />
     <ClCompile Include="Vulkan\buffer.cpp" />
@@ -236,6 +238,7 @@
     <ClInclude Include="Pass\Voxelization\voxelizationpass.h" />
     <ClInclude Include="Pass\Voxelization\voxelizationgeometrysubpass.h" />
     <ClInclude Include="Pass\Voxelization\vxaopass.h" />
+    <ClInclude Include="Physics\dynaobject.h" />
     <ClInclude Include="rendererfacade.h" />
     <ClInclude Include="SceneGraph\camera.h" />
     <ClInclude Include="SceneGraph\drawer.h" />
@@ -249,6 +252,7 @@
     <ClInclude Include="SceneGraph\node.h" />
     <ClInclude Include="SceneGraph\scenegraph.h" />
     <ClInclude Include="SceneGraph\scenegraphbuffer.h" />
+    <ClInclude Include="Tools\geometry.h" />
     <ClInclude Include="Tools\glm.h" />
     <ClInclude Include="Tools\stream.h" />
     <ClInclude Include="Tools\variadics.h" />
@@ -282,6 +286,9 @@
     <ClInclude Include="Vulkan\swapchain.h" />
     <ClInclude Include="vulkan\vulkan.h" />
     <ClInclude Include="Window\window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Tools\Maths\Vec3.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -41,13 +41,6 @@ void VoxelizationPass::prepare() {
 		diagonal /= 2.0f;
 	}
 
-	const glm::vec3 left1 = info.cubeCenterDiagonal[0].xyz - info.cubeCenterDiagonal[0].w / 2.0f;
-	const glm::vec3 left2 = info.cubeCenterDiagonal[0].xyz - info.cubeCenterDiagonal[1].w / 2.0f;
-	
-	std::cout << "src = " << glm::ivec3(glm::ceil(128.0f * glm::fract(left1 / info.cubeCenterDiagonal[0].w)));
-	std::cout << "src = " << (2 * glm::ivec3(glm::ceil(128.0f * glm::fract(left1 / info.cubeCenterDiagonal[1].w)))) % 128;
-	std::cout << "dst = " << glm::ivec3(glm::ceil(128.0f * glm::fract(left1 / info.cubeCenterDiagonal[1].w))) << std::endl;
-
 	mCubeVoxelizationInfoStagingBuffer.resetOffset();
 	mCubeVoxelizationInfoStagingBuffer.push_data(info);
 }

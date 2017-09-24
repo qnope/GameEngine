@@ -1,11 +1,11 @@
-#include "Window\window.h"
-#include "Tools\glm.h"
+#include "Window/window.h"
+#include "Tools/glm.h"
 #include <thread>
 #include <chrono>
 #include <iostream>
 #include "Vulkan/instance.h"
 #include "Vulkan/device.h"
-#include "Vulkan\swapchain.h"
+#include "Vulkan/swapchain.h"
 #include "Transfer/bufferfactory.h"
 #include "Transfer/imagefactory.h"
 #include "SceneGraph/scenegraph.h"
@@ -17,7 +17,12 @@
 #include "rendererfacade.h"
 #include "interface.h"
 
+#include "Physics/dynaobject.h"
+
 #define NAME "Engine"
+#define TIMESTEP 0.01f
+typedef std::chrono::duration<float> time_s;
+
 
 class SuperWindow {
 public:
@@ -118,6 +123,51 @@ private:
 	const std::chrono::milliseconds mFrameDurationInMilisecond;
 };
 
+vk::Semaphore render(SuperWindow& window, Device& device, SceneGraph& sceneGraph, Camera& camera, Interface& interface, std::vector<RendererFacade>& rendererFacades) {
+	if (window.isResized()) {
+		rendererFacades.clear();
+		for (auto i(0u); i < window.getNumberImages(); ++i)
+			rendererFacades.emplace_back(device, sceneGraph, window.getBufferFactory(), window.getImageFactory(), window.getImGUIInstance(), window.getSwapchain(), window.getExtent());
+	}
+
+	auto nextImage{ window.getNextImage() };
+
+	sceneGraph.setCamera(camera);
+	rendererFacades[nextImage].newFrame();
+
+	interface.setVoxelizationProfiling(rendererFacades[nextImage].getVoxelizationPassProfiling());
+	interface.execute();
+	interface.checkError();
+
+	rendererFacades[nextImage].setParameters(interface.getParameters());
+
+	return rendererFacades[nextImage].execute(window.getImageAvailableSemaphore());
+}
+
+void updateCamera(Camera &camera) {
+	if (Input::instance().keyPressed[GLFW_KEY_LEFT])
+		camera.position += glm::vec3(0.0, 0.0, 1.0);
+
+	if (Input::instance().keyPressed[GLFW_KEY_RIGHT])
+		camera.position += glm::vec3(0.0, 0.0, -1.0);
+	
+	if (Input::instance().keyPressed[GLFW_KEY_UP])
+		camera.position += glm::vec3(-1.0, 0.0, 0.0);
+	
+	if (Input::instance().keyPressed[GLFW_KEY_DOWN])
+		camera.position += glm::vec3(1.0, 0.0, 0.0);
+}
+
+void computePhysicalStep(const float& timeSimulated, const float& period, DynaObject& object) {
+	object.saveState();
+	object.rotate(glm::vec3(0, 1, 0), glm::radians(45.f) * period);
+}
+
+void computeRenderState(const float& timeLeft, const float& period, DynaObject& object) {
+	float alpha = timeLeft / period;
+	object.computeRenderState(alpha);
+}
+
 void run() {
 	SuperWindow window(800, 600, NAME);
 	decltype(auto) device = window.getDevice();
@@ -127,12 +177,14 @@ void run() {
 
 	auto rootNode = sceneGraph.getRootNode();
 
-	//auto cubeManager = rootNode->addModel("../Models/cube.obj");
+	auto cubeManager = rootNode->addModel("../Models/cube.obj");
 	auto sponzaManager = rootNode->addModel("../Models/Sponza/sponza.obj");
 
 	auto sponza = sponzaManager.createEntity();
-	sponza.scale(glm::vec3(1.0 / 10.0));
-	//auto firstCube = cubeManager.createEntity();
+	sponza.scale(glm::vec3(1.f / 10.f));
+	auto firstCube = cubeManager.createEntity();
+
+	DynaObject d(&firstCube);
 
 	auto aabb = sceneGraph.getAABB();
 
@@ -149,52 +201,29 @@ void run() {
 
 	Camera camera;
 
-	camera.position = glm::vec3(-40, 20.0, 0.0);
+	camera.position = glm::vec3(50, 25, 0.0);
 	camera.direction = glm::vec3(-1.0f, -0.0f, 0.0f);
 
+	time_s timeSimulated(0.f);
+	const time_s deltaTimeStep(TIMESTEP);
+	time_s accumulator(0.f);
+	auto currentTime = std::chrono::high_resolution_clock::now();
+
 	while (window.isRunning()) {
-		if (window.isResized()) {
-			rendererFacades.clear();
-			for (auto i(0u); i < window.getNumberImages(); ++i)
-				rendererFacades.emplace_back(device, sceneGraph, window.getBufferFactory(), window.getImageFactory(), window.getImGUIInstance(), window.getSwapchain(), window.getExtent());
+		auto semaphoreWaitRenderingFinished = render(window, device, sceneGraph, camera, interface, rendererFacades);
+		updateCamera(camera);
+		auto newTime = std::chrono::high_resolution_clock::now();
+		auto frameTime = newTime - currentTime;
+		currentTime = newTime;
+		accumulator += std::chrono::duration_cast<time_s>(frameTime);
+		while (accumulator > deltaTimeStep) {
+
+			computePhysicalStep(timeSimulated.count(), deltaTimeStep.count(), d);
+			accumulator -= deltaTimeStep;
+			timeSimulated += deltaTimeStep;
 		}
-
-	/*	firstCube.identity();
-		firstCube.translate(0, 500, 0);
-		firstCube.rotate(glm::vec3(0, 1, 0), rotate);
-		firstCube.scale(glm::vec3(200));*/
-
-		//rotate += 360.0f / (2* 300);
-		if (rotate > 360.0f)
-			rotate -= 360.0f;
-
-		auto nextImage{ window.getNextImage() };
-
-		if (Input::instance().keyPressed[GLFW_KEY_UP])
-			camera.position += glm::vec3(-1, 0.0, 0.0);
-
-		if (Input::instance().keyPressed[GLFW_KEY_DOWN])
-			camera.position -= glm::vec3(-1, 0., 0.);
-
-		if (Input::instance().keyPressed[GLFW_KEY_RIGHT])
-			camera.position += glm::vec3(0.0, 0.0, -1.0);
-
-		if (Input::instance().keyPressed[GLFW_KEY_LEFT])
-			camera.position += glm::vec3(0.0, 0.0, 1.0);
-
-		sceneGraph.setCamera(camera);
-		rendererFacades[nextImage].newFrame();
-
-		interface.setVoxelizationProfiling(rendererFacades[nextImage].getVoxelizationPassProfiling());
-		interface.execute();
-		interface.checkError();
-		
-		rendererFacades[nextImage].setParameters(interface.getParameters());
-		
-		auto semaphoreWaitRenderingFinished = rendererFacades[nextImage].execute(window.getImageAvailableSemaphore());
-
+		computeRenderState(accumulator.count(), deltaTimeStep.count(), d);
 		fpsManager.wait();
-
 		window.present(semaphoreWaitRenderingFinished);
 	}
 	device->waitIdle();
