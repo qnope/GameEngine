@@ -19,6 +19,19 @@
 
 #include "Physics/dynaobject.h"
 
+#include <crtdbg.h>
+
+
+#define CASSERT(expr) \
+   do { \
+	_CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_WNDW);\
+	_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_WNDW);\
+	_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_WNDW);\
+      if (!(expr) && (1 == _CrtDbgReport( \
+         _CRT_ASSERT, __FILE__, __LINE__, #expr, NULL))) \
+         _CrtDbgBreak(); \
+   } while (0)
+
 #define NAME "Engine"
 #define TIMESTEP 0.01f
 typedef std::chrono::duration<float> time_s;
@@ -184,10 +197,10 @@ void run() {
 	auto sponza = sponzaManager.createEntity();
 	sponza.scale(glm::vec3(1.f / 10.f));
 	auto firstCube = cubeManager.createEntity();
+	auto aabb = sceneGraph.getAABB();
 
 	DynaObject d(&firstCube);
 
-	auto aabb = sceneGraph.getAABB();
 
 	float rotate = 0.0f;
 
@@ -206,6 +219,7 @@ void run() {
 	camera.position = glm::vec3(-0, 2.f, -3.0);
 	camera.direction = glm::vec3(-0.0f, -0.2f, 1.0f);
 
+	d.scale(glm::vec3(5.f));
 
 	time_s timeSimulated(0.f);
 	const time_s deltaTimeStep(TIMESTEP);
@@ -231,6 +245,16 @@ void run() {
 
 int main() {
 	run();
+	/*int _CrtDbgReport(
+		int reportType,
+		const char *filename,
+		int linenumber,
+		const char *moduleName,
+		const char *format[,
+		argument] ...
+	);*/
+	//_CrtSetReportFile(_CRT_ASSERT, _CRTDBG_FILE_STDOUT);
+	//CASSERT(false);
 
 	getchar();
 

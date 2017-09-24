@@ -14,6 +14,7 @@ public:
 	Entity(bool *validity, glm::mat4 *matrix, AABB *aabb, const AABB &originalAABB);
 
 	void identity();
+	AABB getOriginalAABB() { return mOriginalAABB; }
 
 	void scale(glm::vec3 scaling);
 	void scale(float x, float y, float z);

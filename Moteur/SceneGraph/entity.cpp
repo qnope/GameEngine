@@ -66,6 +66,7 @@ void Entity::computeState(const State& prevState, const State& state, const floa
 	interpolatedPos = glm::mix(prevState.mPos, state.mPos, alpha);
 	*mMatrix = glm::mat4_cast(interpolatedRot);
 	glm::translate(*mMatrix, interpolatedPos);
+	//*mAABB = mOriginalAABB * *mMatrix;
 	mAABB->min = glm::mix(prevState.mAABB.min, state.mAABB.min, alpha);
 	mAABB->max = glm::mix(prevState.mAABB.max, state.mAABB.max, alpha);
 }
