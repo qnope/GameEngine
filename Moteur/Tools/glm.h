@@ -5,6 +5,7 @@
 #include <iostream>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 inline std::ostream &operator<<(std::ostream &o, const glm::vec2 &v) {
 	o << v.x << "," << v.y << std::endl;

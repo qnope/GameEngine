@@ -60,7 +60,12 @@ bool Entity::isValid() const
 }
 
 void Entity::computeState(const State& prevState, const State& state, const float& alpha) {
-	*mMatrix = glm::mix(prevState.mRef.mat, state.mRef.mat, alpha);
+	glm::quat interpolatedRot;
+	glm::vec3 interpolatedPos;
+	interpolatedRot = glm::mix(prevState.mRot, state.mRot, alpha);
+	interpolatedPos = glm::mix(prevState.mPos, state.mPos, alpha);
+	*mMatrix = glm::mat4_cast(interpolatedRot);
+	glm::translate(*mMatrix, interpolatedPos);
 	mAABB->min = glm::mix(prevState.mAABB.min, state.mAABB.min, alpha);
 	mAABB->max = glm::mix(prevState.mAABB.max, state.mAABB.max, alpha);
 }

@@ -3,17 +3,9 @@
 #include "../Tools/glm.h"
 #include "../Tools/geometry.h"
 
-struct Ref {
-	Ref() : mat(glm::mat4{ 1.f }) {}
-	Ref(glm::mat4 m) : mat(m) {}
-
-	glm::mat3 rot() { return glm::mat3(mat); }
-	glm::vec3 pos() { return glm::vec3(mat[3]); }
-	glm::mat4 mat;
-};
-
 struct State {
-	Ref mRef;
+	glm::quat mRot;
+	glm::vec3 mPos;
 	AABB mAABB;
 };
 

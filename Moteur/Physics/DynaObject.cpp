@@ -2,7 +2,8 @@
 
 
 DynaObject::DynaObject(Entity* e) {
-	mState.mRef = glm::mat4{ 1.f };
+	mState.mPos = glm::vec3(0.f, 0.f, 0.f);
+	mState.mRot = glm::quat(1, 0, 0.f, 0.f);
 	mVisualEntity = e;
 }
 
@@ -16,12 +17,13 @@ void DynaObject::computeRenderState(const float alpha) {
 
 void DynaObject::saveState() {
 	mPrevState.mAABB = mState.mAABB;
-	mPrevState.mRef = mState.mRef;
+	mPrevState.mRot = mState.mRot;
+	mPrevState.mPos = mState.mPos;
 }
 
 void DynaObject::rotate(const glm::vec3& axis, const float& angle) {
 	glm::mat4 rot = glm::mat4{ 1.f };
 	rot = glm::rotate(rot, angle, axis);
-	mState.mRef = glm::rotate(mState.mRef.mat, angle, axis);
+	mState.mRot = glm::rotate(mState.mRot, angle, axis);
 	mState.mAABB = mState.mAABB * rot;
 }
