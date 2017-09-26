@@ -23,6 +23,7 @@
 
 #define NAME "Engine"
 #define TIMESTEP 0.01f
+#define MAXTIMESTEPALLOWED 0.05f
 
 typedef std::chrono::duration<float> time_s;
 
@@ -163,11 +164,14 @@ void updateCamera(Camera &camera) {
 
 void computePhysicalStep(std::chrono::steady_clock::time_point& currentTime, time_s& timeSimulated, const time_s& deltaTimeStep, time_s& accumulator, DynaObject& object) {
 	auto newTime = std::chrono::high_resolution_clock::now();
-	auto frameTime = newTime - currentTime;
+	auto frameTime = std::chrono::duration_cast<time_s>(newTime - currentTime);
+	if (frameTime.count() > MAXTIMESTEPALLOWED) {
+		frameTime = deltaTimeStep;
+	}
 	currentTime = newTime;
-	accumulator += std::chrono::duration_cast<time_s>(frameTime);
+	accumulator += frameTime;
 	const float period = deltaTimeStep.count();
-	while (accumulator.count() > deltaTimeStep.count()) {
+	while (accumulator.count() >= deltaTimeStep.count()) {
 		object.update(timeSimulated.count(), period);
 		accumulator -= deltaTimeStep;
 		timeSimulated += deltaTimeStep;
