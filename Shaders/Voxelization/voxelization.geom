@@ -36,8 +36,7 @@ layout(location = 0) out struct GS_OUT {
 }gs_out;
 
 vec3 projectPositionIntoMinusOneOne(in const vec3 currentPosition, in const uint indexClipMap) {
-	const float semiDiagonal = cubeCenterDiagonal[indexClipMap].w / 2.0;
-	return (currentPosition - cubeCenterDiagonal[indexClipMap].xyz) / semiDiagonal;
+	return fract(currentPosition / cubeCenterDiagonal[indexClipMap].w) * 2.0 - 1.0;
 }
 
 vec2[3] computeTriangle(in const vec3 projectedPosition[3], in const uint x, in const uint y) {

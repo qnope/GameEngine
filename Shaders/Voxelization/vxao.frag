@@ -57,10 +57,11 @@ float sampleAnisotropic(in const vec3 worldPosition, in const uint level, in con
 	const vec3 posSampling = getPosSampling(worldPosition, level);
 	const float factorDirection = 1.0 / 3.0;
 
-	vec3 pos = (posSampling * float(voxelGridResolution) + vec3(1.0)) / float(voxelGridResolution + 2) * vec3(factorDirection, 1.0, 1.0);
+	vec3 pos = (posSampling * float(voxelGridResolution) + vec3(1.0)) / float(voxelGridResolution + 2);
 	
 	pos.y += level;
 	pos.y /= float(clipMapNumber);
+	pos.x *= factorDirection;
 	
 	vec3 result = vec3(0.0);
 	result.x += texture(voxelGrid, pos).x;

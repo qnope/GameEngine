@@ -12,7 +12,7 @@
 
 struct VoxelizationPassesParameter {
 	bool enable{ true };
-	int clipMapNumber{ 3 };
+	int clipMapNumber{ 4 };
 	int resolutionInPowerOfTwo{ 7 };
 };
 
