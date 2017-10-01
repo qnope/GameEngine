@@ -21,19 +21,10 @@
 
 #include <crtdbg.h>
 
-
-#define CASSERT(expr) \
-   do { \
-	_CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_WNDW);\
-	_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_WNDW);\
-	_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_WNDW);\
-      if (!(expr) && (1 == _CrtDbgReport( \
-         _CRT_ASSERT, __FILE__, __LINE__, #expr, NULL))) \
-         _CrtDbgBreak(); \
-   } while (0)
-
 #define NAME "Engine"
 #define TIMESTEP 0.01f
+#define MAXTIMESTEPALLOWED 0.05f
+
 typedef std::chrono::duration<float> time_s;
 
 
@@ -103,7 +94,7 @@ public:
 
 private:
 	Window mWindow;
-	Instance mInstance{ "", "", mWindow, true };
+	Instance mInstance{ "", "", mWindow, false };
 	Device mDevice{ mInstance };
 	std::unique_ptr<Swapchain> mSwapchain;
 	std::vector<vk::UniqueSemaphore> mImageAvailableSemaphores;
@@ -171,8 +162,20 @@ void updateCamera(Camera &camera) {
 		camera.position += glm::vec3(1.0, 0.0, 0.0);
 }
 
-void computePhysicalStep(const float& timeSimulated, const float& period, DynaObject& object) {
-	object.update(timeSimulated, period);
+void computePhysicalStep(std::chrono::steady_clock::time_point& currentTime, time_s& timeSimulated, const time_s& deltaTimeStep, time_s& accumulator, DynaObject& object) {
+	auto newTime = std::chrono::high_resolution_clock::now();
+	auto frameTime = std::chrono::duration_cast<time_s>(newTime - currentTime);
+	if (frameTime.count() > MAXTIMESTEPALLOWED) {
+		frameTime = deltaTimeStep;
+	}
+	currentTime = newTime;
+	accumulator += frameTime;
+	const float period = deltaTimeStep.count();
+	while (accumulator.count() >= deltaTimeStep.count()) {
+		object.update(timeSimulated.count(), period);
+		accumulator -= deltaTimeStep;
+		timeSimulated += deltaTimeStep;
+	}
 }
 
 void computeRenderState(const float& timeLeft, const float& period, DynaObject& object) {
@@ -224,16 +227,7 @@ void run() {
 	while (window.isRunning()) {
 		auto semaphoreWaitRenderingFinished = render(window, device, sceneGraph, camera, interface, rendererFacade);
 		updateCamera(camera);
-		auto newTime = std::chrono::high_resolution_clock::now();
-		auto frameTime = newTime - currentTime;
-		currentTime = newTime;
-		accumulator += std::chrono::duration_cast<time_s>(frameTime);
-		while (accumulator > deltaTimeStep) {
-
-			computePhysicalStep(timeSimulated.count(), deltaTimeStep.count(), d);
-			accumulator -= deltaTimeStep;
-			timeSimulated += deltaTimeStep;
-		}
+		computePhysicalStep(currentTime, timeSimulated, deltaTimeStep, accumulator, d);
 		computeRenderState(accumulator.count(), deltaTimeStep.count(), d);
 		//fpsManager.wait();
 		window.present(semaphoreWaitRenderingFinished);
