@@ -213,8 +213,7 @@ void run() {
 
 	Camera camera;
 
-
-	camera.position = glm::vec3(50.f, 0.f, 0.f);
+	camera.position = glm::vec3(50.f, 20.f, 0.f);
 	camera.direction = glm::vec3(-1.0f, -0.0f, 0.0f);
 
 	time_s timeSimulated(0.f);

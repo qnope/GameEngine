@@ -159,4 +159,3 @@ void main() {
 	
 	ambientOcclusion = 1.0 - 2.0 * ao / float(numberCones);
 }
-
