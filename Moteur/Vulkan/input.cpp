@@ -20,11 +20,14 @@ static void scroll_callback(GLFWwindow*, double xoffset, double yoffset)
 
 static void key_callback(GLFWwindow*, int key, int, int action, int)
 {
+	if (key > GLFW_KEY_LAST || key < 0)
+		return;
 	if (action == GLFW_PRESS)
 		Input::instance().keyPressed[key] = true;
 
 	else if (action == GLFW_RELEASE)
 		Input::instance().keyPressed[key] = false;
+	
 }
 
 Input & Input::instance(GLFWwindow * window)
