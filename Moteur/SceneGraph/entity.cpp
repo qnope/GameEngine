@@ -60,13 +60,11 @@ bool Entity::isValid() const
 }
 
 void Entity::computeState(const State& prevState, const State& state, const float& alpha) {
-	glm::quat interpolatedRot;
-	glm::vec3 interpolatedPos;
-	glm::vec3 interpolatedScale;
-	interpolatedRot = glm::mix(prevState.mRot, state.mRot, alpha);
-	interpolatedPos = glm::mix(prevState.mPos, state.mPos, alpha);
-	interpolatedScale = glm::mix(prevState.mScale, state.mScale, alpha);
-	*mMatrix = glm::mat4_cast(interpolatedRot);
+	auto interpolatedRot = glm::mix(prevState.mRot, state.mRot, alpha);
+	auto interpolatedPos = glm::mix(prevState.mPos, state.mPos, alpha);
+	auto interpolatedScale = glm::mix(prevState.mScale, state.mScale, alpha);
+	*mMatrix = glm::translate(glm::mat4(1.0f), interpolatedPos);
+	*mMatrix *= glm::mat4_cast(interpolatedRot);
 	*mMatrix = glm::scale(*mMatrix, interpolatedScale);
 	*mAABB = mOriginalAABB * *mMatrix;
 }

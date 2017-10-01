@@ -201,8 +201,9 @@ void run() {
 	auto aabb = sceneGraph.getAABB();
 
 	DynaObject d(&firstCube);
-
+	d.translate(glm::vec3(0, 10, 0));
 	d.scale(glm::vec3(10.f));
+	
 	float rotate = 0.0f;
 
 	//FPSManager fpsManager(30);

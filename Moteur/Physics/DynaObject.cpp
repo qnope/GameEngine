@@ -29,3 +29,8 @@ void DynaObject::rotate(const glm::vec3& axis, const float& angle) {
 void DynaObject::scale(glm::vec3 scaling) {
 	mState.mScale = scaling;
 }
+
+void DynaObject::translate(glm::vec3 translate)
+{
+	mState.mPos += translate;
+}
