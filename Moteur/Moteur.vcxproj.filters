@@ -423,9 +423,4 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Tools\Maths\Vec3.inl">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </None>
-  </ItemGroup>
 </Project>

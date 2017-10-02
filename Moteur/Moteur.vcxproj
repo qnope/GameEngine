@@ -287,9 +287,6 @@
     <ClInclude Include="vulkan\vulkan.h" />
     <ClInclude Include="Window\window.h" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Tools\Maths\Vec3.inl" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
