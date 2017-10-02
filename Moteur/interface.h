@@ -7,7 +7,7 @@ public:
 	Interface(std::string name);
 	EngineParameter getParameters() const;
 
-	void execute();
+	virtual void execute();
 
 	void setVoxelizationProfiling(const std::vector<Profiling> *ptr);
 
