@@ -94,7 +94,7 @@ public:
 
 private:
 	Window mWindow;
-	Instance mInstance{ "", "", mWindow, true };
+	Instance mInstance{ "", "", mWindow, false };
 	Device mDevice{ mInstance };
 	std::unique_ptr<Swapchain> mSwapchain;
 	std::vector<vk::UniqueSemaphore> mImageAvailableSemaphores;
