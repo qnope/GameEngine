@@ -17,4 +17,8 @@ struct Material {
 	bool useNormalTexture = false;
 	bool useRoughnessTexture = false;
 	bool useMetallicTexture = false;
+
+	bool isOnlyAlbedoTexture() const;
+	bool isNormalPBRTexture() const;
+	bool isOnlyAlbedoColor() const;
 };

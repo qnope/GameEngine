@@ -2,9 +2,9 @@
 #include "node.h"
 #include "ModelImporter/modelimporter.h"
 
-Node::Node(MeshManager &meshManager, MaterialManager &materialManager) :
+Node::Node(MeshManager &meshManager, MaterialsManager &materialsManager) :
 	mMeshManager(meshManager),
-	mMaterialManager(materialManager) {
+	mMaterialsManager(materialsManager) {
 
 }
 
@@ -19,10 +19,10 @@ EntityManager Node::addModel(std::string path) {
 
 	ModelImporter importer(path);
 	auto cmd = mMeshManager.addMesh(importer.mMeshes);
-	auto materialIndice = mMaterialManager.addMaterials(importer.mMaterials);
+	auto materialIndice = mMaterialsManager.addMaterials(importer.mMaterials);
 	AABB aabb;
 	for (int i = 0; i < importer.mMeshes.size(); ++i) {
-		cmd.mParts[i].materialIndex = materialIndice[importer.mMeshes[i].materialIndex];
+		cmd.mParts[i].materialPointer = materialIndice[importer.mMeshes[i].materialIndex];
 		aabb << importer.mMeshes[i].aabb;
 	}
 	mInstancesByObject << std::make_tuple(cmd, std::deque<bool>{}, std::deque<glm::mat4>{}, std::deque<AABB>{}, aabb);
@@ -112,11 +112,10 @@ void Node::draw(std::vector<Drawer> &drawers, bool enableMaterials)
 			Drawer drawer;
 
 			if (enableMaterials)
-				drawer = mMaterialManager.getMaterialDrawerValues(part.materialIndex);
+				mMaterialsManager.getDrawerMaterialValues(drawer, part.materialPointer);
 
 			drawer.vbo = part.vbo;
 			drawer.ibo = part.ibo;
-			drawer.materialIndex = part.materialIndex;
 
 			drawers << drawer;
 		}

@@ -1,12 +1,18 @@
 #include "scenegraph.h"
 
+#include "Material/albedocolormaterialmanager.h"
+#include "Material/albedotexturematerialmanager.h"
+#include "Material/pbrnormaltexturematerialmanager.h"
+
 SceneGraph::SceneGraph(Device & device) :
-mImageFactory(device),
-mBufferFactory(device),
-mMeshManager(mBufferFactory),
-mMaterialManager(device, mBufferFactory, mImageFactory),
-mRootNode(std::make_shared<Node>(mMeshManager, mMaterialManager))
+	mImageFactory(device),
+	mBufferFactory(device),
+	mMeshManager(mBufferFactory),
+	mRootNode(std::make_shared<Node>(mMeshManager, mMaterialsManager))
 {
+	mMaterialsManager.addKindMaterialManager(std::make_unique<AlbedoColorMaterialManager>(device, mBufferFactory));
+	mMaterialsManager.addKindMaterialManager(std::make_unique<AlbedoTextureMaterialManager>(device, mImageFactory));
+	mMaterialsManager.addKindMaterialManager(std::make_unique<PBRNormalTextureMaterialManager>(device, mImageFactory));
 }
 
 std::shared_ptr<Node> SceneGraph::getRootNode()
@@ -51,8 +57,8 @@ void SceneGraph::prepareWithMaterials(const std::vector<vk::Pipeline>& pipelines
 	mDrawers.clear();
 	mEnableMaterials = true;
 	
-	mMaterialManager.fillPipelines(pipelines);
-	mMaterialManager.fillPipelineLayouts(pipelineLayouts);
+	mMaterialsManager.fillPipelines(pipelines);
+	mMaterialsManager.fillPipelineLayouts(pipelineLayouts);
 
 	mRootNode->draw(mDrawers, true);
 }
@@ -67,16 +73,16 @@ void SceneGraph::compile(vk::CommandBuffer cmd, uint32_t materialSetNumber, vk::
 			cmd.bindPipeline(vk::PipelineBindPoint::eGraphics, mDrawers[i].pipeline);
 
 			cmd.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, mDrawers[i].pipelineLayout, materialSetNumber, mDrawers[i].materialSet,
-				((mDrawers[i].offsetAlbedoColor != ~(0u)) ? mDrawers[i].offsetAlbedoColor : vk::ArrayProxy<const uint32_t>{ nullptr }));
+				((mDrawers[i].offsetMaterialUbo != ~(0u)) ? mDrawers[i].offsetMaterialUbo : vk::ArrayProxy<const uint32_t>{ nullptr }));
 		}
 
 		cmd.drawIndexedIndirect(indirectBuffer, (vk::DeviceSize)(sizeof(vk::DrawIndexedIndirectCommand) * i), 1, sizeof(vk::DrawIndexedIndirectCommand));
 	}
 }
 
-const MaterialManager & SceneGraph::getMaterialManager() const
+const MaterialsManager & SceneGraph::getMaterialsManager() const
 {
-	return mMaterialManager;
+	return mMaterialsManager;
 }
 
 AABB SceneGraph::getAABB() const

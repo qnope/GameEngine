@@ -13,19 +13,18 @@ FillGBufferSubpass::FillGBufferSubpass(vk::Device device, SceneGraph &sceneGraph
 
 	setDepthStencilAttachment(4);
 
-	auto albedoColorSetLayout = mSceneGraph.getMaterialManager().getAlbedoColorDescriptorSetLayout();
-	auto albedoTextureSetLayout = mSceneGraph.getMaterialManager().getAlbedoTextureDescriptorSetLayout();
-	auto pbrTextureSetLayout = mSceneGraph.getMaterialManager().getPBRTextureDescriptorSetLayout();
+	auto descriptorSetLayouts = mSceneGraph.getMaterialsManager().getAllDescriptorSetLayouts();
 
-	mPipelineLayouts.emplace_back(PipelineLayoutBuilder::build(mDevice, { matrixDescriptorSetLayout, albedoColorSetLayout }));
-	mPipelineLayouts.emplace_back(PipelineLayoutBuilder::build(mDevice, { matrixDescriptorSetLayout, albedoTextureSetLayout }));
-	mPipelineLayouts.emplace_back(PipelineLayoutBuilder::build(mDevice, { matrixDescriptorSetLayout, pbrTextureSetLayout }));
+	for(auto &layout : descriptorSetLayouts)
+		mPipelineLayouts.emplace_back(PipelineLayoutBuilder::build(mDevice, { matrixDescriptorSetLayout, layout }));
 }
 
 void FillGBufferSubpass::create(vk::RenderPass renderPass, vk::Extent2D extent, uint32_t indexPass)
 {
 	std::string globalPath = "../Shaders/RenderSceneGraphRelated/";
 	std::array<std::string, 3> fragmentShaderNames{ {"fillgbufferalbedocolor_frag.spv", "fillgbufferalbedotexture_frag.spv", "fillgbufferpbrtexture_frag.spv"} };
+
+	assert(fragmentShaderNames.size() == mPipelineLayouts.size());
 
 	for (auto i(0u); i < mPipelineLayouts.size(); ++i)
 		mPipelines.emplace_back( PipelineBuilder::buildFillGBufferPipeline(mDevice, renderPass, indexPass, extent, mPipelineLayouts[i], globalPath + fragmentShaderNames[i]));

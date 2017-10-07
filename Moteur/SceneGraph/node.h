@@ -5,7 +5,7 @@
 #include <numeric>
 #include <deque>
 #include "meshmanager.h"
-#include "materialmanager.h"
+#include "Material/materialsmanager.h"
 #include "entitymanager.h"
 #include "../Tools/vector_view.h"
 
@@ -14,7 +14,7 @@ public:
 	// DrawCommand, instanceValidity, instanceMatrix, AABB, original AABB
 	using InstancesOfOneObject = std::tuple<DrawCmd, std::deque<bool>, std::deque<glm::mat4>, std::deque<AABB>, AABB>;
 
-	Node(MeshManager &meshManager, MaterialManager &materialManager);
+	Node(MeshManager &meshManager, MaterialsManager &materialsManager);
 
 	EntityManager addModel(std::string path);
 
@@ -32,7 +32,7 @@ public:
 
 private:
 	MeshManager &mMeshManager;
-	MaterialManager &mMaterialManager;
+	MaterialsManager &mMaterialsManager;
 
 	glm::mat4 mNodeTransformation = glm::mat4(1.0f);
 
