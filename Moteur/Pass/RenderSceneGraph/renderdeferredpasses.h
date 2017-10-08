@@ -3,6 +3,7 @@
 #include "../../Vulkan/framebuffer.h"
 #include "../renderpass.h"
 #include "../../Descriptor/descriptorpoolbuilder.h"
+#include "../../Descriptor/descriptorsetlayoutbuilder.h"
 #include "../../SceneGraph/scenegraph.h"
 
 class RenderDeferredPasses {

@@ -52,3 +52,24 @@ Material::Material(aiMaterial *mtl, std::string const &globalPath) {
 		useRoughnessTexture = true;
 	}
 }
+
+bool Material::isOnlyAlbedoTexture() const
+{
+	if (useAlbedoTexture && !useNormalTexture && !useRoughnessTexture && !useMetallicTexture)
+		return true;
+	return false;
+}
+
+bool Material::isNormalPBRTexture() const
+{
+	if (useAlbedoTexture && useNormalTexture && useRoughnessTexture && useMetallicTexture)
+		return true;
+	return false;
+}
+
+bool Material::isOnlyAlbedoColor() const
+{
+	if (!useAlbedoTexture && !useNormalTexture && !useRoughnessTexture && !useMetallicTexture)
+		return true;
+	return false;
+}

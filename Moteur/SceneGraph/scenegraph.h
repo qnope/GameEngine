@@ -1,7 +1,7 @@
 #pragma once
 
 #include "meshmanager.h"
-#include "materialmanager.h"
+#include "Material/materialsmanager.h"
 #include "../Transfer/bufferfactory.h"
 #include "../Transfer/imagefactory.h"
 #include "node.h"
@@ -26,7 +26,7 @@ public:
 
 	void compile(vk::CommandBuffer cmd, uint32_t materialSetNumber, vk::Buffer indirectBuffer);
 
-	const MaterialManager &getMaterialManager() const;
+	const MaterialsManager &getMaterialsManager() const;
 
 	AABB getAABB() const;
 
@@ -37,7 +37,7 @@ private:
 	ImageFactory mImageFactory;
 	BufferFactory mBufferFactory;
 	MeshManager mMeshManager;
-	MaterialManager mMaterialManager;
+	MaterialsManager mMaterialsManager;
 
 	std::shared_ptr<Node> mRootNode;
 
