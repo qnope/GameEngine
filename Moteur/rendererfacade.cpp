@@ -115,7 +115,7 @@ void RendererFacade::createDeferredPasses()
 void RendererFacade::createFinalRenderingPass()
 {
     mFinalRenderingPass = std::make_unique<RenderFullScreenPass>(mDevice, vk::Format::eB8G8R8A8Unorm, vk::ImageLayout::eUndefined, vk::ImageLayout::eShaderReadOnlyOptimal);
-    mFinalRenderingPass->setFragmentStage("../Shaders/RenderFullScreen/finalrendering.spv");
+    mFinalRenderingPass->setFragmentStage("../Shaders/RenderFullScreen/finalrendering.frag");
     mFinalRenderingPass->addSampler(vk::DescriptorImageInfo(mRenderDeferredPasses->getAlbedoMap(), mRenderDeferredPasses->getAlbedoMap(), vk::ImageLayout::eShaderReadOnlyOptimal), 0);
     mFinalRenderingPass->create(mExtent);
 }
@@ -180,7 +180,7 @@ void RendererFacade::createVisualizePass(const CombinedImage & combinedImage, bo
 {
     std::vector<unsigned> rangesData = { isMonochromatic, needGammaCorrection };
     mFinalRenderingPass = std::make_unique<RenderFullScreenPass>(mDevice, vk::Format::eB8G8R8A8Unorm, vk::ImageLayout::eUndefined, vk::ImageLayout::eShaderReadOnlyOptimal);
-    mFinalRenderingPass->setFragmentStage("../Shaders/RenderFullScreen/visualizationbuffer.spv");
+    mFinalRenderingPass->setFragmentStage("../Shaders/RenderFullScreen/visualizationbuffer.frag");
     mFinalRenderingPass->addSampler(vk::DescriptorImageInfo(combinedImage, combinedImage, vk::ImageLayout::eShaderReadOnlyOptimal), 0);
     mFinalRenderingPass->addPushConstant(rangesData.data(), (uint32_t)rangesData.size() * sizeof(unsigned));
     mFinalRenderingPass->create(mExtent);

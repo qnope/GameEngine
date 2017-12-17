@@ -1,15 +1,14 @@
-#include <ctgmath>
 #include <utility>
 #include "chunkallocator.h"
 
 vk::DeviceSize nextPowerOfTwo(vk::DeviceSize size) {
-    vk::DeviceSize power = (vk::DeviceSize)(std::log2l((long double)size) + 1);
+    vk::DeviceSize power = (vk::DeviceSize)(std::log2((long double)size) + 1);
     return (vk::DeviceSize)1 << power;
 }
 
 bool isPowerOfTwo(vk::DeviceSize size) {
     vk::DeviceSize mask = 0;
-    vk::DeviceSize power = (vk::DeviceSize)std::log2l((long double)size);
+    vk::DeviceSize power = (vk::DeviceSize)std::log2((long double)size);
 
     for (vk::DeviceSize i = 0; i < power; ++i)
         mask += (vk::DeviceSize)1 << i;

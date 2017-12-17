@@ -21,7 +21,7 @@ VXAOPass::VXAOPass(vk::Device device, BufferFactory & bufferFactory, const Buffe
     mRenderFullScreenPass.addSampler(vk::DescriptorImageInfo(mNormalMap, mNormalMap, vk::ImageLayout::eShaderReadOnlyOptimal), 5);
     mRenderFullScreenPass.addSampler(vk::DescriptorImageInfo(m3DSampler, mVoxelGrid, vk::ImageLayout::eShaderReadOnlyOptimal), 6);
 
-    mRenderFullScreenPass.setFragmentStage("../Shaders/Voxelization/vxao.spv");
+    mRenderFullScreenPass.setFragmentStage("../Shaders/Voxelization/vxao.frag");
 
     mRenderFullScreenPass.create(extent);
 }

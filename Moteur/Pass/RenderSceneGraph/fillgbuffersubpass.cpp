@@ -22,7 +22,7 @@ FillGBufferSubpass::FillGBufferSubpass(vk::Device device, SceneGraph &sceneGraph
 void FillGBufferSubpass::create(vk::RenderPass renderPass, vk::Extent2D extent, uint32_t indexPass)
 {
     std::string globalPath = "../Shaders/RenderSceneGraphRelated/";
-    std::array<std::string, 3> fragmentShaderNames{ {"fillgbufferalbedocolor_frag.spv", "fillgbufferalbedotexture_frag.spv", "fillgbufferpbrtexture_frag.spv"} };
+    std::array<std::string, 3> fragmentShaderNames{ {"fillgbufferalbedocolor.frag", "fillgbufferalbedotexture.frag", "fillgbufferpbrtexture.frag"} };
 
     assert(fragmentShaderNames.size() == mPipelineLayouts.size());
 

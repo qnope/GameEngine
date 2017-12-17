@@ -8,7 +8,6 @@ layout(set = 1, binding = 1) uniform sampler2D normalTexture;
 layout(set = 1, binding = 2) uniform sampler2D roughnessTexture;
 layout(set = 1, binding = 3) uniform sampler2D metallicTexture;
 
-
 layout(location = 0) in struct FS_IN {
 	vec3 position;	
 	vec3 tangent;
