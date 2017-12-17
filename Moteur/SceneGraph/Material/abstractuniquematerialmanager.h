@@ -7,28 +7,28 @@
 
 class AbstractUniqueMaterialManager {
 public:
-	struct MaterialPointer {
-		AbstractUniqueMaterialManager *ptr;
-		uint32_t index;
-	};
+    struct MaterialPointer {
+        AbstractUniqueMaterialManager *ptr;
+        uint32_t index;
+    };
 
-	AbstractUniqueMaterialManager(vk::Device device);
+    AbstractUniqueMaterialManager(vk::Device device);
 
-	void changePipeline(vk::Pipeline pipeline);
-	void changePipelineLayout(vk::PipelineLayout pipelineLayout);
+    void changePipeline(vk::Pipeline pipeline);
+    void changePipelineLayout(vk::PipelineLayout pipelineLayout);
 
-	vk::DescriptorSetLayout getDescriptorSetLayout() const;
+    vk::DescriptorSetLayout getDescriptorSetLayout() const;
 
-	virtual bool isAccepted(Material material) const = 0;
-	virtual MaterialPointer addMaterial(Material material) = 0;
-	virtual void getDrawerMaterialValues(Drawer &drawer, const MaterialPointer &ptr) const;
+    virtual bool isAccepted(Material material) const = 0;
+    virtual MaterialPointer addMaterial(Material material) = 0;
+    virtual void getDrawerMaterialValues(Drawer &drawer, const MaterialPointer &ptr) const;
 
-	virtual ~AbstractUniqueMaterialManager() = default;
+    virtual ~AbstractUniqueMaterialManager() = default;
 
 protected:
-	vk::Device mDevice;
-	vk::Pipeline mPipeline;
-	vk::PipelineLayout mPipelineLayout;
-	std::unique_ptr<DescriptorPoolWrapper> mDescriptorPool;
-	std::unique_ptr<DescriptorSetLayout> mDescriptorSetLayout;
+    vk::Device mDevice;
+    vk::Pipeline mPipeline;
+    vk::PipelineLayout mPipelineLayout;
+    std::unique_ptr<DescriptorPoolWrapper> mDescriptorPool;
+    std::unique_ptr<DescriptorSetLayout> mDescriptorSetLayout;
 };

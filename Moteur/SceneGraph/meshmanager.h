@@ -8,16 +8,16 @@
 
 class MeshManager {
 public:
-	MeshManager(BufferFactory &bufferFactory);
+    MeshManager(BufferFactory &bufferFactory);
 
-	DrawCmd addMesh(const std::vector<Mesh> &meshes);
+    DrawCmd addMesh(const std::vector<Mesh> &meshes);
 
 private:
-	BufferFactory &mBufferFactory;
+    BufferFactory &mBufferFactory;
 
-	// uint32_t 
-	Buffer mStagingBuffer;
-	// the uint32_t size means the total offset used
-	std::vector<std::tuple<uint32_t, Buffer>> mIbos;
-	std::vector<std::tuple<uint32_t, Buffer>> mVbos;
+    // uint32_t 
+    Buffer mStagingBuffer;
+    // the uint32_t size means the total offset used
+    std::vector<std::tuple<uint32_t, Buffer>> mIbos;
+    std::vector<std::tuple<uint32_t, Buffer>> mVbos;
 };

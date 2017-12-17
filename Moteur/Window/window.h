@@ -7,21 +7,21 @@
 class Window
 {
 public:
-	Window(int width, int height, std::string title);
+    Window(int width, int height, std::string title);
 
-	GLFWwindow *getWindow();
+    GLFWwindow *getWindow();
 
-	operator GLFWwindow*();
+    operator GLFWwindow*();
 
-	int getWidth() const;
-	int getHeight() const;
+    int getWidth() const;
+    int getHeight() const;
 
-	bool isRunning() const;
+    bool isRunning() const;
 
-	~Window();
+    ~Window();
 
 private:
 
-	GLFWwindow *mWindow;
+    GLFWwindow *mWindow;
 };
 

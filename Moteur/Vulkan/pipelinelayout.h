@@ -5,18 +5,18 @@
 
 class PipelineLayout : public vk::UniquePipelineLayout {
 public:
-	PipelineLayout() = default;
-	PipelineLayout(vk::Device device);
+    PipelineLayout() = default;
+    PipelineLayout(vk::Device device);
 
-	void addDescriptorSetLayout(vk::DescriptorSetLayout layout);
-	void addPushConstantRange(vk::PushConstantRange range);
+    void addDescriptorSetLayout(vk::DescriptorSetLayout layout);
+    void addPushConstantRange(vk::PushConstantRange range);
 
-	void create();
+    void create();
 
-	std::vector<vk::DescriptorSetLayout> const &getDescriptorSetLayouts() const;
+    std::vector<vk::DescriptorSetLayout> const &getDescriptorSetLayouts() const;
 
 private:
-	vk::Device mDevice;
-	std::vector<vk::DescriptorSetLayout> mDescriptorSetLayouts;
-	std::vector<vk::PushConstantRange> mPushConstantRanges;
+    vk::Device mDevice;
+    std::vector<vk::DescriptorSetLayout> mDescriptorSetLayouts;
+    std::vector<vk::PushConstantRange> mPushConstantRanges;
 };

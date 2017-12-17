@@ -4,30 +4,30 @@
 
 class Interface {
 public:
-	Interface(std::string name);
-	EngineParameter getParameters() const;
+    Interface(std::string name);
+    EngineParameter getParameters() const;
 
-	virtual void execute();
+    virtual void execute();
 
-	void setVoxelizationProfiling(const std::vector<Profiling> *ptr);
+    void setVoxelizationProfiling(const std::vector<Profiling> *ptr);
 
-	void checkError();
+    void checkError();
 
 private:
-	std::string mName;
-	bool mSettingsOpen{ false };
-	bool mVoxelSettingsOpen{ false };
-	bool mAOSettingsOpen{ false };
-	bool mVisualizeSettingsOpen{ false };
-	bool mProfilingOpen{ false };
-	EngineParameter mEngineParameter;
+    std::string mName;
+    bool mSettingsOpen{ false };
+    bool mVoxelSettingsOpen{ false };
+    bool mAOSettingsOpen{ false };
+    bool mVisualizeSettingsOpen{ false };
+    bool mProfilingOpen{ false };
+    EngineParameter mEngineParameter;
 
-	const std::vector<Profiling> *mVoxelizationProfiling{ nullptr };
+    const std::vector<Profiling> *mVoxelizationProfiling{ nullptr };
 
-	void createOpenCloseButton(std::string text, bool &button);
-	void createEngineWindow();
-	void createSettingsWindow();
-	void createVoxelSettingsWindow();
-	void createAOSettingsWindow();
-	void createProfilingWindow();
+    void createOpenCloseButton(std::string text, bool &button);
+    void createEngineWindow();
+    void createSettingsWindow();
+    void createVoxelSettingsWindow();
+    void createAOSettingsWindow();
+    void createProfilingWindow();
 };

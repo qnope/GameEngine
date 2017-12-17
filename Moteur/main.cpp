@@ -239,7 +239,5 @@ void run() {
 int main() {
 	run();
 
-	getchar();
-
 	return 0;
 }

@@ -6,27 +6,27 @@
 
 class Input {
 public:
-	double mouseXPos{ 0.0 };
-	double mouseYPos{ 0.0 };
+    double mouseXPos{ 0.0 };
+    double mouseYPos{ 0.0 };
 
-	double scrollXOffset{ 0.0 };
-	double scrollYOffset{ 0.0 };
+    double scrollXOffset{ 0.0 };
+    double scrollYOffset{ 0.0 };
 
-	std::array<bool, GLFW_MOUSE_BUTTON_LAST> mouseButtonPressed;
-	std::array<bool, GLFW_KEY_LAST> keyPressed;
+    std::array<bool, GLFW_MOUSE_BUTTON_LAST> mouseButtonPressed;
+    std::array<bool, GLFW_KEY_LAST> keyPressed;
 
 public:
-	static Input &instance(GLFWwindow *window = nullptr);
+    static Input &instance(GLFWwindow *window = nullptr);
 
-	Input(Input &&) = delete;
-	Input(const Input&) = delete;
+    Input(Input &&) = delete;
+    Input(const Input&) = delete;
 
-	Input &operator=(Input &&) = delete;
-	Input &operator=(const Input &) = delete;
-
-private:
-	Input() = default;
+    Input &operator=(Input &&) = delete;
+    Input &operator=(const Input &) = delete;
 
 private:
-	GLFWwindow *mWindow{ nullptr };
+    Input() = default;
+
+private:
+    GLFWwindow *mWindow{ nullptr };
 };

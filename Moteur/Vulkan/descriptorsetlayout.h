@@ -4,13 +4,13 @@
 
 class DescriptorSetLayout : public vk::UniqueDescriptorSetLayout {
 public:
-	DescriptorSetLayout(vk::Device device);
+    DescriptorSetLayout(vk::Device device);
 
-	void addBinding(vk::DescriptorSetLayoutBinding binding);
+    void addBinding(vk::DescriptorSetLayoutBinding binding);
 
-	void create();
+    void create();
 
 private:
-	vk::Device mDevice;
-	std::vector<vk::DescriptorSetLayoutBinding> mBindings;
+    vk::Device mDevice;
+    std::vector<vk::DescriptorSetLayoutBinding> mBindings;
 };

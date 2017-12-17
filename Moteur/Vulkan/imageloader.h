@@ -6,17 +6,17 @@ struct SDL_Surface;
 class ImageLoader
 {
 public:
-	ImageLoader(std::string const &path);
+    ImageLoader(std::string const &path);
 
-	uint32_t getWidth() const;
-	uint32_t getHeight() const;
-	uint32_t getRowPitch() const;
-	vk::Format getFormat() const;
+    uint32_t getWidth() const;
+    uint32_t getHeight() const;
+    uint32_t getRowPitch() const;
+    vk::Format getFormat() const;
 
-	unsigned char const *getPixel() const;
+    unsigned char const *getPixel() const;
 
-	~ImageLoader();
+    ~ImageLoader();
 
 private:
-	SDL_Surface *mImage;
+    SDL_Surface *mImage;
 };

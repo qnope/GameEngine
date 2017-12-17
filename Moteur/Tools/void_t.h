@@ -7,12 +7,12 @@ template <typename... T>
 using void_t = typename make_void<T...>::type; // force SFINAE
 
 namespace detail {
-	template<typename AlwaysVoid, template<typename...> class Operator, typename ...Args>
-	struct _is_valid : std::false_type {};
+    template<typename AlwaysVoid, template<typename...> class Operator, typename ...Args>
+    struct _is_valid : std::false_type {};
 
-	
-	template<template<typename...> class Operator, typename ...Args>
-	struct _is_valid<void_t<Operator<Args...>>, Operator, Args...> : std::true_type { using type = Operator<Args...>; };
+
+    template<template<typename...> class Operator, typename ...Args>
+    struct _is_valid<void_t<Operator<Args...>>, Operator, Args...> : std::true_type { using type = Operator<Args...>; };
 }
 
 template<template<typename ...> class Operator, typename ...Args>

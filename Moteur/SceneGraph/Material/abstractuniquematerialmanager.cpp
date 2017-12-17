@@ -1,28 +1,28 @@
 #include "abstractuniquematerialmanager.h"
 
 AbstractUniqueMaterialManager::AbstractUniqueMaterialManager(vk::Device device) :
-	mDevice(device)
+    mDevice(device)
 {
 }
 
 void AbstractUniqueMaterialManager::changePipeline(vk::Pipeline pipeline)
 {
-	mPipeline = pipeline;
+    mPipeline = pipeline;
 }
 
 void AbstractUniqueMaterialManager::changePipelineLayout(vk::PipelineLayout pipelineLayout)
 {
-	mPipelineLayout = pipelineLayout;
+    mPipelineLayout = pipelineLayout;
 }
 
 vk::DescriptorSetLayout AbstractUniqueMaterialManager::getDescriptorSetLayout() const
 {
-	return *mDescriptorSetLayout;
+    return *mDescriptorSetLayout;
 }
 
 void AbstractUniqueMaterialManager::getDrawerMaterialValues(Drawer & drawer, const MaterialPointer & ptr) const
 {
-	assert(ptr.ptr == this);
-	drawer.pipeline = mPipeline;
-	drawer.pipelineLayout = mPipelineLayout;
+    assert(ptr.ptr == this);
+    drawer.pipeline = mPipeline;
+    drawer.pipelineLayout = mPipelineLayout;
 }

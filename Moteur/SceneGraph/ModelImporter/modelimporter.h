@@ -6,9 +6,9 @@
 class ModelImporter
 {
 public:
-	ModelImporter(std::string const &path);
+    ModelImporter(std::string const &path);
 
 public:
-	std::vector<Mesh> mMeshes;
-	std::vector<Material> mMaterials;
+    std::vector<Mesh> mMeshes;
+    std::vector<Material> mMaterials;
 };

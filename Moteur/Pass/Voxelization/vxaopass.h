@@ -4,39 +4,39 @@
 #include "voxelizationpass.h"
 
 struct VXAOParameter {
-	float offsetCone{ 2.5f };
-	int numberCones{ 16 };
-	float oversampling{ 0.1f };
-	float distanceAttenuation{ 1.f };
-	float force{ 1.0f };
-	float maximumDistance{ 0.1f };
+    float offsetCone{ 2.5f };
+    int numberCones{ 16 };
+    float oversampling{ 0.1f };
+    float distanceAttenuation{ 1.f };
+    float force{ 1.0f };
+    float maximumDistance{ 0.1f };
 };
 
 class VXAOPass {
 public:
-	VXAOPass(vk::Device device, BufferFactory &bufferFactory, const Buffer &perspectiveViewMatriceBuffer, RenderDeferredPasses &renderDeferredPass, VoxelizationPass &voxelizationPass, vk::Extent2D extent);
+    VXAOPass(vk::Device device, BufferFactory &bufferFactory, const Buffer &perspectiveViewMatriceBuffer, RenderDeferredPasses &renderDeferredPass, VoxelizationPass &voxelizationPass, vk::Extent2D extent);
 
-	void setVXAOParameters(VXAOParameter parameters);
+    void setVXAOParameters(VXAOParameter parameters);
 
-	vk::RenderPass getRenderPass() const;
-	vk::Extent2D getExtent() const;
+    vk::RenderPass getRenderPass() const;
+    vk::Extent2D getExtent() const;
 
-	void execute(vk::CommandBuffer cmd, vk::Framebuffer framebuffer);
+    void execute(vk::CommandBuffer cmd, vk::Framebuffer framebuffer);
 
 private:
-	vk::Device mDevice;
-	RenderFullScreenPass mRenderFullScreenPass;
-	
-	const Buffer &mPerspectiveViewMatriceBuffer;
-	const Buffer &mCubeVoxelizationInfoBuffer;
+    vk::Device mDevice;
+    RenderFullScreenPass mRenderFullScreenPass;
 
-	Buffer mVXAOParameterStagingBuffer;
-	Buffer mVXAOParameterBuffer;
+    const Buffer &mPerspectiveViewMatriceBuffer;
+    const Buffer &mCubeVoxelizationInfoBuffer;
 
-	const CombinedImage &mDepthMap;
-	const CombinedImage &mTangentMap;
-	const CombinedImage &mNormalMap;
-	const CombinedImage &mVoxelGrid;
+    Buffer mVXAOParameterStagingBuffer;
+    Buffer mVXAOParameterBuffer;
 
-	Sampler m3DSampler{ mDevice, Sampler::simple(vk::Filter::eLinear, vk::SamplerMipmapMode::eLinear, vk::SamplerAddressMode::eClampToEdge) };
+    const CombinedImage &mDepthMap;
+    const CombinedImage &mTangentMap;
+    const CombinedImage &mNormalMap;
+    const CombinedImage &mVoxelGrid;
+
+    Sampler m3DSampler{ mDevice, Sampler::simple(vk::Filter::eLinear, vk::SamplerMipmapMode::eLinear, vk::SamplerAddressMode::eClampToEdge) };
 };

@@ -7,24 +7,24 @@
 
 class VoxelizationGeometrySubPass : public Subpass {
 public:
-	VoxelizationGeometrySubPass(vk::Device device, uint32_t resolution, uint32_t clipMapNumber, SceneGraph & sceneGraph, vk::PipelineLayout pipelineLayout, vk::DescriptorSet cubeVoxelizationInfoImageDescriptorSet, const Buffer &cubeVoxelizationInfoBuffer, const Buffer & modelMatricesBuffer, const Buffer & indirectBuffer, std::unique_ptr<CombinedImage> & combinedImage, ImageFactory & imageFactory);
+    VoxelizationGeometrySubPass(vk::Device device, uint32_t resolution, uint32_t clipMapNumber, SceneGraph & sceneGraph, vk::PipelineLayout pipelineLayout, vk::DescriptorSet cubeVoxelizationInfoImageDescriptorSet, const Buffer &cubeVoxelizationInfoBuffer, const Buffer & modelMatricesBuffer, const Buffer & indirectBuffer, std::unique_ptr<CombinedImage> & combinedImage, ImageFactory & imageFactory);
 
 private:
-	void create(vk::RenderPass renderPass, vk::Extent2D extent, uint32_t indexPass) override;
+    void create(vk::RenderPass renderPass, vk::Extent2D extent, uint32_t indexPass) override;
 
-	void execute(vk::CommandBuffer cmd) override;
+    void execute(vk::CommandBuffer cmd) override;
 
-	vk::Device mDevice;
+    vk::Device mDevice;
 
-	SceneGraph &mSceneGraph;
+    SceneGraph &mSceneGraph;
 
-	uint32_t mResolution;
+    uint32_t mResolution;
 
-	vk::PipelineLayout mPipelineLayout;
-	vk::DescriptorSet mCubeVoxelizationInfoImageDescriptorSet;
+    vk::PipelineLayout mPipelineLayout;
+    vk::DescriptorSet mCubeVoxelizationInfoImageDescriptorSet;
 
-	Pipeline mPipeline;
+    Pipeline mPipeline;
 
-	const Buffer &mModelMatricesBuffer;
-	const Buffer &mIndirectBuffer;
+    const Buffer &mModelMatricesBuffer;
+    const Buffer &mIndirectBuffer;
 };

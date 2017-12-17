@@ -7,13 +7,13 @@ DescriptorSetLayout::DescriptorSetLayout(vk::Device device) : mDevice(device)
 
 void DescriptorSetLayout::addBinding(vk::DescriptorSetLayoutBinding binding)
 {
-	mBindings << binding;
+    mBindings << binding;
 }
 
 void DescriptorSetLayout::create() {
-	vk::DescriptorSetLayoutCreateInfo layoutInfo;
-	layoutInfo.bindingCount = (uint32_t)mBindings.size();
-	layoutInfo.pBindings = mBindings.data();
+    vk::DescriptorSetLayoutCreateInfo layoutInfo;
+    layoutInfo.bindingCount = (uint32_t)mBindings.size();
+    layoutInfo.pBindings = mBindings.data();
 
-	static_cast<vk::UniqueDescriptorSetLayout&>(*this) = mDevice.createDescriptorSetLayoutUnique(layoutInfo);
+    static_cast<vk::UniqueDescriptorSetLayout&>(*this) = mDevice.createDescriptorSetLayoutUnique(layoutInfo);
 }

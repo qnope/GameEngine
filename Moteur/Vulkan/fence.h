@@ -4,11 +4,11 @@
 
 class Fence : public vk::UniqueFence {
 public:
-	Fence() = default;
-	Fence(vk::Device device, bool signaled = false);
+    Fence() = default;
+    Fence(vk::Device device, bool signaled = false);
 
-	void reset();
-	void wait();
+    void reset();
+    void wait();
 private:
-	vk::Device mDevice;
+    vk::Device mDevice;
 };
