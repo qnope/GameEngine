@@ -27,8 +27,9 @@ public:
 
 protected:
     vk::Device mDevice;
-    vk::Pipeline mPipeline;
-    vk::PipelineLayout mPipelineLayout;
+
+    vk::Pipeline mPipeline; /// Associated pipeline to this material
+    vk::PipelineLayout mPipelineLayout; /// Associated pipelineLayout to this material
     std::unique_ptr<DescriptorPoolWrapper> mDescriptorPool;
     std::unique_ptr<DescriptorSetLayout> mDescriptorSetLayout;
 };

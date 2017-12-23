@@ -20,7 +20,7 @@ AbstractUniqueMaterialManager::MaterialPointer AlbedoTextureMaterialManager::add
     MaterialPointer p;
 
     p.ptr = this;
-    p.index = mValues.size();
+    p.index = (uint32_t)mValues.size();
 
     Descriptor descriptor;
     auto descriptorSet = mDescriptorSets.emplace_back(mDescriptorPool->allocate(*mDescriptorSetLayout));

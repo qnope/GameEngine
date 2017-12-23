@@ -64,8 +64,7 @@ void Node::computeMatrices(glm::mat4 parent, vector_view<glm::mat4> &matriceBuff
 {
     auto m = parent * mNodeTransformation;
 
-    for (const auto &instance : mInstancesByObject) {
-        const auto &[cmd, validities, matrices, aabbs, aabb] = instance;
+    for (const auto &[cmd, validities, matrices, aabbs, aabb] : mInstancesByObject) {
         auto itValidity = validities.begin();
         auto itMatrix = matrices.begin();
         auto endMatrix = matrices.end();
@@ -83,8 +82,7 @@ void Node::computeMatrices(glm::mat4 parent, vector_view<glm::mat4> &matriceBuff
 void Node::buildIndirectCommands(vector_view<vk::DrawIndexedIndirectCommand>& indirectCommandsBufferView, uint32_t &currentInstance)
 {
     int i = 0;
-    for (const auto &instance : mInstancesByObject) {
-        const auto &[cmd, validities, matrices, aabbs, aabb] = instance;
+    for (const auto &[cmd, validities, matrices, aabbs, aabb] : mInstancesByObject) {
         for (const auto &part : cmd.mParts) {
             vk::DrawIndexedIndirectCommand indirectCommand;
             indirectCommand.firstIndex = part.firstIndex;
@@ -106,8 +104,7 @@ void Node::buildIndirectCommands(vector_view<vk::DrawIndexedIndirectCommand>& in
 
 void Node::draw(std::vector<Drawer> &drawers, bool enableMaterials)
 {
-    for (const auto &instance : mInstancesByObject) {
-        const auto &[cmd, validities, matrices, aabbs, aabb] = instance;
+    for (const auto &[cmd, validities, matrices, aabbs, aabb] : mInstancesByObject) {
         for (const auto &part : cmd.mParts) {
             Drawer drawer;
 

@@ -27,7 +27,7 @@ AbstractUniqueMaterialManager::MaterialPointer AlbedoColorMaterialManager::addMa
     MaterialPointer p;
 
     p.ptr = this;
-    p.index = mValues.size();
+    p.index = (uint32_t)mValues.size();
 
     Descriptor descriptor;
 

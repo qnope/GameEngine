@@ -20,7 +20,7 @@ AbstractUniqueMaterialManager::MaterialPointer PBRNormalTextureMaterialManager::
     MaterialPointer p;
 
     p.ptr = this;
-    p.index = mValues.size();
+    p.index = (uint32_t)mValues.size();
 
     Descriptor descriptor;
     auto descriptorSet = mDescriptorSets.emplace_back(mDescriptorPool->allocate(*mDescriptorSetLayout));
@@ -35,7 +35,12 @@ AbstractUniqueMaterialManager::MaterialPointer PBRNormalTextureMaterialManager::
     vk::DescriptorImageInfo roughnessInfo(*descriptor.roughnessTexture, *descriptor.roughnessTexture, vk::ImageLayout::eShaderReadOnlyOptimal);
     vk::DescriptorImageInfo metallicInfo(*descriptor.metallicTexture, *descriptor.metallicTexture, vk::ImageLayout::eShaderReadOnlyOptimal);
 
-    mDevice.updateDescriptorSets({ StructHelper::writeDescriptorSet(descriptorSet, 0, &albedoInfo), StructHelper::writeDescriptorSet(descriptorSet, 1, &normalInfo), StructHelper::writeDescriptorSet(descriptorSet, 2, &roughnessInfo), StructHelper::writeDescriptorSet(descriptorSet, 3, &metallicInfo) }, {});
+    mDevice.updateDescriptorSets({
+            StructHelper::writeDescriptorSet(descriptorSet, 0, &albedoInfo),
+            StructHelper::writeDescriptorSet(descriptorSet, 1, &normalInfo),
+            StructHelper::writeDescriptorSet(descriptorSet, 2, &roughnessInfo),
+            StructHelper::writeDescriptorSet(descriptorSet, 3, &metallicInfo)
+        }, {});
 
     mValues.emplace_back(descriptor);
 

@@ -1,13 +1,25 @@
 #include "shader.h"
 #include <fstream>
+#include "Tools/logger.h"
 
 Shader::Shader(vk::Device device, std::string filename, EShLanguage stage) {
     ShaderCompiler compiler;
-    auto code = compiler.compileFromFile(filename, stage, false, false);
 
-    vk::ShaderModuleCreateInfo info;
-    info.codeSize = code.size() * sizeof(decltype(code)::value_type);
-    info.pCode = reinterpret_cast<const uint32_t*>(code.data());
+    log("Try to Compile shader : " + filename);
 
-    static_cast<vk::UniqueShaderModule&>(*this) = device.createShaderModuleUnique(info);
+    try {
+        auto code = compiler.compileFromFile(filename, stage, false, false);
+
+        vk::ShaderModuleCreateInfo info;
+        info.codeSize = code.size() * sizeof(decltype(code)::value_type);
+        info.pCode = reinterpret_cast<const uint32_t*>(code.data());
+        static_cast<vk::UniqueShaderModule&>(*this) = device.createShaderModuleUnique(info);
+    }
+
+    catch(std::runtime_error &error) {
+        log(error);
+        throw;
+    }
+
+    log("Success");
 }

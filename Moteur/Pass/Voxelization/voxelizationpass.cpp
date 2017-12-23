@@ -73,7 +73,7 @@ void VoxelizationPass::execute(vk::CommandBuffer cmd)
     cmd.bindPipeline(vk::PipelineBindPoint::eCompute, mDownsamplerPipeline);
     cmd.bindDescriptorSets(vk::PipelineBindPoint::eCompute, mDownsamplerPipelineLayout, 0, mDownsamplerDescriptorSet, nullptr);
 
-    for (int i = 1; i < mClipMapNumber; ++i) {
+    for (auto i = 1u; i < mClipMapNumber; ++i) {
 
         auto dispatch = mResolution / 8 / 2;
 

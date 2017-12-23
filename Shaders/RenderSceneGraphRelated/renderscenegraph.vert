@@ -25,11 +25,11 @@ layout(location = 0) out struct VS_OUT {
 }vs_out;
 
 void main() {
-	const vec4 worldPosition = inModelMatrix *  vec4(inPosition, 1.0);
+    const vec4 worldPosition = inModelMatrix *  vec4(inPosition, 1.0);
     gl_Position = projectionMatrix * cameraMatrix * worldPosition;
     mat3 normalMatrix = transpose(inverse(mat3(inModelMatrix)));
-	vs_out.position = worldPosition.xyz;
-	vs_out.tangent = normalMatrix * inTangent;
-	vs_out.normal = normalMatrix * inNormal;
-	vs_out.textureCoordinate = inTextureCoordinate;
+    vs_out.position = worldPosition.xyz;
+    vs_out.tangent = normalMatrix * inTangent;
+    vs_out.normal = normalMatrix * inNormal;
+    vs_out.textureCoordinate = inTextureCoordinate;
 }

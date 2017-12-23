@@ -27,7 +27,6 @@
 
 typedef std::chrono::duration<float> time_s;
 
-
 class SuperWindow {
 public:
 	SuperWindow(int w, int h, std::string name) :

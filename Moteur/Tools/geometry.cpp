@@ -1,7 +1,5 @@
 #include "geometry.h"
 
-
-
 AABB & operator<<(AABB & aabb, const AABB & a)
 {
     aabb.min = glm::min(aabb.min, a.min);
