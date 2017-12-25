@@ -1,7 +1,7 @@
-#include "fullscreensubpass.h"
-#include "../../Vulkan/structhelper.h"
+#include "FullscreenSubpass.h"
+#include "Vulkan/StructHelper.h"
 
-FullScreenSubPass::FullScreenSubPass(vk::Device device) :
+FullscreenSubpass::FullscreenSubpass(vk::Device device) :
     mDevice(device),
     mDescriptorPool(device),
     mDescriptorSetLayout(device),
@@ -11,12 +11,12 @@ FullScreenSubPass::FullScreenSubPass(vk::Device device) :
     addColorAttachment(0);
 }
 
-void FullScreenSubPass::setFragmentStage(std::string filename)
+void FullscreenSubpass::setFragmentStage(std::string filename)
 {
     mFragmentStage = filename;
 }
 
-void FullScreenSubPass::addUniformBuffer(vk::DescriptorBufferInfo info, uint32_t binding)
+void FullscreenSubpass::addUniformBuffer(vk::DescriptorBufferInfo info, uint32_t binding)
 {
     mDescriptorSetLayout.addBinding(LayoutBinding::uniformBuffer(binding, 1, vk::ShaderStageFlagBits::eFragment));
 
@@ -24,7 +24,7 @@ void FullScreenSubPass::addUniformBuffer(vk::DescriptorBufferInfo info, uint32_t
     mDescriptorPool.addPoolSize(DescriptorPoolSize::uniformBuffer());
 }
 
-void FullScreenSubPass::addSampler(vk::DescriptorImageInfo info, uint32_t binding)
+void FullscreenSubpass::addSampler(vk::DescriptorImageInfo info, uint32_t binding)
 {
     mDescriptorSetLayout.addBinding(LayoutBinding::combinedImage(binding, 1, vk::ShaderStageFlagBits::eFragment));
 
@@ -32,14 +32,14 @@ void FullScreenSubPass::addSampler(vk::DescriptorImageInfo info, uint32_t bindin
     mDescriptorPool.addPoolSize(DescriptorPoolSize::combinedImage());
 }
 
-void FullScreenSubPass::addStorageImage(vk::DescriptorImageInfo info, uint32_t binding)
+void FullscreenSubpass::addStorageImage(vk::DescriptorImageInfo info, uint32_t binding)
 {
     mDescriptorSetLayout.addBinding(LayoutBinding::storageImage(binding, 1, vk::ShaderStageFlagBits::eFragment));
     mImageInfos.emplace_back(std::make_tuple(info, binding, vk::DescriptorType::eStorageImage));
     mDescriptorPool.addPoolSize(DescriptorPoolSize::storageImage());
 }
 
-void FullScreenSubPass::addPushConstant(vk::PushConstantRange range, const void * data)
+void FullscreenSubpass::addPushConstant(vk::PushConstantRange range, const void * data)
 {
     mPushConstantRanges << range;
     auto begin = static_cast<const char*>(data);
@@ -47,7 +47,7 @@ void FullScreenSubPass::addPushConstant(vk::PushConstantRange range, const void 
     std::copy(begin, end, mPushConstantData.begin() + range.offset);
 }
 
-void FullScreenSubPass::create(vk::RenderPass renderPass, vk::Extent2D extent, uint32_t index)
+void FullscreenSubpass::create(vk::RenderPass renderPass, vk::Extent2D extent, uint32_t index)
 {
     mDescriptorSetLayout.create();
     mPipelineLayout = PipelineLayoutBuilder::build(mDevice, { mDescriptorSetLayout }, mPushConstantRanges);
@@ -66,7 +66,7 @@ void FullScreenSubPass::create(vk::RenderPass renderPass, vk::Extent2D extent, u
     mDevice.updateDescriptorSets(writeDescriptorSets, {});
 }
 
-void FullScreenSubPass::execute(vk::CommandBuffer cmd) {
+void FullscreenSubpass::execute(vk::CommandBuffer cmd) {
     cmd.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, mPipelineLayout, 0, mDescriptorSet, {});
     cmd.bindPipeline(vk::PipelineBindPoint::eGraphics, mPipeline);
 

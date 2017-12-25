@@ -1,4 +1,4 @@
-#include "memoryblock.h"
+#include "MemoryBlock.h"
 
 int findMemoryType(uint32_t memoryTypeBits,
     vk::PhysicalDeviceMemoryProperties const &properties,

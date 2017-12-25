@@ -1,5 +1,6 @@
 #pragma once
-#include "../Window/window.h"
+
+#include "Window/Window.h"
 #include "vulkan.h"
 
 class Instance : public vk::UniqueInstance {

@@ -1,7 +1,7 @@
 #pragma once
-#include "../../imgui/imguiinstance.h"
-#include "../subpass.h"
-#include "../pipelinebuilder.h"
+#include "imgui/ImGUIInstance.h"
+#include "Pass/Subpass.h"
+#include "Pass/PipelineBuilder.h"
 
 class ImGUISubpass : public Subpass {
 public:

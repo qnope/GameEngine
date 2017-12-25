@@ -1,6 +1,6 @@
-#include "pbrnormaltexturematerialmanager.h"
-#include "../../Descriptor/descriptorpoolbuilder.h"
-#include "../../Descriptor/descriptorsetlayoutbuilder.h"
+#include "PBRNormalTextureMaterialManager.h"
+#include "Descriptor/DescriptorPoolBuilder.h"
+#include "Descriptor/DescriptorSetLayoutBuilder.h"
 
 PBRNormalTextureMaterialManager::PBRNormalTextureMaterialManager(vk::Device device, ImageFactory & imageFactory) :
     AbstractUniqueMaterialManager(device),

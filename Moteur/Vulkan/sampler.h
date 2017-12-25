@@ -1,6 +1,6 @@
 #pragma once
 
-#include "device.h"
+#include "Device.h"
 
 class Sampler : public vk::UniqueSampler {
 public:

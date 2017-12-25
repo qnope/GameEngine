@@ -1,4 +1,4 @@
-#include "entitymanager.h"
+#include "EntityManager.h"
 
 EntityManager::EntityManager(std::deque<bool>* validityDeque, std::deque<glm::mat4>* matricesDeque, std::deque<AABB> *aabbsDeque, const AABB &originalAABB) :
     mValidityDeque(validityDeque),

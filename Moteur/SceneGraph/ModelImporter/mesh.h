@@ -3,8 +3,8 @@
 #include <vector>
 #include "vulkan/vulkan.hpp"
 #include <assimp/mesh.h>
-#include "../../Tools/glm.h"
-#include "../../Tools/geometry.h"
+#include "Tools/glm.h"
+#include "Tools/Geometry.h"
 
 struct Vertex {
     glm::vec3 position;

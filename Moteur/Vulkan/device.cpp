@@ -1,6 +1,6 @@
 #include <iostream>
-#include "../Tools/stream.h"
-#include "device.h"
+#include "Tools/stream.h"
+#include "Device.h"
 
 static constexpr float priority = 1.0f;
 

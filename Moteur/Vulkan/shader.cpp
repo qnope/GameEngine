@@ -1,6 +1,6 @@
-#include "shader.h"
+#include "Shader.h"
 #include <fstream>
-#include "Tools/logger.h"
+#include "Tools/Logger.h"
 
 Shader::Shader(vk::Device device, std::string filename, EShLanguage stage) {
     ShaderCompiler compiler;

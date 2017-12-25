@@ -1,4 +1,4 @@
-#include "abstractuniquematerialmanager.h"
+#include "AbstractUniqueMaterialManager.h"
 
 AbstractUniqueMaterialManager::AbstractUniqueMaterialManager(vk::Device device) :
     mDevice(device)

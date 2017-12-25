@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../Tools/stream.h"
-#include "deviceallocator.h"
+#include "Tools/stream.h"
+#include "DeviceAllocator.h"
 
 class Buffer : public vk::UniqueBuffer
 {
@@ -21,7 +21,6 @@ public:
     bool isDeviceLocal() const;
     void *getPtr();
     DeviceAllocator &getAllocator();
-
 
     template<typename T>
     std::enable_if_t<std::is_trivially_copyable_v<T> && !is_iterable_v<T>> push_data(T const &value) {

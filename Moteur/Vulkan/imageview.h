@@ -1,5 +1,6 @@
 #pragma once
-#include "device.h"
+
+#include "Device.h"
 
 class ImageView : public vk::UniqueImageView {
 public:

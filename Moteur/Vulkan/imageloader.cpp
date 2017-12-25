@@ -1,4 +1,4 @@
-#include "imageloader.h"
+#include "ImageLoader.h"
 #include <SDL2/SDL_image.h>
 
 ImageLoader::ImageLoader(std::string const &path) {

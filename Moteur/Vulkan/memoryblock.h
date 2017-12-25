@@ -1,6 +1,6 @@
 #pragma once
 
-#include "device.h"
+#include "Device.h"
 
 int findMemoryType(uint32_t memoryTypeBits,
     vk::PhysicalDeviceMemoryProperties const &properties,

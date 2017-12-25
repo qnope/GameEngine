@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Vulkan/framebuffer.h"
+#include "Vulkan/Framebuffer.h"
 
 struct FramebufferBuilder {
     static Framebuffer gBuffer(vk::Device device, ImageFactory &imageFactory, vk::Extent2D extent, vk::RenderPass renderPass);

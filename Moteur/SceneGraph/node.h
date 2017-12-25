@@ -4,10 +4,10 @@
 #include <functional>
 #include <numeric>
 #include <deque>
-#include "meshmanager.h"
-#include "Material/materialsmanager.h"
-#include "entitymanager.h"
-#include "../Tools/vector_view.h"
+#include "MeshManager.h"
+#include "Material/MaterialsManager.h"
+#include "EntityManager.h"
+#include "Tools/vector_view.h"
 
 class Node {
 public:

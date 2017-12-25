@@ -1,4 +1,4 @@
-#include "commandpool.h"
+#include "CommandPool.h"
 
 CommandPool::CommandPool(vk::Device device, uint32_t queueFamily, bool resetable, bool transient) : mDevice(device)
 {

@@ -1,6 +1,6 @@
-#include "pipelinebuilder.h"
+#include "PipelineBuilder.h"
 
-#include "../SceneGraph/ModelImporter/mesh.h"
+#include "SceneGraph/ModelImporter/Mesh.h"
 
 Pipeline PipelineBuilder::buildFullScreenPipeline(vk::Device device, vk::RenderPass renderpass, vk::Extent2D extent2D, vk::PipelineLayout layout, std::string fragmentShader)
 {

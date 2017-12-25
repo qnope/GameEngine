@@ -1,13 +1,13 @@
 #pragma once
 
-#include "../subpass.h"
-#include "../../SceneGraph/scenegraph.h"
-#include "../pipelinebuilder.h"
-#include "../../Transfer/imagefactory.h"
+#include "Pass/Subpass.h"
+#include "SceneGraph/SceneGraph.h"
+#include "Pass/PipelineBuilder.h"
+#include "Transfer/ImageFactory.h"
 
-class VoxelizationGeometrySubPass : public Subpass {
+class VoxelizationGeometrySubpass : public Subpass {
 public:
-    VoxelizationGeometrySubPass(vk::Device device, uint32_t resolution, uint32_t clipMapNumber, SceneGraph & sceneGraph, vk::PipelineLayout pipelineLayout, vk::DescriptorSet cubeVoxelizationInfoImageDescriptorSet, const Buffer &cubeVoxelizationInfoBuffer, const Buffer & modelMatricesBuffer, const Buffer & indirectBuffer, std::unique_ptr<CombinedImage> & combinedImage, ImageFactory & imageFactory);
+    VoxelizationGeometrySubpass(vk::Device device, uint32_t resolution, uint32_t clipMapNumber, SceneGraph & sceneGraph, vk::PipelineLayout pipelineLayout, vk::DescriptorSet cubeVoxelizationInfoImageDescriptorSet, const Buffer &cubeVoxelizationInfoBuffer, const Buffer & modelMatricesBuffer, const Buffer & indirectBuffer, std::unique_ptr<CombinedImage> & combinedImage, ImageFactory & imageFactory);
 
 private:
     void create(vk::RenderPass renderPass, vk::Extent2D extent, uint32_t indexPass) override;

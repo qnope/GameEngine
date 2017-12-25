@@ -1,4 +1,4 @@
-#include "image.h"
+#include "Image.h"
 
 Image::Image(Device &device, DeviceAllocator & allocator, const vk::ImageCreateInfo & info) :
     mDevice(device), mAllocator(allocator), mInfos(info)

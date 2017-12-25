@@ -1,6 +1,6 @@
 #pragma once
 
-#include "memorychunk.h"
+#include "MemoryChunk.h"
 
 class ChunkAllocator
 {

@@ -1,4 +1,4 @@
-#include "imguisubpass.h"
+#include "ImGUISubpass.h"
 
 ImGUISubpass::ImGUISubpass(ImGUIInstance &imGUIInstance, vk::Device device, BufferFactory & bufferFactory) :
     mImGUIInstance(imGUIInstance),

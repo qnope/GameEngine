@@ -1,6 +1,6 @@
-#include "swapchain.h"
-#include "../Tools/stream.h"
-#include "structhelper.h"
+#include "Swapchain.h"
+#include "Tools/stream.h"
+#include "StructHelper.h"
 
 vk::SurfaceFormatKHR getFormat(const std::vector<vk::SurfaceFormatKHR> &formats) {
     vk::SurfaceFormatKHR toReturn;

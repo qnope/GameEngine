@@ -1,10 +1,10 @@
-#include "instance.h"
+#include "Instance.h"
 
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <SDL2/SDL_image.h>
-#include "../Tools/stream.h"
+#include "Tools/stream.h"
 
 static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
     VkDebugReportFlagsEXT flags,

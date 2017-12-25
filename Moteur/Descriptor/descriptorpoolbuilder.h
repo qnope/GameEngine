@@ -1,8 +1,8 @@
 #pragma once
 
-#include "descriptorpoolwrapper.h"
-#include "../Tools/variadics.h"
-#include "../Vulkan/structhelper.h"
+#include "DescriptorPoolWrapper.h"
+#include "Tools/variadics.h"
+#include "Vulkan/StructHelper.h"
 
 struct DescriptorPoolBuilder {
 private:

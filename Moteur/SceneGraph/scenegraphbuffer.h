@@ -1,6 +1,6 @@
 #pragma once
 
-#include "scenegraph.h"
+#include "SceneGraph.h"
 
 struct CameraInformation {
     glm::mat4 projection;

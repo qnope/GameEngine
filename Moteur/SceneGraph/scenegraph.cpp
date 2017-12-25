@@ -1,8 +1,8 @@
 #include "scenegraph.h"
 
-#include "Material/albedocolormaterialmanager.h"
-#include "Material/albedotexturematerialmanager.h"
-#include "Material/pbrnormaltexturematerialmanager.h"
+#include "Material/AlbedoColorMaterialManager.h"
+#include "Material/AlbedoTextureMaterialManager.h"
+#include "Material/PBRNormalTextureMaterialManager.h"
 
 SceneGraph::SceneGraph(Device & device) :
     mImageFactory(device),

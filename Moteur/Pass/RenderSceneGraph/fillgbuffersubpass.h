@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../../SceneGraph/scenegraph.h"
-#include "../subpass.h"
-#include "../pipelinelayoutbuilder.h"
-#include "../pipelinebuilder.h"
+#include "SceneGraph/SceneGraph.h"
+#include "Pass/Subpass.h"
+#include "Pass/PipelineLayoutBuilder.h"
+#include "Pass/PipelineBuilder.h"
 
 class FillGBufferSubpass : public Subpass {
 public:

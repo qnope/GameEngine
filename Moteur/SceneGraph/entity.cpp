@@ -1,4 +1,4 @@
-#include "entity.h"
+#include "Entity.h"
 
 Entity::Entity(bool *validity, glm::mat4 * matrix, AABB *aabb, const AABB &originalAABB) :
     mValidity(validity), mMatrix(matrix), mAABB(aabb), mOriginalAABB(originalAABB)

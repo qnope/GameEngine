@@ -1,14 +1,14 @@
 #pragma once
 
-#include "../subpass.h"
-#include "../pipelinebuilder.h"
-#include "../../Vulkan/descriptorpool.h"
-#include "../../Descriptor/descriptorsetlayoutbuilder.h"
-#include "../pipelinelayoutbuilder.h"
+#include "Pass/Subpass.h"
+#include "Pass/PipelineBuilder.h"
+#include "Vulkan/DescriptorPool.h"
+#include "Descriptor/DescriptorSetLayoutBuilder.h"
+#include "Pass/PipelineLayoutBuilder.h"
 
-class FullScreenSubPass final : public Subpass {
+class FullscreenSubpass final : public Subpass {
 public:
-    FullScreenSubPass(vk::Device device);
+    FullscreenSubpass(vk::Device device);
 
     void setFragmentStage(std::string filename);
     void addUniformBuffer(vk::DescriptorBufferInfo info, uint32_t binding);

@@ -1,5 +1,5 @@
-#include "imguipass.h"
-#include "../../Vulkan/input.h"
+#include "ImGUIPass.h"
+#include "Vulkan/Input.h"
 
 ImGUIPass::ImGUIPass(ImGUIInstance &imGUIInstance, Device &device, vk::Format format, vk::Extent2D extent, BufferFactory &bufferFactory) :
     mImGUIInstance(imGUIInstance),

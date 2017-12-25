@@ -1,7 +1,7 @@
 #pragma once
 
-#include "shader.h"
-#include "structhelper.h"
+#include "Shader.h"
+#include "StructHelper.h"
 
 class Pipeline : public vk::UniquePipeline {
 public:

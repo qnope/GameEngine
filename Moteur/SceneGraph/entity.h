@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../Tools/glm.h"
-#include "../Tools/geometry.h"
+#include "Tools/glm.h"
+#include "Tools/Geometry.h"
 
 struct State {
     glm::quat mRot;

@@ -1,5 +1,5 @@
-#include "pipelinelayout.h"
-#include "../Tools/stream.h"
+#include "PipelineLayout.h"
+#include "Tools/stream.h"
 
 PipelineLayout::PipelineLayout(vk::Device device) : mDevice(device)
 {

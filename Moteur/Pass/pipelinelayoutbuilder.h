@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Vulkan/pipelinelayout.h"
+#include "Vulkan/PipelineLayout.h"
 
 struct PipelineLayoutBuilder {
     static PipelineLayout build(vk::Device device, const std::vector<vk::DescriptorSetLayout> &layouts, const std::vector<vk::PushConstantRange> ranges) {

@@ -1,4 +1,4 @@
-#include "sampler.h"
+#include "Sampler.h"
 
 Sampler::Sampler(vk::Device device, const vk::SamplerCreateInfo & info)
 {

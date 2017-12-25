@@ -1,4 +1,4 @@
-#include "vxaopass.h"
+#include "VXAOPass.h"
 
 VXAOPass::VXAOPass(vk::Device device, BufferFactory & bufferFactory, const Buffer & perspectiveViewMatriceBuffer, RenderDeferredPasses & renderDeferredPass, VoxelizationPass & voxelizationPass, vk::Extent2D extent) :
     mDevice(device),

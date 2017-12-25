@@ -1,8 +1,9 @@
 #pragma once
 
-#include "../Vulkan/descriptorsetlayout.h"
-#include "../Vulkan/structhelper.h"
-#include "../Tools/variadics.h"
+#include "Vulkan/Descriptorsetlayout.h"
+#include "Vulkan/StructHelper.h"
+#include "Tools/variadics.h"
+
 struct DescriptorSetLayoutBuilder {
 private:
     template<typename ...Bindings>

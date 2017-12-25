@@ -1,4 +1,4 @@
-#include "dynaobject.h"
+#include "DynaObject.h"
 
 
 DynaObject::DynaObject(Entity* e) {

@@ -1,5 +1,5 @@
-#include "meshmanager.h"
-#include "../Tools/stream.h"
+#include "MeshManager.h"
+#include "Tools/stream.h"
 
 static int isBufferAvailable(const std::vector<std::tuple<uint32_t, Buffer>> &buffers, vk::DeviceSize size) {
     for (auto i = 0u; i < buffers.size(); ++i)

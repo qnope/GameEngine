@@ -1,8 +1,8 @@
 #pragma once
 
 #include <assimp/material.h>
-#include "../../Transfer/imagefactory.h"
-#include "../../Tools/glm.h"
+#include "Transfer/ImageFactory.h"
+#include "Tools/glm.h"
 
 struct Material {
     Material(aiMaterial *mtl, std::string const &globalPath);

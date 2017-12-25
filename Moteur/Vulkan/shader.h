@@ -1,6 +1,6 @@
 #pragma once
 
-#include "device.h"
+#include "Device.h"
 #include "ShaderCompiler.h"
 
 class Shader : public vk::UniqueShaderModule {

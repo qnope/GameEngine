@@ -1,4 +1,4 @@
-#include "querypool.h"
+#include "QueryPool.h"
 
 QueryPoolTimeStamp::QueryPoolTimeStamp(Device & device, uint32_t number) :
     mDevice(device),

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <deque>
-#include "entity.h"
+#include "Entity.h"
 
 class EntityManager {
 public:

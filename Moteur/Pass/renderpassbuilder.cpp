@@ -1,4 +1,4 @@
-#include "renderpassbuilder.h"
+#include "RenderPassBuilder.h"
 
 std::tuple<RenderPass, std::shared_ptr<FillGBufferSubpass>> RenderPassBuilder::relatedSceneGraph(vk::Device device, SceneGraph & sceneGraph, vk::DescriptorSetLayout matrixDescriptorSetLayout, vk::DescriptorSet matrixDescriptorSet, vk::Extent2D extent, const Buffer &modelMatricesBuffer, const Buffer &indirectBuffer)
 {
@@ -29,11 +29,11 @@ std::tuple<RenderPass, std::shared_ptr<FillGBufferSubpass>> RenderPassBuilder::r
     return std::make_tuple(std::move(renderPass), fillGBufferSubpass);
 }
 
-std::tuple<RenderPass, std::shared_ptr<FullScreenSubPass>> RenderPassBuilder::fullScreen(vk::Device device, vk::Format format, vk::ImageLayout initialLayout, vk::ImageLayout finalLayout)
+std::tuple<RenderPass, std::shared_ptr<FullscreenSubpass>> RenderPassBuilder::fullScreen(vk::Device device, vk::Format format, vk::ImageLayout initialLayout, vk::ImageLayout finalLayout)
 {
     auto colorAttachment = StructHelper::attachmentDescriptionSimpleWithoutStencil(format, initialLayout, finalLayout);
 
-    auto subpass{ std::make_shared<FullScreenSubPass>(device) };
+    auto subpass{ std::make_shared<FullscreenSubpass>(device) };
     RenderPass renderPass{ device };
     renderPass.addSubpass(subpass, false);
     renderPass.addAttachment(colorAttachment, Clear::black());
@@ -82,7 +82,7 @@ std::tuple<RenderPass, std::shared_ptr<Subpass>> RenderPassBuilder::voxelization
     RenderPass renderPass{ device };
 
     if (onlyGeometry)
-        subPass = std::make_shared<VoxelizationGeometrySubPass>(device, resolution, clipMapNumber, sceneGraph, pipelineLayout, cubeVoxelizationInfoImageDescriptorSet, cubeVoxelizationInfoBuffer, modelMatricesBuffer, indirectBuffer, combinedImage, imageFactory);
+        subPass = std::make_shared<VoxelizationGeometrySubpass>(device, resolution, clipMapNumber, sceneGraph, pipelineLayout, cubeVoxelizationInfoImageDescriptorSet, cubeVoxelizationInfoBuffer, modelMatricesBuffer, indirectBuffer, combinedImage, imageFactory);
 
     renderPass.addSubpass(subPass, false);
 

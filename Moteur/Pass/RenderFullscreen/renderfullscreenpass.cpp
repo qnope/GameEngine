@@ -1,7 +1,7 @@
-#include "renderfullscreenpass.h"
-#include "../renderpassbuilder.h"
-#include "../../Vulkan/structhelper.h"
-#include "../../Tools/stream.h"
+#include "RenderFullscreenPass.h"
+#include "Pass/RenderPassBuilder.h"
+#include "Vulkan/StructHelper.h"
+#include "Tools/stream.h"
 
 RenderFullScreenPass::RenderFullScreenPass(vk::Device device, vk::Format format, vk::ImageLayout initialLayout, vk::ImageLayout finalLayout) {
     std::tie(mRenderPass, mSubPass) = RenderPassBuilder::fullScreen(device, format, initialLayout, finalLayout);

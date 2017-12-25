@@ -1,6 +1,6 @@
 #pragma once
-#include "../imgui/imguiinstance.h"
-#include "../Vulkan/pipeline.h"
+#include "imgui/ImGUIInstance.h"
+#include "Vulkan/Pipeline.h"
 
 struct PipelineBuilder {
     static Pipeline buildFullScreenPipeline(vk::Device device, vk::RenderPass renderpass, vk::Extent2D extent2D, vk::PipelineLayout layout, std::string fragmentShader);

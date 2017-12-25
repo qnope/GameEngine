@@ -6,9 +6,9 @@
 // If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
 // https://github.com/ocornut/imgui
 
-#include "imguiinstance.h"
+#include "ImGUIInstance.h"
 
-#include "../Descriptor/descriptorpoolbuilder.h"
+#include "Descriptor/DescriptorPoolBuilder.h"
 
 static const char* getClipboardCallback(void* user_data)
 {

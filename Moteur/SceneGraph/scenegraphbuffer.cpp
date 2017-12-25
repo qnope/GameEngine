@@ -1,4 +1,4 @@
-#include "scenegraphbuffer.h"
+#include "SceneGraphBuffer.h"
 
 SceneGraphBuffer::SceneGraphBuffer(Device &device, SceneGraph & sceneGraph, BufferFactory & bufferFactory, uint32_t numberObjects, uint32_t numberCommands) :
     mSceneGraph(sceneGraph),

@@ -1,5 +1,5 @@
 #include <utility>
-#include "chunkallocator.h"
+#include "ChunkAllocator.h"
 
 vk::DeviceSize nextPowerOfTwo(vk::DeviceSize size) {
     vk::DeviceSize power = (vk::DeviceSize)(std::log2((long double)size) + 1);

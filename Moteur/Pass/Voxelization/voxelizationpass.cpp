@@ -1,4 +1,4 @@
-#include "voxelizationpass.h"
+#include "VoxelizationPass.h"
 
 VoxelizationPass::VoxelizationPass(Device & device, uint32_t resolution, uint32_t clipMapNumber, SceneGraph & sceneGraph, const Buffer & modelMatricesBuffer, const Buffer & indirectBuffer, ImageFactory & imageFactory, BufferFactory & bufferFactory) :
     mDevice(device),

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "device.h"
+#include "Device.h"
 
 using Profiling = std::tuple<std::string, uint32_t>;
 

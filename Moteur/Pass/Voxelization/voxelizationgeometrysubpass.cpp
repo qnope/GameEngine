@@ -1,6 +1,6 @@
-#include "voxelizationgeometrysubpass.h"
+#include "VoxelizationGeometrySubpass.h"
 
-VoxelizationGeometrySubPass::VoxelizationGeometrySubPass(vk::Device device, uint32_t resolution, uint32_t clipMapNumber, SceneGraph & sceneGraph, vk::PipelineLayout pipelineLayout, vk::DescriptorSet cubeVoxelizationInfoImageDescriptorSet, const Buffer &cubeVoxelizationInfoBuffer, const Buffer & modelMatricesBuffer, const Buffer & indirectBuffer, std::unique_ptr<CombinedImage> &combinedImage, ImageFactory &imageFactory) :
+VoxelizationGeometrySubpass::VoxelizationGeometrySubpass(vk::Device device, uint32_t resolution, uint32_t clipMapNumber, SceneGraph & sceneGraph, vk::PipelineLayout pipelineLayout, vk::DescriptorSet cubeVoxelizationInfoImageDescriptorSet, const Buffer &cubeVoxelizationInfoBuffer, const Buffer & modelMatricesBuffer, const Buffer & indirectBuffer, std::unique_ptr<CombinedImage> &combinedImage, ImageFactory &imageFactory) :
     mDevice(device),
     mSceneGraph(sceneGraph),
     mResolution(resolution),
@@ -19,13 +19,13 @@ VoxelizationGeometrySubPass::VoxelizationGeometrySubPass(vk::Device device, uint
     device.updateDescriptorSets(writeSet, {});
 }
 
-void VoxelizationGeometrySubPass::create(vk::RenderPass renderPass, vk::Extent2D extent, uint32_t indexPass)
+void VoxelizationGeometrySubpass::create(vk::RenderPass renderPass, vk::Extent2D extent, uint32_t indexPass)
 {
     mPipeline = PipelineBuilder::buildVoxelizationOnlyGeometryPipeline(mDevice, renderPass, mResolution, mPipelineLayout);
 }
 
 
-void VoxelizationGeometrySubPass::execute(vk::CommandBuffer cmd)
+void VoxelizationGeometrySubpass::execute(vk::CommandBuffer cmd)
 {
     cmd.bindVertexBuffers(1, (vk::Buffer)mModelMatricesBuffer, { 0u });
 

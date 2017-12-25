@@ -1,4 +1,4 @@
-#include "memorychunk.h"
+#include "MemoryChunk.h"
 
 MemoryChunk::MemoryChunk(Device &device, vk::DeviceSize size, int memoryTypeIndex) :
     mDevice(device),

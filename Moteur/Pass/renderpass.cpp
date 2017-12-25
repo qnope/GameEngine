@@ -1,4 +1,4 @@
-#include "renderpass.h"
+#include "RenderPass.h"
 
 RenderPass::RenderPass(vk::Device device) :
     mDevice(device)

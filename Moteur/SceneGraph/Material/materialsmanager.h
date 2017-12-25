@@ -1,6 +1,6 @@
 #pragma once
 
-#include "abstractuniquematerialmanager.h"
+#include "AbstractUniqueMaterialManager.h"
 
 class MaterialsManager {
 public:

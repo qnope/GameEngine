@@ -1,6 +1,6 @@
 #pragma once
 
-#include "device.h"
+#include "Device.h"
 
 class CommandBufferSubmitter {
 public:

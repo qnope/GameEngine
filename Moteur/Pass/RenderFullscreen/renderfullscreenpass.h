@@ -1,8 +1,7 @@
 #pragma once
 
-#include "../renderpass.h"
-#include "fullscreensubpass.h"
-#include <tuple>
+#include "Pass/RenderPass.h"
+#include "FullscreenSubpass.h"
 
 class RenderFullScreenPass {
 public:
@@ -25,6 +24,6 @@ public:
 
 private:
     RenderPass mRenderPass;
-    std::shared_ptr<FullScreenSubPass> mSubPass;
+    std::shared_ptr<FullscreenSubpass> mSubPass;
     vk::Extent2D mExtent;
 };

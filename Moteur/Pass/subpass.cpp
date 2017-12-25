@@ -1,4 +1,4 @@
-#include "subpass.h"
+#include "Subpass.h"
 
 void Subpass::addColorAttachment(uint32_t index)
 {
@@ -24,8 +24,4 @@ vk::SubpassDescription Subpass::getDescription() const
         nullptr,
         mHasDepthStencil ? &mDepthStencilAttachment : nullptr,
         0u, nullptr);
-}
-
-Subpass::~Subpass() {
-
 }

@@ -1,5 +1,5 @@
-#include "imageview.h"
-#include "structhelper.h"
+#include "ImageView.h"
+#include "StructHelper.h"
 
 ImageView::ImageView(Device & device, vk::ImageViewCreateInfo const & info)
 {

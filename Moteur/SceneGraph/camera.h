@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Tools/glm.h"
+#include "Tools/glm.h"
 
 struct Camera {
     glm::mat4 getPerspectiveMatrix() const {

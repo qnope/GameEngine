@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../../Descriptor/descriptorpoolwrapper.h"
-#include "../../Vulkan/descriptorsetlayout.h"
-#include "../ModelImporter/material.h"
-#include "../drawer.h"
+#include "Descriptor/DescriptorPoolWrapper.h"
+#include "Vulkan/Descriptorsetlayout.h"
+#include "SceneGraph/ModelImporter/Material.h"
+#include "SceneGraph/Drawer.h"
 
 class AbstractUniqueMaterialManager {
 public:

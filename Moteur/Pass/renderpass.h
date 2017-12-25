@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../Vulkan/device.h"
-#include "../Vulkan/structhelper.h"
-#include "subpass.h"
+#include "Vulkan/Device.h"
+#include "Vulkan/StructHelper.h"
+#include "Subpass.h"
 
 class RenderPass : public vk::UniqueRenderPass {
 public:

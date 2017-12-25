@@ -1,6 +1,7 @@
 #pragma once
-#include "imageview.h"
-#include "../Transfer/imagefactory.h"
+
+#include "ImageView.h"
+#include "Transfer/ImageFactory.h"
 
 class Framebuffer : public vk::UniqueFramebuffer {
 public:

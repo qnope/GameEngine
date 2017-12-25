@@ -1,4 +1,4 @@
-#include "interface.h"
+#include "Interface.h"
 
 Interface::Interface(std::string name) : mName(name)
 {

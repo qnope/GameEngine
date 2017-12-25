@@ -1,4 +1,4 @@
-#include "deviceallocator.h"
+#include "DeviceAllocator.h"
 
 DeviceAllocator::DeviceAllocator(Device &device, vk::DeviceSize size) :
     mChunkAllocator(device, size) {

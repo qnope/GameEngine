@@ -1,5 +1,5 @@
-#include "../Vulkan/buffer.h"
-#include "imagefactory.h"
+#include "Vulkan/Buffer.h"
+#include "ImageFactory.h"
 
 #include <algorithm>
 

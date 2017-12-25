@@ -1,12 +1,12 @@
 #pragma once
 
-#include "../../Descriptor/descriptorpoolbuilder.h"
-#include "../renderpassbuilder.h"
-#include "../framebufferbuilder.h"
-#include "../../Descriptor/descriptorsetlayoutbuilder.h"
-#include "../pipelinelayoutbuilder.h"
-#include "../../Transfer/imagefactory.h"
-#include "../../Vulkan/querypool.h"
+#include "Descriptor/DescriptorPoolBuilder.h"
+#include "Pass/RenderPassBuilder.h"
+#include "Pass/FrameBufferBuilder.h"
+#include "Descriptor/DescriptorSetLayoutBuilder.h"
+#include "Pass/PipelineLayoutBuilder.h"
+#include "Transfer/ImageFactory.h"
+#include "Vulkan/QueryPool.h"
 
 #define MAX_CLIPMAP 10
 

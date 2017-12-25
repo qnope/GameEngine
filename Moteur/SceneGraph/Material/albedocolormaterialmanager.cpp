@@ -1,6 +1,6 @@
-#include "albedocolormaterialmanager.h"
-#include "../../Descriptor/descriptorpoolbuilder.h"
-#include "../../Descriptor/descriptorsetlayoutbuilder.h"
+#include "AlbedoColorMaterialManager.h"
+#include "Descriptor/DescriptorPoolBuilder.h"
+#include "Descriptor/DescriptorSetLayoutBuilder.h"
 
 AlbedoColorMaterialManager::AlbedoColorMaterialManager(vk::Device device, BufferFactory & bufferFactory) :
     AbstractUniqueMaterialManager(device),

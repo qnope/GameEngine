@@ -1,8 +1,8 @@
 #pragma once
 
 #include "vulkan.h"
-#include "buffer.h"
-#include "image.h"
+#include "Buffer.h"
+#include "Image.h"
 
 struct Clear {
     static vk::ClearColorValue black() {

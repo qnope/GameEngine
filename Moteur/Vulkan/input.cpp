@@ -1,4 +1,4 @@
-#include "input.h"
+#include "Input.h"
 #include <cassert>
 
 static void cursor_position_callback(GLFWwindow*, double xpos, double ypos)

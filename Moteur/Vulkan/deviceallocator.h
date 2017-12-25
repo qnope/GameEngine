@@ -1,6 +1,6 @@
 #pragma once
 
-#include "chunkallocator.h"
+#include "ChunkAllocator.h"
 
 class DeviceAllocator
 {

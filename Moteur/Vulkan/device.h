@@ -1,5 +1,6 @@
 #pragma once
-#include "instance.h"
+
+#include "Instance.h"
 
 struct QueueFamilyIndices {
     int graphicFamily = -1;

@@ -1,5 +1,5 @@
-#include "descriptorpool.h"
-#include "../Tools/stream.h"
+#include "DescriptorPool.h"
+#include "Tools/stream.h"
 
 DescriptorPool::DescriptorPool(vk::Device device) : mDevice(device)
 {

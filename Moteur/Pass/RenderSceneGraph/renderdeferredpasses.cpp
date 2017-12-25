@@ -1,7 +1,7 @@
-#include "renderdeferredpasses.h"
-#include "../renderpassbuilder.h"
-#include "../framebufferbuilder.h"
-#include "../../Descriptor/descriptorsetlayoutbuilder.h"
+#include "RenderDeferredPasses.h"
+#include "Pass/RenderPassBuilder.h"
+#include "Pass/FrameBufferBuilder.h"
+#include "Descriptor/DescriptorSetLayoutBuilder.h"
 
 
 RenderDeferredPasses::RenderDeferredPasses(Device & device, vk::Extent2D extent, ImageFactory & imageFactory, SceneGraph & sceneGraph, const Buffer & perspectiveViewMatrixBuffer, const Buffer & modelMatricesBuffer, const Buffer & indirectBuffer) :

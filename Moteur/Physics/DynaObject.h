@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
-#include "../Tools/geometry.h"
-#include "../SceneGraph/entity.h"
+#include "Tools/Geometry.h"
+#include "SceneGraph/Entity.h"
 
 class DynaObject {
 

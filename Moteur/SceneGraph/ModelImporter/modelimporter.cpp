@@ -1,7 +1,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
-#include "modelimporter.h"
+#include "ModelImporter.h"
 
 ModelImporter::ModelImporter(const std::string &path) {
     Assimp::Importer imp;

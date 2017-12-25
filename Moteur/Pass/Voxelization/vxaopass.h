@@ -1,7 +1,7 @@
 #pragma once
-#include "../RenderFullscreen/renderfullscreenpass.h"
-#include "../RenderSceneGraph/renderdeferredpasses.h"
-#include "voxelizationpass.h"
+#include "Pass/RenderFullscreen/RenderFullscreenPass.h"
+#include "Pass/RenderSceneGraph/RenderDeferredPasses.h"
+#include "VoxelizationPass.h"
 
 struct VXAOParameter {
     float offsetCone{ 2.5f };

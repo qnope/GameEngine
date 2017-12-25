@@ -1,4 +1,4 @@
-#include "buffer.h"
+#include "Buffer.h"
 
 Buffer::Buffer(Device &device, vk::BufferUsageFlags usage, vk::DeviceSize size,
     DeviceAllocator &allocator, bool shouldBeDeviceLocal) :

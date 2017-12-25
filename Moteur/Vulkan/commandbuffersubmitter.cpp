@@ -1,5 +1,6 @@
-#include "commandbuffersubmitter.h"
-#include "../Tools/stream.h"
+#include "CommandBufferSubmitter.h"
+#include "Tools/stream.h"
+
 void CommandBufferSubmitter::addCommandBuffer(vk::CommandBuffer cmd)
 {
     mCommandBuffers << cmd;

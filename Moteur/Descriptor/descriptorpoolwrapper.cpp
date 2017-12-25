@@ -1,5 +1,5 @@
-#include "descriptorpoolwrapper.h"
-#include "../Tools/stream.h"
+#include "DescriptorPoolWrapper.h"
+#include "Tools/stream.h"
 
 DescriptorPoolWrapper::DescriptorPoolWrapper(vk::Device device, uint32_t numberSetByPool) :
     mDevice(device),

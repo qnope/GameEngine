@@ -1,5 +1,5 @@
-#include "fillgbuffersubpass.h"
-#include "../../Vulkan/structhelper.h"
+#include "FillGBufferSubpass.h"
+#include "Vulkan/StructHelper.h"
 
 FillGBufferSubpass::FillGBufferSubpass(vk::Device device, SceneGraph &sceneGraph, vk::DescriptorSetLayout matrixDescriptorSetLayout, vk::DescriptorSet matrixDescriptorSet, const Buffer &modelMatricesBuffer, const Buffer &indirectBuffer) :
     mDevice(device),

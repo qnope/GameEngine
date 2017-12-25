@@ -1,6 +1,6 @@
-#include "albedotexturematerialmanager.h"
-#include "../../Descriptor/descriptorpoolbuilder.h"
-#include "../../Descriptor/descriptorsetlayoutbuilder.h"
+#include "AlbedoTextureMaterialManager.h"
+#include "Descriptor/DescriptorPoolBuilder.h"
+#include "Descriptor/DescriptorSetLayoutBuilder.h"
 
 AlbedoTextureMaterialManager::AlbedoTextureMaterialManager(vk::Device device, ImageFactory & imageFactory) :
     AbstractUniqueMaterialManager(device),

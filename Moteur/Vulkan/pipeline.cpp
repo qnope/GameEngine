@@ -1,5 +1,5 @@
-#include "pipeline.h"
-#include "../Tools/stream.h"
+#include "Pipeline.h"
+#include "Tools/stream.h"
 #include <map>
 char const *_main = "main";
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "device.h"
+#include "Device.h"
 
 class Fence : public vk::UniqueFence {
 public:

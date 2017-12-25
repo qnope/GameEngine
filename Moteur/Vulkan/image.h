@@ -1,6 +1,6 @@
 #pragma once
 
-#include "deviceallocator.h"
+#include "DeviceAllocator.h"
 
 class Image : public vk::UniqueImage {
 public:

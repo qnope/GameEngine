@@ -1,8 +1,7 @@
 #pragma once
 
-#include "abstractuniquematerialmanager.h"
-
-#include "../../Transfer/imagefactory.h"
+#include "AbstractUniqueMaterialManager.h"
+#include "Transfer/ImageFactory.h"
 
 class PBRNormalTextureMaterialManager : public AbstractUniqueMaterialManager {
 public:

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../Vulkan/vulkan.h"
-#include "ModelImporter/mesh.h"
-#include "Material/abstractuniquematerialmanager.h"
+#include "Vulkan/vulkan.h"
+#include "ModelImporter/Mesh.h"
+#include "Material/AbstractUniqueMaterialManager.h"
 
 // A full object 
 struct DrawCmd {

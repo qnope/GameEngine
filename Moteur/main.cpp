@@ -1,23 +1,23 @@
-#include "Window/window.h"
+#include "Window/Window.h"
 #include "Tools/glm.h"
 #include <thread>
 #include <chrono>
 #include <iostream>
-#include "Vulkan/instance.h"
-#include "Vulkan/device.h"
-#include "Vulkan/swapchain.h"
-#include "Transfer/bufferfactory.h"
-#include "Transfer/imagefactory.h"
-#include "SceneGraph/scenegraph.h"
+#include "Vulkan/Instance.h"
+#include "Vulkan/Device.h"
+#include "Vulkan/Swapchain.h"
+#include "Transfer/BufferFactory.h"
+#include "Transfer/ImageFactory.h"
+#include "SceneGraph/SceneGraph.h"
 
-#include "imgui/imguiinstance.h"
+#include "imgui/ImGUIInstance.h"
 #include <memory>
 
-#include "Vulkan/input.h"
-#include "rendererfacade.h"
-#include "interface.h"
+#include "Vulkan/Input.h"
+#include "RendererFacade.h"
+#include "Interface.h"
 
-#include "Physics/dynaobject.h"
+#include "Physics/DynaObject.h"
 
 #include <crtdbg.h>
 
@@ -93,7 +93,7 @@ public:
 
 private:
 	Window mWindow;
-	Instance mInstance{ "", "", mWindow, false };
+    Instance mInstance{ "", "", mWindow, true };
 	Device mDevice{ mInstance };
 	std::unique_ptr<Swapchain> mSwapchain;
 	std::vector<vk::UniqueSemaphore> mImageAvailableSemaphores;

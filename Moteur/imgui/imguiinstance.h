@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../Vulkan/device.h"
-#include "../Descriptor/descriptorpoolbuilder.h"
-#include "../Descriptor/descriptorsetlayoutbuilder.h"
-#include "../Pass/pipelinelayoutbuilder.h"
-#include "../Transfer/imagefactory.h"
+#include "Vulkan/Device.h"
+#include "Descriptor/DescriptorPoolBuilder.h"
+#include "Descriptor/DescriptorSetLayoutBuilder.h"
+#include "Pass/PipelineLayoutBuilder.h"
+#include "Transfer/ImageFactory.h"
 
 #include "imgui.h"
 

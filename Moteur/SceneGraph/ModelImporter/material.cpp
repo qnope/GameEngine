@@ -1,4 +1,4 @@
-#include "material.h"
+#include "Material.h"
 #include <iostream>
 
 static std::string normalizePathTexture(std::string _path) {

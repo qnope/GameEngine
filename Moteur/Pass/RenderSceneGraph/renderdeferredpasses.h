@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../../Vulkan/framebuffer.h"
-#include "../renderpass.h"
-#include "../../Descriptor/descriptorpoolbuilder.h"
-#include "../../Descriptor/descriptorsetlayoutbuilder.h"
-#include "../../SceneGraph/scenegraph.h"
+#include "Vulkan/Framebuffer.h"
+#include "Pass/RenderPass.h"
+#include "Descriptor/DescriptorPoolBuilder.h"
+#include "Descriptor/DescriptorSetLayoutBuilder.h"
+#include "SceneGraph/SceneGraph.h"
 
 class RenderDeferredPasses {
 public:

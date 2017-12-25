@@ -1,4 +1,4 @@
-#include "geometry.h"
+#include "Geometry.h"
 
 AABB & operator<<(AABB & aabb, const AABB & a)
 {

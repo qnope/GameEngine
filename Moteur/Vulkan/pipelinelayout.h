@@ -1,7 +1,7 @@
 #pragma once
 
-#include "device.h"
-#include "descriptorsetlayout.h"
+#include "Device.h"
+#include "Descriptorsetlayout.h"
 
 class PipelineLayout : public vk::UniquePipelineLayout {
 public:

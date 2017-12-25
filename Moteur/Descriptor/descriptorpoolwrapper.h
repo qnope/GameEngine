@@ -1,5 +1,5 @@
 #pragma once
-#include "../Vulkan/descriptorpool.h"
+#include "Vulkan/DescriptorPool.h"
 
 class DescriptorPoolWrapper {
     friend struct DescriptorPoolBuilder;

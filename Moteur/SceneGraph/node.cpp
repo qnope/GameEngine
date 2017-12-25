@@ -1,6 +1,6 @@
 #include <functional>
-#include "node.h"
-#include "ModelImporter/modelimporter.h"
+#include "Node.h"
+#include "ModelImporter/ModelImporter.h"
 
 Node::Node(MeshManager &meshManager, MaterialsManager &materialsManager) :
     mMeshManager(meshManager),

@@ -1,4 +1,4 @@
-#include "bufferfactory.h"
+#include "BufferFactory.h"
 
 BufferFactory::BufferFactory(Device & device) :
     mDevice(device), mDeviceAllocator(device, 1 << 20), mQueue(device.getTransferQueue()),

@@ -1,10 +1,10 @@
 #pragma once
 
 #include <vector>
-#include "../Transfer/bufferfactory.h"
-#include "ModelImporter/mesh.h"
-#include "../Vulkan/buffer.h"
-#include "drawcommand.h"
+#include "../Transfer/BufferFactory.h"
+#include "ModelImporter/Mesh.h"
+#include "../Vulkan/Buffer.h"
+#include "DrawCommand.h"
 
 class MeshManager {
 public:

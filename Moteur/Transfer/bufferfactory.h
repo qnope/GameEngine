@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../Vulkan/deviceallocator.h"
-#include "../Vulkan/structhelper.h"
-#include "../Vulkan/commandbuffersubmitter.h"
-#include "../Vulkan/fence.h"
-#include "../Vulkan/commandpool.h"
+#include "Vulkan/DeviceAllocator.h"
+#include "Vulkan/StructHelper.h"
+#include "Vulkan/CommandBufferSubmitter.h"
+#include "Vulkan/Fence.h"
+#include "Vulkan/CommandPool.h"
 
 class BufferFactory {
 public:

@@ -1,4 +1,4 @@
-#include "materialsmanager.h"
+#include "MaterialsManager.h"
 
 void MaterialsManager::addKindMaterialManager(std::unique_ptr<AbstractUniqueMaterialManager>&& ptr)
 {

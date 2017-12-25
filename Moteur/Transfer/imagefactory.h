@@ -1,11 +1,11 @@
 #pragma once
 
 #include <tuple>
-#include "../Vulkan/image.h"
-#include "../Vulkan/imageview.h"
-#include "../Vulkan/sampler.h"
-#include "bufferfactory.h"
-#include "../Vulkan/imageloader.h"
+#include "Vulkan/Image.h"
+#include "Vulkan/ImageView.h"
+#include "Vulkan/Sampler.h"
+#include "BufferFactory.h"
+#include "Vulkan/ImageLoader.h"
 
 struct CombinedImage {
     CombinedImage(Image &img, ImageView &imageView, Sampler &sampler) : image(std::move(img)), imageView(std::move(imageView)), sampler(std::move(sampler)) {

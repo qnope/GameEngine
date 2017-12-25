@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../../imgui/imguiinstance.h"
-#include "../../Vulkan/framebuffer.h"
-#include "../renderpassbuilder.h"
-#include "imguisubpass.h"
+#include "imgui/ImGUIInstance.h"
+#include "Vulkan/Framebuffer.h"
+#include "Pass/RenderPassBuilder.h"
+#include "ImGUISubpass.h"
 
 class ImGUIPass {
 public:

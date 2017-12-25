@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Vulkan/vulkan.h"
+#include "Vulkan/vulkan.h"
 
 struct Drawer {
     vk::Buffer vbo;

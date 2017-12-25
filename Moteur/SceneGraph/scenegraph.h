@@ -1,13 +1,13 @@
 #pragma once
 
-#include "meshmanager.h"
-#include "Material/materialsmanager.h"
-#include "../Transfer/bufferfactory.h"
-#include "../Transfer/imagefactory.h"
-#include "node.h"
-#include "../Tools/vector_view.h"
+#include "MeshManager.h"
+#include "Material/MaterialsManager.h"
+#include "Transfer/BufferFactory.h"
+#include "Transfer/ImageFactory.h"
+#include "Node.h"
+#include "Tools/vector_view.h"
 
-#include "camera.h"
+#include "Camera.h"
 
 class SceneGraph {
 public:

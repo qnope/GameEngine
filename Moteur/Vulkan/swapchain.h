@@ -1,9 +1,9 @@
 #pragma once
 
 #include "vulkan.h"
-#include "imageview.h"
-#include "framebuffer.h"
-#include "device.h"
+#include "ImageView.h"
+#include "Framebuffer.h"
+#include "Device.h"
 
 class Swapchain : public vk::UniqueSwapchainKHR {
 public:

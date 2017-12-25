@@ -1,5 +1,5 @@
-#include "descriptorsetlayout.h"
-#include "../Tools/stream.h"
+#include "Descriptorsetlayout.h"
+#include "Tools/stream.h"
 
 DescriptorSetLayout::DescriptorSetLayout(vk::Device device) : mDevice(device)
 {

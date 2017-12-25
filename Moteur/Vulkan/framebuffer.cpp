@@ -1,4 +1,4 @@
-#include "framebuffer.h"
+#include "Framebuffer.h"
 
 Framebuffer::Framebuffer(vk::Device device, vk::RenderPass renderpass, std::vector<CombinedImage> &&images) :
     mCombinedImages(std::move(images))

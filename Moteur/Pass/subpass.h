@@ -1,12 +1,12 @@
 #pragma once
 
-#include "../Vulkan/device.h"
+#include "Vulkan/Device.h"
 
 class Subpass {
     friend class RenderPass;
 public:
 
-    virtual ~Subpass() = 0;
+    virtual ~Subpass() = default;
 
 protected:
     void addColorAttachment(uint32_t index);

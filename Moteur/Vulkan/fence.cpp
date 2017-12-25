@@ -1,4 +1,4 @@
-#include "fence.h"
+#include "Fence.h"
 
 Fence::Fence(vk::Device device, bool signaled) : mDevice(device)
 {
