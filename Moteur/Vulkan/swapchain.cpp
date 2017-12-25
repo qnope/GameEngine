@@ -37,8 +37,9 @@ vk::Extent2D getSwapExtent(const vk::SurfaceCapabilitiesKHR &capabilities, const
         return capabilities.currentExtent;
 
     vk::Extent2D extent;
+
     extent.height = std::max<uint32_t>(capabilities.minImageExtent.height, std::min<uint32_t>(capabilities.maxImageExtent.height, window.getHeight())),
-        extent.width = std::max<uint32_t>(capabilities.minImageExtent.width, std::min<uint32_t>(capabilities.maxImageExtent.width, window.getWidth()));
+    extent.width = std::max<uint32_t>(capabilities.minImageExtent.width, std::min<uint32_t>(capabilities.maxImageExtent.width, window.getWidth()));
 
     return extent;
 }
@@ -56,6 +57,9 @@ Swapchain::Swapchain(Device & device, Swapchain *old) : mDevice(device)
     auto format = ::getFormat(mFormats);
     auto presentMode = getPresentMode(mPresentModes);
     mExtent = getSwapExtent(mCapabilities, device.getInstance().getWindow());
+
+    if(mExtent.width == 0 || mExtent.height == 0)
+        throw std::runtime_error("Minimize window");
 
     mImageCount = std::max<uint32_t>(mCapabilities.minImageCount, 3);
 

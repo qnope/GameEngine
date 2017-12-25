@@ -29,214 +29,230 @@ typedef std::chrono::duration<float> time_s;
 
 class SuperWindow {
 public:
-	SuperWindow(int w, int h, std::string name) :
-		mWindow(w, h, name) {
-		Input::instance(mWindow);
-	}
+    SuperWindow(int w, int h, std::string name) :
+        mWindow(w, h, name) {
+        Input::instance(mWindow);
+    }
 
-	bool isRunning() const {
-		return mWindow.isRunning();
-	}
+    bool isRunning() const {
+        return mWindow.isRunning();
+    }
 
-	Device &getDevice() { return mDevice; }
+    Device &getDevice() { return mDevice; }
 
-	uint32_t getNumberImages() const { return mSwapchain->getImageCount(); }
+    uint32_t getNumberImages() const { return mSwapchain->getImageCount(); }
 
-	uint32_t getNextImage() {
-		if (mAlreadyPresented == true) {
-			mCurrentSemaphoreIndex = mNextImage;
-			mNextImage = mDevice->acquireNextImageKHR(*mSwapchain, std::numeric_limits<uint64_t>::max(), mImageAvailableSemaphores[mCurrentSemaphoreIndex], vk::Fence()).value;
-		}
+    uint32_t getNextImage() {
+        if (mAlreadyPresented == true) {
+            mCurrentSemaphoreIndex = mNextImage;
+            mNextImage = mDevice->acquireNextImageKHR(*mSwapchain, std::numeric_limits<uint64_t>::max(), mImageAvailableSemaphores[mCurrentSemaphoreIndex], vk::Fence()).value;
+        }
 
-		mAlreadyPresented = false;
-		return mNextImage;
-	}
+        mAlreadyPresented = false;
+        return mNextImage;
+    }
 
-	int getWidth() const { return mWindow.getWidth(); }
-	int getHeight() const { return mWindow.getHeight(); }
-	vk::Extent2D getExtent() const { return vk::Extent2D{ (uint32_t)getWidth(), (uint32_t)getHeight() }; }
+    int getWidth() const {return mWindow.getWidth(); }
+    int getHeight() const { return mWindow.getHeight(); }
+    vk::Extent2D getExtent() const { return vk::Extent2D{ (uint32_t)getWidth(), (uint32_t)getHeight() }; }
 
-	bool isResized() {
-		static int w{ 0 }, h{ 0 };
+    bool isResized() {
+        static int w{ 0 }, h{ 0 };
 
-		if (w != getWidth() || h != getHeight()) {
-			w = getWidth();
-			h = getHeight();
-			mDevice->waitIdle();
-			mSwapchain = std::make_unique<Swapchain>(mDevice, mSwapchain.get());
-			mImageAvailableSemaphores.resize(mSwapchain->getImageCount());
-			for (auto &semaphore : mImageAvailableSemaphores)
-				semaphore = mDevice->createSemaphoreUnique(vk::SemaphoreCreateInfo());
-			return true;
-		}
-		return false;
-	}
+        int currentWidth = getWidth();
+        int currentHeight = getHeight();
 
-	vk::Format getFormat() const { return mSwapchain->getFormat(); }
+        if (w != currentWidth || h != currentHeight) {
+            mDevice->waitIdle();
+            mSwapchain = std::make_unique<Swapchain>(mDevice, mSwapchain.get());
+            mImageAvailableSemaphores.resize(mSwapchain->getImageCount());
+            for (auto &semaphore : mImageAvailableSemaphores)
+                semaphore = mDevice->createSemaphoreUnique(vk::SemaphoreCreateInfo());
 
-	Swapchain &getSwapchain() { return *mSwapchain; }
-	const Framebuffer &getCurrentFramebuffer() const { return mSwapchain->getFramebuffers()[mNextImage]; }
-	vk::Framebuffer getFramebuffer(uint32_t index) const { return mSwapchain->getFramebuffers()[index]; }
+            w = currentWidth;
+            h = currentHeight;
+            return true;
+        }
 
-	vk::Semaphore getImageAvailableSemaphore() { return mImageAvailableSemaphores[mCurrentSemaphoreIndex]; }
+        return false;
+    }
 
-	void present(vk::Semaphore semaphoreToWait) {
-		assert(mAlreadyPresented == false);
-		mCommandBufferSubmitter.addWaitSemaphore(semaphoreToWait);
-		mCommandBufferSubmitter.present(*mSwapchain, mNextImage, mDevice.getPresentQueue());
-		mAlreadyPresented = true;
-	}
+    vk::Format getFormat() const { return mSwapchain->getFormat(); }
 
-	BufferFactory &getBufferFactory() { return mBufferFactory; }
-	ImageFactory &getImageFactory() { return mImageFactory; }
-	ImGUIInstance &getImGUIInstance() { return mImGUIInstance; }
+    Swapchain &getSwapchain() { return *mSwapchain; }
+    const Framebuffer &getCurrentFramebuffer() const { return mSwapchain->getFramebuffers()[mNextImage]; }
+    vk::Framebuffer getFramebuffer(uint32_t index) const { return mSwapchain->getFramebuffers()[index]; }
+
+    vk::Semaphore getImageAvailableSemaphore() { return mImageAvailableSemaphores[mCurrentSemaphoreIndex]; }
+
+    void present(vk::Semaphore semaphoreToWait) {
+        assert(mAlreadyPresented == false);
+        mCommandBufferSubmitter.addWaitSemaphore(semaphoreToWait);
+        mCommandBufferSubmitter.present(*mSwapchain, mNextImage, mDevice.getPresentQueue());
+        mAlreadyPresented = true;
+    }
+
+    BufferFactory &getBufferFactory() { return mBufferFactory; }
+    ImageFactory &getImageFactory() { return mImageFactory; }
+    ImGUIInstance &getImGUIInstance() { return mImGUIInstance; }
 
 private:
-	Window mWindow;
-    Instance mInstance{ "", "", mWindow, true };
-	Device mDevice{ mInstance };
-	std::unique_ptr<Swapchain> mSwapchain;
-	std::vector<vk::UniqueSemaphore> mImageAvailableSemaphores;
-	CommandBufferSubmitter mCommandBufferSubmitter{};
-	uint32_t mNextImage{ 0 };
-	uint32_t mCurrentSemaphoreIndex{ 0 };
-	bool mAlreadyPresented{ true };
-	BufferFactory mBufferFactory{ mDevice };
-	ImageFactory mImageFactory{ mDevice };
-	ImGUIInstance mImGUIInstance{ mDevice, mWindow, mImageFactory };
+    Window mWindow;
+    Instance mInstance{ "", "", mWindow, false };
+    Device mDevice{ mInstance };
+    std::unique_ptr<Swapchain> mSwapchain;
+    std::vector<vk::UniqueSemaphore> mImageAvailableSemaphores;
+    CommandBufferSubmitter mCommandBufferSubmitter{};
+    uint32_t mNextImage{ 0 };
+    uint32_t mCurrentSemaphoreIndex{ 0 };
+    bool mAlreadyPresented{ true };
+    BufferFactory mBufferFactory{ mDevice };
+    ImageFactory mImageFactory{ mDevice };
+    ImGUIInstance mImGUIInstance{ mDevice, mWindow, mImageFactory };
 };
 
 class FPSManager {
 public:
-	FPSManager(uint32_t fps) : mFrameDurationInMilisecond(1000 / fps) {}
+    FPSManager(uint32_t fps) : mFrameDurationInMilisecond(1000 / fps) {}
 
-	void wait() {
-		static auto lastTime = std::chrono::high_resolution_clock::now();
-		auto currentTime = std::chrono::high_resolution_clock::now();
-		auto endTime = lastTime + mFrameDurationInMilisecond;
-		auto waitTime = endTime - currentTime;
+    void wait() {
+        static auto lastTime = std::chrono::high_resolution_clock::now();
+        auto currentTime = std::chrono::high_resolution_clock::now();
+        auto endTime = lastTime + mFrameDurationInMilisecond;
+        auto waitTime = endTime - currentTime;
 
-		if (waitTime.count() > 0)
-			std::this_thread::sleep_for(waitTime);
+        if (waitTime.count() > 0)
+            std::this_thread::sleep_for(waitTime);
 
-		lastTime = std::chrono::high_resolution_clock::now();
-	}
+        lastTime = std::chrono::high_resolution_clock::now();
+    }
 
 private:
-	const std::chrono::milliseconds mFrameDurationInMilisecond;
+    const std::chrono::milliseconds mFrameDurationInMilisecond;
 };
 
 vk::Semaphore render(SuperWindow& window, Device& device, SceneGraph& sceneGraph, Camera& camera, Interface& interface, std::unique_ptr<RendererFacade> &rendererFacade) {
-	if (window.isResized()) {
-		rendererFacade = std::make_unique<RendererFacade>(device, sceneGraph, window.getBufferFactory(), window.getImageFactory(), window.getImGUIInstance(), window.getExtent());
-		for (auto i(0u); i < window.getNumberImages(); ++i)
-			window.getSwapchain().createFramebuffer(rendererFacade->getPresentationRenderPass());
-	}
+    if (window.isResized()) {
+        auto extent = window.getExtent();
+        if(extent.width == 0 || extent.height == 0) {
+            rendererFacade = nullptr;
+            throw std::runtime_error("Unable to render currently");
+        }
+        rendererFacade = std::make_unique<RendererFacade>(device, sceneGraph, window.getBufferFactory(), window.getImageFactory(), window.getImGUIInstance(), extent);
+        for (auto i(0u); i < window.getNumberImages(); ++i)
+            window.getSwapchain().createFramebuffer(rendererFacade->getPresentationRenderPass());
+    }
 
-	auto nextImage{ window.getNextImage() };
+    auto nextImage{ window.getNextImage() };
 
-	sceneGraph.setCamera(camera);
-	rendererFacade->newFrame();
+    sceneGraph.setCamera(camera);
 
-	interface.setVoxelizationProfiling(rendererFacade->getVoxelizationPassProfiling());
-	interface.execute();
-	interface.checkError();
+    rendererFacade->newFrame();
 
-	rendererFacade->setParameters(interface.getParameters());
+    interface.setVoxelizationProfiling(rendererFacade->getVoxelizationPassProfiling());
+    interface.execute();
+    interface.checkError();
 
-	return rendererFacade->execute(window.getImageAvailableSemaphore(), window.getSwapchain().getFramebuffers()[window.getNextImage()]);
+    rendererFacade->setParameters(interface.getParameters());
+
+    return rendererFacade->execute(window.getImageAvailableSemaphore(), window.getSwapchain().getFramebuffers()[window.getNextImage()]);
 }
 
 void updateCamera(Camera &camera) {
-	if (Input::instance().keyPressed[GLFW_KEY_LEFT])
-		camera.position += glm::vec3(0.0, 0.0, 1.0);
+    if (Input::instance().keyPressed[GLFW_KEY_LEFT])
+        camera.position += glm::vec3(0.0, 0.0, 1.0);
 
-	if (Input::instance().keyPressed[GLFW_KEY_RIGHT])
-		camera.position += glm::vec3(0.0, 0.0, -1.0);
-	
-	if (Input::instance().keyPressed[GLFW_KEY_UP])
-		camera.position += glm::vec3(-1.0, 0.0, 0.0);
-	
-	if (Input::instance().keyPressed[GLFW_KEY_DOWN])
-		camera.position += glm::vec3(1.0, 0.0, 0.0);
+    if (Input::instance().keyPressed[GLFW_KEY_RIGHT])
+        camera.position += glm::vec3(0.0, 0.0, -1.0);
+
+    if (Input::instance().keyPressed[GLFW_KEY_UP])
+        camera.position += glm::vec3(-1.0, 0.0, 0.0);
+
+    if (Input::instance().keyPressed[GLFW_KEY_DOWN])
+        camera.position += glm::vec3(1.0, 0.0, 0.0);
 }
 
 void computePhysicalStep(std::chrono::steady_clock::time_point& currentTime, time_s& timeSimulated, const time_s& deltaTimeStep, time_s& accumulator, DynaObject& object) {
-	auto newTime = std::chrono::high_resolution_clock::now();
-	auto frameTime = std::chrono::duration_cast<time_s>(newTime - currentTime);
-	if (frameTime.count() > MAXTIMESTEPALLOWED) {
-		frameTime = deltaTimeStep;
-	}
-	currentTime = newTime;
-	accumulator += frameTime;
-	const float period = deltaTimeStep.count();
-	while (accumulator.count() >= deltaTimeStep.count()) {
-		object.update(timeSimulated.count(), period);
-		accumulator -= deltaTimeStep;
-		timeSimulated += deltaTimeStep;
-	}
+    auto newTime = std::chrono::high_resolution_clock::now();
+    auto frameTime = std::chrono::duration_cast<time_s>(newTime - currentTime);
+    if (frameTime.count() > MAXTIMESTEPALLOWED) {
+        frameTime = deltaTimeStep;
+    }
+    currentTime = newTime;
+    accumulator += frameTime;
+    const float period = deltaTimeStep.count();
+    while (accumulator.count() >= deltaTimeStep.count()) {
+        object.update(timeSimulated.count(), period);
+        accumulator -= deltaTimeStep;
+        timeSimulated += deltaTimeStep;
+    }
 }
 
 void computeRenderState(const float& timeLeft, const float& period, DynaObject& object) {
-	float alpha = timeLeft / period;
-	object.computeRenderState(alpha);
+    float alpha = timeLeft / period;
+    object.computeRenderState(alpha);
 }
 
 void run() {
-	SuperWindow window(800, 600, NAME);
-	decltype(auto) device = window.getDevice();
+    SuperWindow window(800, 600, NAME);
+    decltype(auto) device = window.getDevice();
 
-	CommandPool commandPoolSceneGraphPass(device, device.getQueueFamilyIndices().graphicFamily, false, false);
-	SceneGraph sceneGraph(device);
+    CommandPool commandPoolSceneGraphPass(device, device.getQueueFamilyIndices().graphicFamily, false, false);
+    SceneGraph sceneGraph(device);
 
-	auto rootNode = sceneGraph.getRootNode();
+    auto rootNode = sceneGraph.getRootNode();
 
-	auto cubeManager = rootNode->addModel("../Models/cube.obj");
-	auto sponzaManager = rootNode->addModel("../Models/Sponza/sponza.obj");
+    auto cubeManager = rootNode->addModel("../Models/cube.obj");
+    auto sponzaManager = rootNode->addModel("../Models/Sponza/sponza.obj");
 
-	auto sponza = sponzaManager.createEntity();
-	sponza.scale(glm::vec3(1.f / 10.f));
-	auto firstCube = cubeManager.createEntity();
-	auto aabb = sceneGraph.getAABB();
+    auto sponza = sponzaManager.createEntity();
+    sponza.scale(glm::vec3(1.f / 10.f));
+    auto firstCube = cubeManager.createEntity();
+    auto aabb = sceneGraph.getAABB();
 
-	DynaObject d(&firstCube);
-	d.translate(glm::vec3(0, 10, 0));
-	d.scale(glm::vec3(10.f));
-	
-	float rotate = 0.0f;
+    DynaObject d(&firstCube);
+    d.translate(glm::vec3(0, 10, 0));
+    d.scale(glm::vec3(10.f));
 
-	//FPSManager fpsManager(30);
+    float rotate = 0.0f;
 
-	bool show_test_window = true;
-	bool show_another_window = false;
+    //FPSManager fpsManager(30);
 
-	std::unique_ptr<RendererFacade> rendererFacade;
+    bool show_test_window = true;
+    bool show_another_window = false;
 
-	Interface interface(NAME);
+    std::unique_ptr<RendererFacade> rendererFacade;
 
-	Camera camera;
+    Interface interface(NAME);
 
-	camera.position = glm::vec3(50.f, 20.f, 0.f);
-	camera.direction = glm::vec3(-1.0f, -0.0f, 0.0f);
+    Camera camera;
 
-	time_s timeSimulated(0.f);
-	const time_s deltaTimeStep(TIMESTEP);
-	time_s accumulator(0.f);
-	auto currentTime = std::chrono::high_resolution_clock::now();
+    camera.position = glm::vec3(50.f, 20.f, 0.f);
+    camera.direction = glm::vec3(-1.0f, -0.0f, 0.0f);
 
-	while (window.isRunning()) {
-		auto semaphoreWaitRenderingFinished = render(window, device, sceneGraph, camera, interface, rendererFacade);
-		updateCamera(camera);
-		computePhysicalStep(currentTime, timeSimulated, deltaTimeStep, accumulator, d);
-		computeRenderState(accumulator.count(), deltaTimeStep.count(), d);
-		//fpsManager.wait();
-		window.present(semaphoreWaitRenderingFinished);
-	}
-	device->waitIdle();
+    time_s timeSimulated(0.f);
+    const time_s deltaTimeStep(TIMESTEP);
+    time_s accumulator(0.f);
+    auto currentTime = std::chrono::high_resolution_clock::now();
+
+    while (window.isRunning()) {
+        try {
+            auto semaphoreWaitRenderingFinished = render(window, device, sceneGraph, camera, interface, rendererFacade);
+            updateCamera(camera);
+            computePhysicalStep(currentTime, timeSimulated, deltaTimeStep, accumulator, d);
+            computeRenderState(accumulator.count(), deltaTimeStep.count(), d);
+            //fpsManager.wait();
+            window.present(semaphoreWaitRenderingFinished);
+        }
+
+        // Unable to render
+        catch(std::runtime_error&){}
+    }
+    device->waitIdle();
 }
 
 int main() {
-	run();
+    run();
 
-	return 0;
+    return 0;
 }
