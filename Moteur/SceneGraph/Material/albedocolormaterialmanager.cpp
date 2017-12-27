@@ -3,7 +3,7 @@
 #include "Descriptor/DescriptorSetLayoutBuilder.h"
 
 AlbedoColorMaterialManager::AlbedoColorMaterialManager(vk::Device device, BufferFactory & bufferFactory) :
-    AbstractUniqueMaterialManager(device),
+    AbstractUniqueMaterialManager(device, "../Shaders/MaterialFunctionDefinition/AlbedoColor.frag"),
     mBufferFactory(bufferFactory),
     mStagingBuffer(bufferFactory.createEmptyBuffer(sizeof(Descriptor), vk::BufferUsageFlagBits::eTransferSrc, false)),
     mBuffer(bufferFactory.createEmptyBuffer(sizeof(Descriptor) * 1000, vk::BufferUsageFlagBits::eUniformBuffer | vk::BufferUsageFlagBits::eTransferDst, true))

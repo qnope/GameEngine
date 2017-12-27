@@ -3,7 +3,7 @@
 #include "Descriptor/DescriptorSetLayoutBuilder.h"
 
 PBRNormalTextureMaterialManager::PBRNormalTextureMaterialManager(vk::Device device, ImageFactory & imageFactory) :
-    AbstractUniqueMaterialManager(device),
+    AbstractUniqueMaterialManager(device, "../Shaders/MaterialFunctionDefinition/PBRNormalTexture.frag"),
     mImageFactory(imageFactory)
 {
     mDescriptorPool = std::make_unique<DescriptorPoolWrapper>(DescriptorPoolBuilder::normalPBRTexture(device, 10));

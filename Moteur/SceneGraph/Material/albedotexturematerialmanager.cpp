@@ -3,7 +3,7 @@
 #include "Descriptor/DescriptorSetLayoutBuilder.h"
 
 AlbedoTextureMaterialManager::AlbedoTextureMaterialManager(vk::Device device, ImageFactory & imageFactory) :
-    AbstractUniqueMaterialManager(device),
+    AbstractUniqueMaterialManager(device, "../Shaders/MaterialFunctionDefinition/AlbedoTexture.frag"),
     mImageFactory(imageFactory)
 {
     mDescriptorPool = std::make_unique<DescriptorPoolWrapper>(DescriptorPoolBuilder::monoCombinedSampler(device, 10));

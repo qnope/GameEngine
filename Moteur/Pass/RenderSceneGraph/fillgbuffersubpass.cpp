@@ -13,6 +13,7 @@ FillGBufferSubpass::FillGBufferSubpass(vk::Device device, SceneGraph &sceneGraph
 
     setDepthStencilAttachment(4);
 
+    mFunctionDefinitions = mSceneGraph.getMaterialsManager().getAllFunctionDescriptions();
     auto descriptorSetLayouts = mSceneGraph.getMaterialsManager().getAllDescriptorSetLayouts();
 
     for (auto &layout : descriptorSetLayouts)
@@ -21,13 +22,8 @@ FillGBufferSubpass::FillGBufferSubpass(vk::Device device, SceneGraph &sceneGraph
 
 void FillGBufferSubpass::create(vk::RenderPass renderPass, vk::Extent2D extent, uint32_t indexPass)
 {
-    std::string globalPath = "../Shaders/RenderSceneGraphRelated/";
-    std::array<std::string, 3> fragmentShaderNames{ {"fillgbufferalbedocolor.frag", "fillgbufferalbedotexture.frag", "fillgbufferpbrtexture.frag"} };
-
-    assert(fragmentShaderNames.size() == mPipelineLayouts.size());
-
     for (auto i(0u); i < mPipelineLayouts.size(); ++i)
-        mPipelines.emplace_back(PipelineBuilder::buildFillGBufferPipeline(mDevice, renderPass, indexPass, extent, mPipelineLayouts[i], globalPath + fragmentShaderNames[i]));
+        mPipelines.emplace_back(PipelineBuilder::buildFillGBufferPipeline(mDevice, renderPass, indexPass, extent, mPipelineLayouts[i], mFunctionDefinitions[i]));
 }
 
 void FillGBufferSubpass::execute(vk::CommandBuffer cmd)

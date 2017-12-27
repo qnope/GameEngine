@@ -32,6 +32,7 @@ add_executable(GameEngine
 
     # ShaderGenerator
     Moteur/ShaderGenerator/ShaderGenerator.cpp
+    Moteur/ShaderGenerator/FillGBufferShaderBuilder.cpp
     ##########################################################
 
     # Passes
@@ -79,6 +80,7 @@ add_executable(GameEngine
     # Tools
     Moteur/Tools/Geometry.cpp
     Moteur/Tools/Logger.cpp
+    Moteur/Tools/string_tools.cpp
     ############################################################
 
     # Transfer

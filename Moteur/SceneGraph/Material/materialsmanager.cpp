@@ -29,6 +29,17 @@ std::vector<vk::DescriptorSetLayout> MaterialsManager::getAllDescriptorSetLayout
     return layouts;
 }
 
+std::vector<std::string> MaterialsManager::getAllFunctionDescriptions() const {
+    std::vector<std::string> functionDefinitions;
+
+    functionDefinitions.reserve(mMaterialManagers.size());
+
+    for(auto &p : mMaterialManagers)
+        functionDefinitions.emplace_back(p->getFunctionDefinition());
+
+    return functionDefinitions;
+}
+
 void MaterialsManager::getDrawerMaterialValues(Drawer & drawer, const AbstractUniqueMaterialManager::MaterialPointer & ptr) const
 {
     ptr.ptr->getDrawerMaterialValues(drawer, ptr);

@@ -1,8 +1,14 @@
 #include "AbstractUniqueMaterialManager.h"
+#include "Tools/string_tools.h"
 
-AbstractUniqueMaterialManager::AbstractUniqueMaterialManager(vk::Device device) :
+AbstractUniqueMaterialManager::AbstractUniqueMaterialManager(vk::Device device, std::string pathToMaterialFunctionDefinition) :
     mDevice(device)
 {
+    mMaterialFunctionDefinition = readFile(pathToMaterialFunctionDefinition);
+}
+
+std::string AbstractUniqueMaterialManager::getFunctionDefinition() const {
+    return mMaterialFunctionDefinition;
 }
 
 void AbstractUniqueMaterialManager::changePipeline(vk::Pipeline pipeline)

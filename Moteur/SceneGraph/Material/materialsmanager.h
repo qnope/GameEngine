@@ -10,6 +10,7 @@ public:
     std::vector<AbstractUniqueMaterialManager::MaterialPointer> addMaterials(std::vector<Material> materials);
 
     std::vector<vk::DescriptorSetLayout> getAllDescriptorSetLayouts() const;
+    std::vector<std::string> getAllFunctionDescriptions() const;
 
     void getDrawerMaterialValues(Drawer &drawer, const AbstractUniqueMaterialManager::MaterialPointer &ptr) const;
 

@@ -62,6 +62,9 @@ public:
         int currentWidth = getWidth();
         int currentHeight = getHeight();
 
+        if(currentWidth == 0 || currentHeight == 0)
+            throw std::runtime_error("Unable to render");
+
         if (w != currentWidth || h != currentHeight) {
             mDevice->waitIdle();
             mSwapchain = std::make_unique<Swapchain>(mDevice, mSwapchain.get());
@@ -133,14 +136,17 @@ private:
 
 vk::Semaphore render(SuperWindow& window, Device& device, SceneGraph& sceneGraph, Camera& camera, Interface& interface, std::unique_ptr<RendererFacade> &rendererFacade) {
     if (window.isResized()) {
-        auto extent = window.getExtent();
-        if(extent.width == 0 || extent.height == 0) {
-            rendererFacade = nullptr;
-            throw std::runtime_error("Unable to render currently");
+        try {
+            auto extent = window.getExtent();
+            rendererFacade = std::make_unique<RendererFacade>(device, sceneGraph, window.getBufferFactory(), window.getImageFactory(), window.getImGUIInstance(), extent);
+            for (auto i(0u); i < window.getNumberImages(); ++i)
+                window.getSwapchain().createFramebuffer(rendererFacade->getPresentationRenderPass());
         }
-        rendererFacade = std::make_unique<RendererFacade>(device, sceneGraph, window.getBufferFactory(), window.getImageFactory(), window.getImGUIInstance(), extent);
-        for (auto i(0u); i < window.getNumberImages(); ++i)
-            window.getSwapchain().createFramebuffer(rendererFacade->getPresentationRenderPass());
+
+        catch(std::exception &e) {
+            std::cerr << e.what() << std::endl;
+            std::abort();
+        }
     }
 
     auto nextImage{ window.getNextImage() };
@@ -246,7 +252,7 @@ void run() {
         }
 
         // Unable to render
-        catch(std::runtime_error&){}
+        catch(std::runtime_error&) {}
     }
     device->waitIdle();
 }

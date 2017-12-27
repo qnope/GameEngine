@@ -2,21 +2,7 @@
 #include "ResourceLimits.h"
 #include <fstream>
 #include <SPIRV/GlslangToSpv.h>
-
-static std::string readSourceFromFile(std::string fileName)
-{
-    std::ifstream stream(fileName);
-    std::string source;
-    std::string line;
-
-    if (!stream)
-        throw std::string("unable to open input file");
-
-    while (std::getline(stream, line))
-        source += line + "\n";
-
-    return source;
-}
+#include "Tools/string_tools.h"
 
 ShaderCompiler::ShaderCompiler() {
     glslang::InitializeProcess();
@@ -48,13 +34,13 @@ std::vector<unsigned> ShaderCompiler::compileFromSource(std::string source, EShL
     };
 
     if (!shader.parse(&Resources, defaultVersion, false, messages))
-        throwError(fileName, shader);
+        throwError(fileName ? fileName : "", shader);
 
     program.addShader(&shader);
 
     // Link
     if (!program.link(messages))
-        throwError(fileName, program);
+        throwError(fileName ? fileName : "", program);
 
     std::vector<unsigned int> spirv;
     spv::SpvBuildLogger logger;
@@ -77,7 +63,7 @@ std::vector<unsigned> ShaderCompiler::compileFromSource(std::string source, EShL
 }
 
 std::vector<unsigned> ShaderCompiler::compileFromFile(std::string pathFile, EShLanguage stage, bool debug, bool invertY) {
-    return compileFromSource(readSourceFromFile(pathFile), stage, debug, invertY, pathFile.c_str());
+    return compileFromSource(readFile(pathFile), stage, debug, invertY, pathFile.c_str());
 }
 
 ShaderCompiler::~ShaderCompiler() {

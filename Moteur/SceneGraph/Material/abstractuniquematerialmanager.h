@@ -12,10 +12,12 @@ public:
         uint32_t index;
     };
 
-    AbstractUniqueMaterialManager(vk::Device device);
+    AbstractUniqueMaterialManager(vk::Device device, std::string pathToMaterialFunctionDefinition);
 
     void changePipeline(vk::Pipeline pipeline);
     void changePipelineLayout(vk::PipelineLayout pipelineLayout);
+
+    std::string getFunctionDefinition() const;
 
     vk::DescriptorSetLayout getDescriptorSetLayout() const;
 
@@ -32,4 +34,5 @@ protected:
     vk::PipelineLayout mPipelineLayout; /// Associated pipelineLayout to this material
     std::unique_ptr<DescriptorPoolWrapper> mDescriptorPool;
     std::unique_ptr<DescriptorSetLayout> mDescriptorSetLayout;
+    std::string mMaterialFunctionDefinition;
 };

@@ -1,26 +1,39 @@
 #include "Pipeline.h"
 #include "Tools/stream.h"
 #include <map>
-char const *_main = "main";
+
+static char const *_main = "main";
+
+static std::map<vk::ShaderStageFlagBits, EShLanguage> _associationTable = {
+    {vk::ShaderStageFlagBits::eVertex, EShLanguage::EShLangVertex},
+    {vk::ShaderStageFlagBits::eTessellationControl, EShLanguage::EShLangTessControl},
+    {vk::ShaderStageFlagBits::eTessellationEvaluation, EShLanguage::EShLangTessEvaluation},
+    {vk::ShaderStageFlagBits::eGeometry, EShLanguage::EShLangGeometry},
+    {vk::ShaderStageFlagBits::eFragment, EShLanguage::EShLangFragment},
+    {vk::ShaderStageFlagBits::eCompute, EShLanguage::EShLangCompute},
+};
 
 Pipeline::Pipeline(vk::Device device) : mDevice(device)
 {
 
 }
 
-void Pipeline::setShaderStage(std::string filename, vk::ShaderStageFlagBits stage)
+void Pipeline::setShaderStageFromFile(std::string fileName, vk::ShaderStageFlagBits stage)
 {
-    static std::map<vk::ShaderStageFlagBits, EShLanguage> associationTable = {
-        {vk::ShaderStageFlagBits::eVertex, EShLanguage::EShLangVertex},
-        {vk::ShaderStageFlagBits::eTessellationControl, EShLanguage::EShLangTessControl},
-        {vk::ShaderStageFlagBits::eTessellationEvaluation, EShLanguage::EShLangTessEvaluation},
-        {vk::ShaderStageFlagBits::eGeometry, EShLanguage::EShLangGeometry},
-        {vk::ShaderStageFlagBits::eFragment, EShLanguage::EShLangFragment},
-        {vk::ShaderStageFlagBits::eCompute, EShLanguage::EShLangCompute},
-    };
-
     assert(std::find_if(mShaderStages.begin(), mShaderStages.end(), [stage](auto s) {if (s.stage == stage) return true; return false; }) == mShaderStages.end());
-    mShaders.emplace_back(mDevice, filename, associationTable[stage]);
+    mShaders.emplace_back(mDevice, fileName, _associationTable[stage], file_tag{});
+
+    vk::PipelineShaderStageCreateInfo v;
+    v.module = mShaders.back().get();
+    v.stage = stage;
+    v.pName = _main;
+
+    mShaderStages << v;
+}
+
+void Pipeline::setShaderStageFromSource(std::string source, vk::ShaderStageFlagBits stage) {
+    assert(std::find_if(mShaderStages.begin(), mShaderStages.end(), [stage](auto s) {if (s.stage == stage) return true; return false; }) == mShaderStages.end());
+    mShaders.emplace_back(mDevice, source, _associationTable[stage], source_tag{});
 
     vk::PipelineShaderStageCreateInfo v;
     v.module = mShaders.back().get();

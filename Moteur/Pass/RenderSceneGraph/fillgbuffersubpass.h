@@ -20,6 +20,7 @@ private:
 
     vk::DescriptorSet mMatrixDescriptorSet;
 
+    std::vector<std::string> mFunctionDefinitions;
     std::vector<PipelineLayout> mPipelineLayouts;
     std::vector<Pipeline> mPipelines;
 

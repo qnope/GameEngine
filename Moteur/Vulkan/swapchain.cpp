@@ -58,8 +58,8 @@ Swapchain::Swapchain(Device & device, Swapchain *old) : mDevice(device)
     auto presentMode = getPresentMode(mPresentModes);
     mExtent = getSwapExtent(mCapabilities, device.getInstance().getWindow());
 
-    if(mExtent.width == 0 || mExtent.height == 0)
-        throw std::runtime_error("Minimize window");
+    assert(mExtent.width > 0);
+    assert(mExtent.height > 0);
 
     mImageCount = std::max<uint32_t>(mCapabilities.minImageCount, 3);
 

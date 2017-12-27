@@ -1,13 +1,13 @@
 #include "PipelineBuilder.h"
-
+#include "ShaderGenerator/FillGBufferShaderBuilder.h"
 #include "SceneGraph/ModelImporter/Mesh.h"
 
 Pipeline PipelineBuilder::buildFullScreenPipeline(vk::Device device, vk::RenderPass renderpass, vk::Extent2D extent2D, vk::PipelineLayout layout, std::string fragmentShader)
 {
     Pipeline pipeline(device);
 
-    pipeline.setShaderStage("../Shaders/RenderFullScreen/quad.vert", vk::ShaderStageFlagBits::eVertex);
-    pipeline.setShaderStage(fragmentShader, vk::ShaderStageFlagBits::eFragment);
+    pipeline.setShaderStageFromFile("../Shaders/RenderFullScreen/quad.vert", vk::ShaderStageFlagBits::eVertex);
+    pipeline.setShaderStageFromFile(fragmentShader, vk::ShaderStageFlagBits::eFragment);
 
     pipeline.setInputAssemblyState(PipelineHelper::inputAssemblyTriStrip());
     pipeline.addViewport(PipelineHelper::simpleViewport(extent2D));
@@ -23,8 +23,8 @@ Pipeline PipelineBuilder::buildImGUIPipeline(ImGUIInstance &instance, vk::Render
 {
     Pipeline pipeline(instance.device);
 
-    pipeline.setShaderStage("../Shaders/ImGUI/imgui.vert", vk::ShaderStageFlagBits::eVertex);
-    pipeline.setShaderStage("../Shaders/ImGUI/imgui.frag", vk::ShaderStageFlagBits::eFragment);
+    pipeline.setShaderStageFromFile("../Shaders/ImGUI/imgui.vert", vk::ShaderStageFlagBits::eVertex);
+    pipeline.setShaderStageFromFile("../Shaders/ImGUI/imgui.frag", vk::ShaderStageFlagBits::eFragment);
 
     pipeline.addVertexInputBinding(vk::VertexInputBindingDescription(0, sizeof(ImDrawVert), vk::VertexInputRate::eVertex));
 
@@ -42,12 +42,15 @@ Pipeline PipelineBuilder::buildImGUIPipeline(ImGUIInstance &instance, vk::Render
     return pipeline;
 }
 
-Pipeline PipelineBuilder::buildFillGBufferPipeline(vk::Device device, vk::RenderPass renderpass, uint32_t subpass, vk::Extent2D extent2D, vk::PipelineLayout layout, std::string fragmentShader)
+Pipeline PipelineBuilder::buildFillGBufferPipeline(vk::Device device, vk::RenderPass renderpass, uint32_t subpass, vk::Extent2D extent2D, vk::PipelineLayout layout, std::string materialFunctionDefinition)
 {
     Pipeline pipeline(device);
 
-    pipeline.setShaderStage("../Shaders/RenderSceneGraphRelated/renderscenegraph.vert", vk::ShaderStageFlagBits::eVertex);
-    pipeline.setShaderStage(fragmentShader, vk::ShaderStageFlagBits::eFragment);
+    FillGBufferShaderBuilder shaderBuilder;
+    auto fragmentSource = shaderBuilder.buildFragmentShader(materialFunctionDefinition);
+
+    pipeline.setShaderStageFromFile("../Shaders/FillGBuffer/FillGBuffer.vert", vk::ShaderStageFlagBits::eVertex);
+    pipeline.setShaderStageFromSource(fragmentSource, vk::ShaderStageFlagBits::eFragment);
 
     pipeline.addVertexInputBinding(vk::VertexInputBindingDescription(0, sizeof(Vertex), vk::VertexInputRate::eVertex));
     pipeline.addVertexInputBinding(vk::VertexInputBindingDescription(1, sizeof(glm::mat4), vk::VertexInputRate::eInstance));
@@ -89,9 +92,9 @@ Pipeline PipelineBuilder::buildVoxelizationOnlyGeometryPipeline(vk::Device devic
     pipeline.addVertexInputAttribute(vk::VertexInputAttributeDescription(3, 1, vk::Format::eR32G32B32A32Sfloat, 2 * sizeof(glm::vec4)));
     pipeline.addVertexInputAttribute(vk::VertexInputAttributeDescription(4, 1, vk::Format::eR32G32B32A32Sfloat, 3 * sizeof(glm::vec4)));
 
-    pipeline.setShaderStage("../Shaders/Voxelization/voxelization.vert", vk::ShaderStageFlagBits::eVertex);
-    pipeline.setShaderStage("../Shaders/Voxelization/voxelization.geom", vk::ShaderStageFlagBits::eGeometry);
-    pipeline.setShaderStage("../Shaders/Voxelization/voxelizationgeometry.frag", vk::ShaderStageFlagBits::eFragment);
+    pipeline.setShaderStageFromFile("../Shaders/Voxelization/voxelization.vert", vk::ShaderStageFlagBits::eVertex);
+    pipeline.setShaderStageFromFile("../Shaders/Voxelization/voxelization.geom", vk::ShaderStageFlagBits::eGeometry);
+    pipeline.setShaderStageFromFile("../Shaders/Voxelization/voxelizationgeometry.frag", vk::ShaderStageFlagBits::eFragment);
 
     vk::Extent2D extent{ resolution, resolution };
     pipeline.addViewport(PipelineHelper::simpleViewport(extent));
@@ -106,7 +109,7 @@ Pipeline PipelineBuilder::buildVoxelDownsamplerOnlyGeometryPipeline(vk::Device d
 {
     Pipeline pipeline{ device };
 
-    pipeline.setShaderStage("../Shaders/Voxelization/geometrydownsampler.comp", vk::ShaderStageFlagBits::eCompute);
+    pipeline.setShaderStageFromFile("../Shaders/Voxelization/geometrydownsampler.comp", vk::ShaderStageFlagBits::eCompute);
     pipeline.createCompute(layout);
 
     return pipeline;

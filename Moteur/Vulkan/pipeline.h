@@ -8,7 +8,8 @@ public:
     Pipeline() = default;
     Pipeline(vk::Device device);
 
-    void setShaderStage(std::string filename, vk::ShaderStageFlagBits stage);
+    void setShaderStageFromFile(std::string fileName, vk::ShaderStageFlagBits stage);
+    void setShaderStageFromSource(std::string source, vk::ShaderStageFlagBits stage);
 
     void addVertexInputBinding(vk::VertexInputBindingDescription binding);
     void addVertexInputAttribute(vk::VertexInputAttributeDescription attribute);
