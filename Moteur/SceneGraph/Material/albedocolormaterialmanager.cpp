@@ -22,29 +22,21 @@ bool AlbedoColorMaterialManager::isAccepted(Material material) const
     return material.isOnlyAlbedoColor();
 }
 
-AbstractUniqueMaterialManager::MaterialPointer AlbedoColorMaterialManager::addMaterial(Material material)
+void AlbedoColorMaterialManager::registerMaterial(Material material)
 {
-    MaterialPointer p;
-
-    p.ptr = this;
-    p.index = (uint32_t)mValues.size();
-
     Descriptor descriptor;
 
     descriptor.color = glm::vec4(material.albedoColor, 1.0);
 
     mStagingBuffer.resetOffset();
     mStagingBuffer.push_data(descriptor);
-    mBufferFactory.transfer(mStagingBuffer, mBuffer, 0, p.index * sizeof(Descriptor), sizeof(Descriptor));
+    mBufferFactory.transfer(mStagingBuffer, mBuffer, 0, mNumberMaterialRegistered * sizeof(Descriptor), sizeof(Descriptor));
 
     mValues.emplace_back(descriptor);
-
-    return p;
 }
 
-void AlbedoColorMaterialManager::getDrawerMaterialValues(Drawer & drawer, const MaterialPointer & ptr) const
+void AlbedoColorMaterialManager::getDrawerDescriptorSet(Drawer & drawer, const MaterialPointer & ptr) const
 {
-    AbstractUniqueMaterialManager::getDrawerMaterialValues(drawer, ptr);
     drawer.materialSet = mDescriptorSet;
     drawer.offsetMaterialUbo = ptr.index * sizeof(Descriptor);
 }

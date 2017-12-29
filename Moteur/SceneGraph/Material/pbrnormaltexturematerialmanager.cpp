@@ -15,13 +15,8 @@ bool PBRNormalTextureMaterialManager::isAccepted(Material material) const
     return material.isNormalPBRTexture();
 }
 
-AbstractUniqueMaterialManager::MaterialPointer PBRNormalTextureMaterialManager::addMaterial(Material material)
+void PBRNormalTextureMaterialManager::registerMaterial(Material material)
 {
-    MaterialPointer p;
-
-    p.ptr = this;
-    p.index = (uint32_t)mValues.size();
-
     Descriptor descriptor;
     auto descriptorSet = mDescriptorSets.emplace_back(mDescriptorPool->allocate(*mDescriptorSetLayout));
 
@@ -43,12 +38,9 @@ AbstractUniqueMaterialManager::MaterialPointer PBRNormalTextureMaterialManager::
         }, {});
 
     mValues.emplace_back(descriptor);
-
-    return p;
 }
 
-void PBRNormalTextureMaterialManager::getDrawerMaterialValues(Drawer & drawer, const MaterialPointer & ptr) const
+void PBRNormalTextureMaterialManager::getDrawerDescriptorSet(Drawer & drawer, const MaterialPointer & ptr) const
 {
-    AbstractUniqueMaterialManager::getDrawerMaterialValues(drawer, ptr);
     drawer.materialSet = mDescriptorSets[ptr.index];
 }

@@ -21,6 +21,17 @@ void AbstractUniqueMaterialManager::changePipelineLayout(vk::PipelineLayout pipe
     mPipelineLayout = pipelineLayout;
 }
 
+auto AbstractUniqueMaterialManager::addMaterial(Material material) -> MaterialPointer {
+    MaterialPointer p;
+
+    p.ptr = this;
+    p.index = mNumberMaterialRegistered++;
+
+    registerMaterial(material);
+
+    return p;
+}
+
 vk::DescriptorSetLayout AbstractUniqueMaterialManager::getDescriptorSetLayout() const
 {
     return *mDescriptorSetLayout;
@@ -31,4 +42,5 @@ void AbstractUniqueMaterialManager::getDrawerMaterialValues(Drawer & drawer, con
     assert(ptr.ptr == this);
     drawer.pipeline = mPipeline;
     drawer.pipelineLayout = mPipelineLayout;
+    getDrawerDescriptorSet(drawer, ptr);
 }

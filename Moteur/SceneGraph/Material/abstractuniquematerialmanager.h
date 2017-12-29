@@ -22,10 +22,14 @@ public:
     vk::DescriptorSetLayout getDescriptorSetLayout() const;
 
     virtual bool isAccepted(Material material) const = 0;
-    virtual MaterialPointer addMaterial(Material material) = 0;
-    virtual void getDrawerMaterialValues(Drawer &drawer, const MaterialPointer &ptr) const;
+    MaterialPointer addMaterial(Material material);
+    void getDrawerMaterialValues(Drawer &drawer, const MaterialPointer &ptr) const;
 
     virtual ~AbstractUniqueMaterialManager() = default;
+
+protected:
+    virtual void registerMaterial(Material material) = 0;
+    virtual void getDrawerDescriptorSet(Drawer &drawer, const MaterialPointer &ptr) const = 0;
 
 protected:
     vk::Device mDevice;
@@ -35,4 +39,6 @@ protected:
     std::unique_ptr<DescriptorPoolWrapper> mDescriptorPool;
     std::unique_ptr<DescriptorSetLayout> mDescriptorSetLayout;
     std::string mMaterialFunctionDefinition;
+
+    uint32_t mNumberMaterialRegistered{0};
 };

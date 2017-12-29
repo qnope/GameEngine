@@ -15,8 +15,10 @@ public:
     PBRNormalTextureMaterialManager(vk::Device device, ImageFactory &imageFactory);
 
     bool isAccepted(Material material) const override;
-    MaterialPointer addMaterial(Material material) override;
-    void getDrawerMaterialValues(Drawer &drawer, const MaterialPointer &ptr) const override;
+
+protected:
+    void registerMaterial(Material material) override;
+    void getDrawerDescriptorSet(Drawer &drawer, const MaterialPointer &ptr) const override;
 
 private:
     ImageFactory &mImageFactory;

@@ -14,8 +14,10 @@ public:
     AlbedoColorMaterialManager(vk::Device device, BufferFactory &bufferFactory);
 
     bool isAccepted(Material material) const override;
-    MaterialPointer addMaterial(Material material) override;
-    void getDrawerMaterialValues(Drawer &drawer, const MaterialPointer &ptr) const override;
+
+protected:
+    void registerMaterial(Material material) override;
+    void getDrawerDescriptorSet(Drawer &drawer, const MaterialPointer &ptr) const override;
 
 private:
     BufferFactory &mBufferFactory;
